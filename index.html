@@ -1,363 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M4S</title>
-    <style>
-        /* Reset & Base */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M4S</title>
+  <style>
+    /* Reset & Base */
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { background:#000; color:#fff; font-family:Arial,sans-serif; overflow-x:hidden; }
 
-        body {
-            background: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            overflow-x: hidden;
-        }
+    /* Canvas Background */
+    #bgCanvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; }
 
-        /* Canvas Background */
-        #bgCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
+    /* Header */
+    header { text-align:center; position:relative; z-index:1; }
+    header h1 { font-size:2.5rem; margin:1rem 0; }
 
-        /* Header */
-        header {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
+    /* Main Menu */
+    #menu { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; padding:1rem; position:relative; z-index:1; }
+    .menu-item { background:#1f1f1f; flex:1 1 150px; max-width:200px; padding:1rem; text-align:center; border-radius:.75rem; cursor:pointer; transition:background .3s; }
+    .menu-item:hover { background:#333; }
 
-        header h1 {
-            font-size: 2.5rem;
-            margin: 1rem 0;
-        }
+    /* Sections */
+    section { display:none; padding:1rem; position:relative; z-index:1; }
+    .back-button { background:none; border:none; color:#0af; font-size:1rem; cursor:pointer; margin-bottom:1rem; }
+    input[type="text"] { width:100%; padding:.5rem; background:#333; border:1px solid #555; border-radius:.25rem; color:#fff; margin-bottom:1rem; }
 
-        /* Main Menu */
-        #menu {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            padding: 1rem;
-            position: relative;
-            z-index: 1;
-        }
+    /* Media Containers */
+    #imagesContainer, #videosContainer, #audioContainer { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
+    .media-item { background:#1f1f1f; border-radius:.5rem; padding:.5rem; flex:1 1 200px; max-width:300px; text-align:center; cursor:pointer; }
+    .media-item img, .media-item video { width:100%; height:auto; border-radius:.3rem; margin-bottom:.5rem; }
+    .media-item audio { width:100%; margin-bottom:.5rem; }
+    .media-title { font-size:.9rem; word-break:break-word; }
 
-        .menu-item {
-            background: #1f1f1f;
-            flex: 1 1 150px;
-            max-width: 200px;
-            padding: 1rem;
-            text-align: center;
-            border-radius: .75rem;
-            cursor: pointer;
-            transition: background .3s;
-        }
+    /* Text List */
+    #textList { display:flex; flex-direction:column; gap:.5rem; }
+    #textList .media-item { display:flex; justify-content:space-between; align-items:center; }
 
-        .menu-item:hover {
-            background: #333;
-        }
+    /* Modal */
+    #modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999; }
+    #modal .content { background:#000; border-radius:.5rem; max-width:90%; max-height:90%; padding:1rem; overflow:auto; position:relative; }
+    #modal .close { position:absolute; top:.5rem; right:.5rem; background:none; border:none; font-size:1.5rem; color:#fff; cursor:pointer; }
+    #modal .controls { display:flex; justify-content:space-between; margin-top:1rem; }
+    #modal button, #modal a { background:#1f1f1f; border:none; color:#fff; padding:.5rem 1rem; border-radius:.25rem; cursor:pointer; text-decoration:none; }
+    #modal .like { font-size:1.2rem; color:#f55; }
+    #modal pre { background:#111; padding:1rem; border-radius:.25rem; white-space:pre-wrap; }
 
-        /* Sections */
-        section {
-            display: none;
-            padding: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .back-button {
-            background: none;
-            border: none;
-            color: #0af;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-bottom: 1rem;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: .5rem;
-            background: #333;
-            border: 1px solid #555;
-            border-radius: .25rem;
-            color: #fff;
-            margin-bottom: 1rem;
-        }
-
-        /* Media Containers */
-        #imagesContainer,
-        #videosContainer,
-        #audioContainer {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .media-item {
-            background: #1f1f1f;
-            border-radius: .5rem;
-            padding: .5rem;
-            flex: 1 1 200px;
-            max-width: 300px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .media-item img,
-        .media-item video {
-            width: 100%;
-            height: auto;
-            border-radius: .3rem;
-            margin-bottom: .5rem;
-        }
-
-        .media-item audio {
-            width: 100%;
-            margin-bottom: .5rem;
-        }
-
-        .media-title {
-            font-size: .9rem;
-            word-break: break-word;
-        }
-
-        /* Text List */
-        #textList {
-            display: flex;
-            flex-direction: column;
-            gap: .5rem;
-        }
-
-        #textList .media-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Modal */
-        #modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        #modal .content {
-            background: #000;
-            border-radius: .5rem;
-            max-width: 90%;
-            max-height: 90%;
-            padding: 1rem;
-            overflow: auto;
-            position: relative;
-        }
-
-        #modal .close {
-            position: absolute;
-            top: .5rem;
-            right: .5rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        #modal .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
-        }
-
-        #modal button,
-        #modal a {
-            background: #1f1f1f;
-            border: none;
-            color: #fff;
-            padding: .5rem 1rem;
-            border-radius: .25rem;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        #modal .like {
-            font-size: 1.2rem;
-            color: #f55;
-        }
-
-        #modal pre {
-            background: #111;
-            padding: 1rem;
-            border-radius: .25rem;
-            white-space: pre-wrap;
-        }
-
-        /* Responsive */
-        @media (max-width:768px) {
-            header h1 {
-                font-size: 2rem;
-            }
-
-            .menu-item {
-                flex: 1 1 45%;
-            }
-        }
-
-        @media (max-width:480px) {
-            .menu-item {
-                flex: 1 1 90%;
-            }
-
-            .media-item {
-                flex: 1 1 100%;
-            }
-        }
-    </style>
+    /* Responsive */
+    @media (max-width:768px) { header h1 { font-size:2rem; } .menu-item { flex:1 1 45%; } }
+    @media (max-width:480px) { .menu-item { flex:1 1 90%; } .media-item { flex:1 1 100%; } }
+  </style>
 </head>
-
 <body>
-    <canvas id="bgCanvas"></canvas>
-    <header>
-        <h1>M4S</h1>
-    </header>
+  <canvas id="bgCanvas"></canvas>
+  <header><h1>M4S</h1></header>
+  <div id="menu">
+    <div class="menu-item" data-section="imagesSection">Images</div>
+    <div class="menu-item" data-section="videosSection">Videos</div>
+    <div class="menu-item" data-section="audioSection">Audio</div>
+    <div class="menu-item" data-section="textSection">Text</div>
+  </div>
 
-    <div id="menu">
-        <div class="menu-item" data-section="imagesSection">Images</div>
-        <div class="menu-item" data-section="videosSection">Videos</div>
-        <div class="menu-item" data-section="audioSection">Audio</div>
-        <div class="menu-item" data-section="textSection">Text</div>
+  <section id="imagesSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>Images</h2>
+    <input type="text" id="searchImages" placeholder="Search images...">
+    <div id="imagesContainer"></div>
+  </section>
+
+  <section id="videosSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>Videos</h2>
+    <input type="text" id="searchVideos" placeholder="Search videos...">
+    <div id="videosContainer"></div>
+  </section>
+
+  <section id="audioSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>Audio</h2>
+    <input type="text" id="searchAudio" placeholder="Search audio...">
+    <div id="audioContainer"></div>
+  </section>
+
+  <section id="textSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>Text Files</h2>
+    <input type="text" id="searchText" placeholder="Search text files...">
+    <div id="textList"></div>
+  </section>
+
+  <div id="modal">
+    <div class="content">
+      <button class="close">✕</button>
+      <div id="previewContainer"></div>
+      <div class="controls">
+        <button id="likeBtn" class="like">♡ Like</button>
+        <a id="downloadBtn" href="#" download>Download</a>
+      </div>
     </div>
+  </div>
 
-    <section id="imagesSection">
-        <button class="back-button" data-back>← Back</button>
-        <h2>Images</h2>
-        <input type="text" id="searchImages" placeholder="Search images...">
-        <div id="imagesContainer"></div>
-    </section>
+  <footer>
+    <a href="https://mahmoudelsheikh7.github.io/profilecardwebpage-mahmoud/" target="_blank" aria-label="GitHub">
+      <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24" height="24">
+        <path d="M12 0.3C5.4 0.3 0 5.7 0 12.3C0 17.6 3.4 22 8.2 23.6C8.8 23.7 9 23.3 9 23V20.9C5.7 21.6 5 19.2 5 19.2C4.5 17.9 3.8 17.5 3.8 17.5C2.8 16.8 3.9 16.8 3.9 16.8C5 16.9 5.6 18 5.6 18C6.6 19.7 8.3 19.2 9 18.9C9.1 18.1 9.4 17.6 9.7 17.3C7.1 17 4.3 16 4.3 11.4C4.3 10.1 4.8 9 5.6 8.1C5.5 7.8 5.1 6.6 5.7 5C5.7 5 6.8 4.7 9 6.1C9.9 5.9 10.9 5.8 12 5.8C13.1 5.8 14.1 5.9 15 6.1C17.2 4.7 18.3 5 18.3 5C18.9 6.6 18.5 7.8 18.4 8.1C19.2 9 19.7 10.1 19.7 11.4C19.7 16 16.9 17 14.3 17.3C14.7 17.7 15 18.4 15 19.5V23C15 23.3 15.2 23.7 15.8 23.6C20.6 22 24 17.6 24 12.3C24 5.7 18.6 0.3 12 0.3Z"/>
+      </svg>
+    </a>
+    <p>© Mahmoud El-Sheikh</p>
+  </footer>
 
-    <section id="videosSection">
-        <button class="back-button" data-back>← Back</button>
-        <h2>Videos</h2>
-        <input type="text" id="searchVideos" placeholder="Search videos...">
-        <div id="videosContainer"></div>
-    </section>
+  <script>
+    // Canvas background
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; drawRandomLines(); }
+    window.addEventListener('resize', resizeCanvas);
+    function drawRandomLines() { ctx.clearRect(0,0,canvas.width,canvas.height); for(let i=0;i<30;i++){ const pts=[]; for(let j=0;j<5+Math.floor(Math.random()*5);j++){ pts.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height}); } ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y); pts.slice(1).forEach(p=>ctx.lineTo(p.x,p.y)); ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=1+Math.random(); ctx.stroke(); } }
+    resizeCanvas();
 
-    <section id="audioSection">
-        <button class="back-button" data-back>← Back</button>
-        <h2>Audio</h2>
-        <input type="text" id="searchAudio" placeholder="Search audio...">
-        <div id="audioContainer"></div>
-    </section>
+    // Config & State
+    const githubUser='mahmoudelsheikh7', repoName='M4S', branch='main';
+    let imagesList=[],videosList=[],audioList=[],textList=[];
+    let imagesLoaded=false,videosLoaded=false,audioLoaded=false,textLoaded=false;
 
-    <section id="textSection">
-        <button class="back-button" data-back>← Back</button>
-        <h2>Text Files</h2>
-        <input type="text" id="searchText" placeholder="Search text files...">
-        <div id="textList"></div>
-    </section>
+    // Navigation
+    function showMenu(){ document.getElementById('menu').style.display='flex'; document.querySelectorAll('section').forEach(s=>s.style.display='none'); document.getElementById('modal').style.display='none'; }
+    function showSection(id){ showMenu(); document.getElementById('menu').style.display='none'; document.getElementById(id).style.display='block'; if(id==='imagesSection'&&!imagesLoaded) loadImages(); if(id==='videosSection'&&!videosLoaded) loadVideos(); if(id==='audioSection'&&!audioLoaded) loadAudio(); if(id==='textSection'&&!textLoaded) loadText(); }
+    document.querySelectorAll('.menu-item').forEach(i=>i.addEventListener('click',()=>showSection(i.dataset.section)));
+    document.querySelectorAll('.back-button').forEach(b=>b.addEventListener('click',showMenu));
 
-    <div id="modal">
-        <div class="content">
-            <button class="close">✕</button>
-            <div id="previewContainer"></div>
-            <div class="controls">
-                <button id="likeBtn" class="like">♡ Like</button>
-                <a id="downloadBtn" href="#" download>Download</a>
-            </div>
-        </div>
-    </div>
+    // Modal & Preview
+    const modal=document.getElementById('modal'), preview=document.getElementById('previewContainer');
+    const likeBtn=document.getElementById('likeBtn'), downloadBtn=document.getElementById('downloadBtn');
+    let liked=false;
 
-    <footer>
-        <a href="https://mahmoudelsheikh7.github.io/profilecardwebpage-mahmoud/" target="_blank" aria-label="GitHub">
-            <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24"
-                height="24">
-                <path
-                    d="M12 0.3C5.4 0.3 0 5.7 0 12.3C0 17.6 3.4 22 8.2 23.6C8.8 23.7 9 23.3 9 23V20.9C5.7 21.6 5 19.2 5 19.2C4.5 17.9 3.8 17.5 3.8 17.5C2.8 16.8 3.9 16.8 3.9 16.8C5 16.9 5.6 18 5.6 18C6.6 19.7 8.3 19.2 9 18.9C9.1 18.1 9.4 17.6 9.7 17.3C7.1 17 4.3 16 4.3 11.4C4.3 10.1 4.8 9 5.6 8.1C5.5 7.8 5.1 6.6 5.7 5C5.7 5 6.8 4.7 9 6.1C9.9 5.9 10.9 5.8 12 5.8C13.1 5.8 14.1 5.9 15 6.1C17.2 4.7 18.3 5 18.3 5C18.9 6.6 18.5 7.8 18.4 8.1C19.2 9 19.7 10.1 19.7 11.4C19.7 16 16.9 17 14.3 17.3C14.7 17.7 15 18.4 15 19.5V23C15 23.3 15.2 23.7 15.8 23.6C20.6 22 24 17.6 24 12.3C24 5.7 18.6 0.3 12 0.3Z" />
-            </svg>
-        </a>
-        <p>© Mahmoud El-Sheikh</p>
-    </footer>
+    function openModal(type,item){
+      preview.innerHTML='';
+      liked=false; likeBtn.textContent='♡ Like';
+      let media;
+      if(type==='image'){
+        media=document.createElement('img');
+        media.src=encodeURI(item.download_url);
+        media.onload=()=>setTimeout(()=>modal.style.display='none',3000);
+      } else if(type==='video'){
+        media=document.createElement('video'); media.src=encodeURI(item.download_url); media.controls=true; media.autoplay=true;
+        media.onended=()=>modal.style.display='none';
+      } else if(type==='audio'){
+        media=document.createElement('audio'); media.src=encodeURI(item.download_url); media.controls=true;
+      } else if(type==='text'){
+        media=document.createElement('pre'); media.textContent='Loading...';
+        fetch(item.download_url).then(r=>r.text()).then(txt=>media.textContent=txt);
+      }
+      downloadBtn.href=item.download_url; downloadBtn.download=item.name;
+      preview.appendChild(media);
+      modal.style.display='flex';
+    }
+    modal.querySelector('.close').addEventListener('click',()=>modal.style.display='none');
+    likeBtn.addEventListener('click',()=>{ liked=!liked; likeBtn.textContent=liked?'♥ Liked':'♡ Like'; });
+    window.addEventListener('click',e=>{ if(e.target===modal) modal.style.display='none'; });
 
-    <script>
-        // Canvas background
-        const canvas = document.getElementById('bgCanvas'); const ctx = canvas.getContext('2d');
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; drawRandomLines(); }
-        window.addEventListener('resize', resizeCanvas);
-        function drawRandomLines() { ctx.clearRect(0, 0, canvas.width, canvas.height); for (let i = 0; i < 30; i++) { const pts = []; for (let j = 0; j < 5 + Math.floor(Math.random() * 5); j++) { pts.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height }); } ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y)); ctx.strokeStyle = 'rgba(255,255,255,0.1)'; ctx.lineWidth = 1 + Math.random(); ctx.stroke(); } }
-        resizeCanvas();
+    // Load & Display
+    function loadImages(){ fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/images?ref=${branch}`)
+      .then(r=>r.json()).then(data=>{ imagesList=data.filter(f=>f.type==='file'&&/\.(jpe?g|png|gif|webp)$/i.test(f.name)); displayImages(imagesList); imagesLoaded=true; }); }
+    function displayImages(list){ const c=document.getElementById('imagesContainer'); c.innerHTML=''; list.forEach(item=>{ const d=document.createElement('div'); d.className='media-item'; d.addEventListener('click',()=>openModal('image',item)); const img=document.createElement('img'); img.src=encodeURI(item.download_url); const title=document.createElement('div'); title.className='media-title'; title.textContent=item.name; d.append(img,title); c.appendChild(d); }); }
+    document.getElementById('searchImages').addEventListener('input',e=>displayImages(imagesList.filter(i=>i.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
-        // Config & state
-        const githubUser = 'mahmoudelsheikh7', repoName = 'M4S', branch = 'main';
-        let imagesList = [], videosList = [], audioList = [], textList = [], imagesLoaded = false, videosLoaded = false, audioLoaded = false, textLoaded = false;
+    function loadVideos(){ fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/videos?ref=${branch}`)
+      .then(r=>r.json()).then(data=>{ videosList=data.filter(f=>f.type==='file'&&/\.(mp4|webm|ogg)$/i.test(f.name)); displayVideos(videosList); videosLoaded=true; }); }
+    function displayVideos(list){ const c=document.getElementById('videosContainer'); c.innerHTML=''; list.forEach(item=>{ const d=document.createElement('div'); d.className='media-item'; d.addEventListener('click',()=>openModal('video',item)); const vid=document.createElement('video'); vid.src=encodeURI(item.download_url); vid.muted=true; vid.preload='none'; const title=document.createElement('div'); title.className='media-title'; title.textContent=item.name; d.append(vid,title); c.appendChild(d); }); }
+    document.getElementById('searchVideos').addEventListener('input',e=>displayVideos(videosList.filter(v=>v.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
-        // Navigation
-        function showMenu() { document.getElementById('menu').style.display = 'flex'; document.querySelectorAll('section').forEach(s => s.style.display = 'none'); document.getElementById('modal').style.display = 'none'; }
-        function showSection(id) { showMenu(); document.getElementById('menu').style.display = 'none'; document.getElementById(id).style.display = 'block'; if (id === 'imagesSection' && !imagesLoaded) loadImages(); if (id === 'videosSection' && !videosLoaded) loadVideos(); if (id === 'audioSection' && !audioLoaded) loadAudio(); if (id === 'textSection' && !textLoaded) loadText(); }
-        document.querySelectorAll('.menu-item').forEach(i => i.addEventListener('click', () => showSection(i.dataset.section)));
-        document.querySelectorAll('.back-button').forEach(b => b.addEventListener('click', showMenu));
+    function loadAudio(){ fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/audio?ref=${branch}`)
+      .then(r=>r.json()).then(data=>{ audioList=data.filter(f=>f.type==='file'); displayAudio(audioList); audioLoaded=true; }); }
+    function displayAudio(list){ const c=document.getElementById('audioContainer'); c.innerHTML=''; list.forEach(item=>{ const d=document.createElement('div'); d.className='media-item'; d.addEventListener('click',()=>openModal('audio',item)); const a=document.createElement('audio'); a.src=encodeURI(item.download_url); a.controls=true; const title=document.createElement('div'); title.className='media-title'; title.textContent=item.name; d.append(a,title); c.appendChild(d); }); }
+    document.getElementById('searchAudio').addEventListener('input',e=>displayAudio(audioList.filter(a=>a.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
-        // Load/display helpers with modal auto-close
-        const modal = document.getElementById('modal'), preview = document.getElementById('previewContainer'), likeBtn = document.getElementById('likeBtn'), downloadBtn = document.getElementById('downloadBtn'); let liked = false;
-        function openModal(type, item) {
-            preview.innerHTML = ''; liked = false; likeBtn.textContent = '♡ Like'; let media;
-            if (type === 'image') { media = document.createElement('img'); media.src = encodeURI(item.download_url); media.onload = () => setAutoClose(media); }
-            else if (type === 'video') { media = document.createElement('video'); media.src = encodeURI(item.download_url); media.controls = true; media.autoplay = true; media.onended = () => modal.style.display = 'none'; }
-            else if (type === 'audio') { media = document.createElement('audio'); media.src = encodeURI(item.download_url); media.controls = true; /* no auto-close for audio */ }
-            else if (type === 'text') { media = document.createElement('pre'); media.textContent = 'Loading...'; fetch(item.download_url).then(r => r.text()).then(txt => media.textContent = txt); }
-            downloadBtn.href = item.download_url; downloadBtn.download = item.name; preview.appendChild(media); modal.style.display = 'flex';
-        }
-        function setAutoClose(img) { setTimeout(() => modal.style.display = 'none', 3000); /* closes 3s after image load */ }
-        modal.querySelector('.close').addEventListener('click', () => modal.style.display = 'none');
-        likeBtn.addEventListener('click', () => { liked = !liked; likeBtn.textContent = liked ? '♥ Liked' : '♡ Like'; });
-        window.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+    function loadText(){ fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/text?ref=${branch}`)
+      .then(r=>r.json()).then(data=>{ textList=data.filter(f=>f.type==='file'); displayTextList(textList); textLoaded=true; }); }
+    function displayTextList(list){ const c=document.getElementById('textList'); c.innerHTML=''; list.forEach(item=>{ const d=document.createElement('div'); d.className='media-item'; d.addEventListener('click',()=>openModal('text',item)); const title=document.createElement('div'); title.className='media-title'; title.textContent=item.name; d.appendChild(title); c.appendChild(d); }); }
+    document.getElementById('searchText').addEventListener('input',e=>displayTextList(textList.filter(t=>t.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
-        // Load & display functions (omitted for brevity, same as before with new openModal)
-        function loadImages() {
-            fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/images?ref=${branch}`)
-                .then(r => r.json()).then(data => { imagesList = data.filter(f => f.type === 'file' && /\.(jpe?g|png|gif|webp)$/i.test(f.name)); displayImages(imagesList); imagesLoaded = true; });
-        }
-        function displayImages(list) { const c = document.getElementById('imagesContainer'); c.innerHTML = ''; list.forEach(item => { const d = document.createElement('div'); d.className = 'media-item'; d.addEventListener('click', () => openModal('image', item)); const img = document.createElement('img'); img.src = encodeURI(item.download_url); const title = document.createElement('div'); title.className = 'media-title'; title.textContent = item.name; d.append(img, title); c.appendChild(d); }); }
-        function loadVideos() {
-            fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/videos?ref=${branch}`)
-                .then(r => r.json()).then(data => { videosList = data.filter(f => f.type === 'file' && /\.(mp4|webm|ogg)$/i.test(f.name)); displayVideos(videosList); videosLoaded = true; });
-        }
-        function displayVideos(list) { const c = document.getElementById('videosContainer'); c.innerHTML = ''; list.forEach(item => { const d = document.createElement('div'); d.className = 'media-item'; d.addEventListener('click', () => openModal('video', item)); const vid = document.createElement('video'); vid.src = encodeURI(item.download_url); vid.muted = true; vid.preload = 'none'; const title = document.createElement('div'); title.className = 'media-title'; title.textContent = item.name; d.append(vid, title); c.appendChild(d); }); }
-        function loadAudio() {
-            fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/audio?ref=${branch}`)
-                .then(r => r.json()).then(data => { audioList = data.filter(f => f.type === 'file'); displayAudio(audioList); audioLoaded = true; });
-        }
-        function displayAudio(list) { const c = document.getElementById('audioContainer'); c.innerHTML = ''; list.forEach(item => { const d = document.createElement('div'); d.className = 'media-item'; d.addEventListener('click', () => openModal('audio', item)); const a = document.createElement('audio'); a.src = encodeURI(item.download_url); a.controls = true; const title = document.createElement('div'); title.className = 'media-title'; title.textContent = item.name; d.append(a, title); c.appendChild(d); }); }
-        function loadText() {
-            fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/text?ref=${branch}`)
-                .then(r => r.json()).then(data => { textList = data.filter(f => f.type === 'file'); displayTextList(textList); textLoaded = true; });
-        }
-        function displayTextList(list) { const c = document.getElementById('textList'); c.innerHTML = ''; list.forEach(item => { const d = document.createElement('div'); d.className = 'media-item'; d.addEventListener('click', () => openModal('text', item)); const title = document.createElement('div'); title.className = 'media-title'; title.textContent = item.name; d.appendChild(title); c.appendChild(d); }); }
-        document.getElementById('searchImages').addEventListener('input', e => displayImages(imagesList.filter(i => i.name.toLowerCase().includes(e.target.value.toLowerCase()))));
-        document.getElementById('searchVideos').addEventListener('input', e => displayVideos(videosList.filter(v => v.name.toLowerCase().includes(e.target.value.toLowerCase()))));
-        document.getElementById('searchAudio').addEventListener('input', e => displayAudio(audioList.filter(a => a.name.toLowerCase().includes(e.target.value.toLowerCase()))));
-        document.getElementById('searchText').addEventListener('input', e => displayTextList(textList.filter(t => t.name.toLowerCase().includes(e.target.value.toLowerCase()))));
-
-        // Init
-        showMenu();
-    </script>
+    // Initialize
+    showMenu();
+  </script>
 </body>
-
 </html>
