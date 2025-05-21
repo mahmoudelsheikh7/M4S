@@ -1,1 +1,490 @@
-<div></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>M4S</title>
+<style>
+  /* Dark theme and layout */
+  body {
+    background-color: #000000f1;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    text-align: center;
+    
+  }
+  header h1 {
+    font-size: 36px;
+    margin: 0;
+    color: #ffffff;
+    letter-spacing: 2px;
+  }
+  #bgCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+  }
+  
+  
+  #menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    padding: 20px;
+  }
+  .menu-item {
+    width: 180px;
+    height: 120px;
+    background: #1f1f1f;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .menu-item:hover {
+    background: #333;
+  }
+  section {
+    display: none;
+    padding: 20px;
+  }
+  h2 {
+    margin-top: 0;
+  }
+  .back-button {
+    background: none;
+    border: none;
+    color: #00aaff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0 15px;
+    background: #333;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 4px;
+  }
+  #imagesContainer, #videosContainer, #audioContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .media-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #1f1f1f;
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    width: 180px;
+  }
+  footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #121212;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  footer .github-icon {
+    fill: white;
+    transition: transform 0.3s ease;
+  }
+  footer .github-icon:hover {
+    transform: scale(1.2);
+  }
+  footer p {
+    margin: 0;
+  }
+  
+  .media-item:hover {
+    border-color: #555;
+  }
+  .media-item img, .media-item video {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 3px;
+  }
+  .media-item audio {
+    width: 100%;
+    margin-top: 5px;
+  }
+  .media-title {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 5px;
+    word-break: break-word;
+  }
+  #textList .media-item {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  #textList .media-item:hover {
+    background: #333;
+  }
+  #textViewer {
+    margin-top: 15px;
+  }
+  #textViewer pre {
+    background: #222;
+    padding: 10px;
+    border: 1px solid #444;
+    white-space: pre-wrap;
+    color: #e0e0e0;
+  }
+  #textViewer button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: #0066cc;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #textViewer a {
+    margin-left: 10px;
+    color: #00aaff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  @media (max-width: 600px) {
+    .menu-item {
+      width: 120px;
+      height: 100px;
+      font-size: 16px;
+    }
+    .media-item {
+      width: 140px;
+      margin: 3px;
+    }
+    .media-item img, .media-item video {
+      max-height: 120px;
+    }
+  }
+</style>
+</head>
+<body>
+    <canvas id="bgCanvas"></canvas>
+  <!-- Main Menu -->
+  <header>
+    <h1>M4S</h1>
+  </header>
+  
+  
+  <div id="menu">
+    <div class="menu-item" data-section="imagesSection">Images</div>
+    <div class="menu-item" data-section="videosSection">Videos</div>
+    <div class="menu-item" data-section="audioSection">Audio</div>
+    <div class="menu-item" data-section="textSection">Text</div>
+  </div>
+
+  <!-- Images Section -->
+  <section id="imagesSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>Images</h2>
+    <input type="text" id="searchImages" placeholder="Search images...">
+    <div id="imagesContainer"></div>
+  </section>
+
+  <!-- Videos Section -->
+  <section id="videosSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>Videos</h2>
+    <input type="text" id="searchVideos" placeholder="Search videos...">
+    <div id="videosContainer"></div>
+  </section>
+
+  <!-- Audio Section -->
+  <section id="audioSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>Audio</h2>
+    <input type="text" id="searchAudio" placeholder="Search audio...">
+    <div id="audioContainer"></div>
+  </section>
+
+  <!-- Text Section -->
+  <section id="textSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>Text Files</h2>
+    <input type="text" id="searchText" placeholder="Search text files...">
+    <div id="textList"></div>
+    <div id="textViewer" style="display:none;">
+      <pre id="textContent"></pre>
+      <button id="copyText">Copy Text</button>
+      <a id="downloadText" href="#" download>Download File</a>
+    </div>
+  </section>
+
+<script>
+// Configuration: GitHub user, repo, and branch
+const githubUser = 'mahmoud-el-sheikh'; // GitHub username
+const repoName   = 'media-repo';        // Repository name
+const branch     = 'main';              // Branch name
+
+let imagesList = [], videosList = [], audioList = [], textList = [];
+let imagesLoaded = false, videosLoaded = false, audioLoaded = false, textLoaded = false;
+
+// Show the main menu, hide all sections, and reset text viewer
+function showMenu() {
+  document.getElementById('textViewer').style.display = 'none';
+  document.getElementById('menu').style.display = 'flex';
+  ['imagesSection','videosSection','audioSection','textSection'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+}
+
+// Show a specific section, hide the menu, and load content if needed
+function showSection(id) {
+  document.getElementById('textViewer').style.display = 'none';
+  document.getElementById('menu').style.display = 'none';
+  ['imagesSection','videosSection','audioSection','textSection'].forEach(sec => {
+    const el = document.getElementById(sec);
+    el.style.display = (sec === id) ? 'block' : 'none';
+  });
+  if (id === 'imagesSection' && !imagesLoaded) loadImages();
+  if (id === 'videosSection' && !videosLoaded) loadVideos();
+  if (id === 'audioSection' && !audioLoaded) loadAudio();
+  if (id === 'textSection' && !textLoaded) loadText();
+}
+
+// Attach click handlers to menu items
+document.querySelectorAll('.menu-item').forEach(item => {
+  item.addEventListener('click', () => showSection(item.getAttribute('data-section')));
+});
+// Attach click handlers to back buttons
+document.querySelectorAll('.back-button').forEach(btn => {
+  btn.addEventListener('click', showMenu);
+});
+
+// Load and display images from GitHub
+function loadImages() {
+  fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/images?ref=${branch}`)
+    .then(res => res.json())
+    .then(data => {
+      imagesList = data.filter(file => file.type === 'file');
+      displayImages(imagesList);
+      imagesLoaded = true;
+    })
+    .catch(err => console.error('Error loading images:', err));
+}
+function displayImages(list) {
+  const container = document.getElementById('imagesContainer');
+  container.innerHTML = '';
+  list.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'media-item';
+    const img = document.createElement('img');
+    img.src = item.download_url;
+    img.alt = item.name;
+    img.loading = 'lazy';
+    div.appendChild(img);
+    const title = document.createElement('div');
+    title.className = 'media-title';
+    title.textContent = item.name;
+    div.appendChild(title);
+    container.appendChild(div);
+  });
+}
+// Filter images by name
+document.getElementById('searchImages').addEventListener('input', () => {
+  const q = document.getElementById('searchImages').value.toLowerCase();
+  displayImages(imagesList.filter(item => item.name.toLowerCase().includes(q)));
+});
+
+// Load and display videos from GitHub
+function loadVideos() {
+  fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/videos?ref=${branch}`)
+    .then(res => res.json())
+    .then(data => {
+      videosList = data.filter(file => file.type === 'file');
+      displayVideos(videosList);
+      videosLoaded = true;
+    })
+    .catch(err => console.error('Error loading videos:', err));
+}
+function displayVideos(list) {
+  const container = document.getElementById('videosContainer');
+  container.innerHTML = '';
+  list.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'media-item';
+    const video = document.createElement('video');
+    video.src = item.download_url;
+    video.controls = true;
+    video.preload = 'none';
+    div.appendChild(video);
+    const title = document.createElement('div');
+    title.className = 'media-title';
+    title.textContent = item.name;
+    div.appendChild(title);
+    container.appendChild(div);
+  });
+}
+// Filter videos by name
+document.getElementById('searchVideos').addEventListener('input', () => {
+  const q = document.getElementById('searchVideos').value.toLowerCase();
+  displayVideos(videosList.filter(item => item.name.toLowerCase().includes(q)));
+});
+
+// Load and display audio from GitHub
+function loadAudio() {
+  fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/audio?ref=${branch}`)
+    .then(res => res.json())
+    .then(data => {
+      audioList = data.filter(file => file.type === 'file');
+      displayAudio(audioList);
+      audioLoaded = true;
+    })
+    .catch(err => console.error('Error loading audio:', err));
+}
+function displayAudio(list) {
+  const container = document.getElementById('audioContainer');
+  container.innerHTML = '';
+  list.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'media-item';
+    const audio = document.createElement('audio');
+    audio.src = item.download_url;
+    audio.controls = true;
+    audio.preload = 'none';
+    div.appendChild(audio);
+    const title = document.createElement('div');
+    title.className = 'media-title';
+    title.textContent = item.name;
+    div.appendChild(title);
+    container.appendChild(div);
+  });
+}
+// Filter audio by name
+document.getElementById('searchAudio').addEventListener('input', () => {
+  const q = document.getElementById('searchAudio').value.toLowerCase();
+  displayAudio(audioList.filter(item => item.name.toLowerCase().includes(q)));
+});
+
+// Load and display text files from GitHub
+function loadText() {
+  fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/text?ref=${branch}`)
+    .then(res => res.json())
+    .then(data => {
+      textList = data.filter(file => file.type === 'file');
+      displayTextList(textList);
+      textLoaded = true;
+    })
+    .catch(err => console.error('Error loading text files:', err));
+}
+function displayTextList(list) {
+  const listDiv = document.getElementById('textList');
+  listDiv.innerHTML = '';
+  list.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'media-item';
+    const title = document.createElement('div');
+    title.className = 'media-title';
+    title.textContent = item.name;
+    div.appendChild(title);
+    listDiv.appendChild(div);
+    div.addEventListener('click', () => viewText(item));
+  });
+}
+// Filter text list by name
+document.getElementById('searchText').addEventListener('input', () => {
+  const q = document.getElementById('searchText').value.toLowerCase();
+  displayTextList(textList.filter(item => item.name.toLowerCase().includes(q)));
+});
+
+// View a text file (fetch content) and show in viewer
+function viewText(item) {
+  fetch(item.download_url)
+    .then(res => res.text())
+    .then(content => {
+      document.getElementById('textViewer').style.display = 'block';
+      document.getElementById('textContent').textContent = content;
+      const dl = document.getElementById('downloadText');
+      dl.href = item.download_url;
+      dl.download = item.name;
+    })
+    .catch(err => console.error('Error loading text content:', err));
+}
+// Copy text to clipboard
+document.getElementById('copyText').addEventListener('click', () => {
+  const text = document.getElementById('textContent').textContent;
+  navigator.clipboard.writeText(text);
+});
+</script>
+<script>
+    // إعدادات الخلفية العشوائية بالخطوط البيضاء الملتوية
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawRandomLines();
+    }
+    window.addEventListener('resize', resizeCanvas);
+    
+    function drawRandomLines() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const lines = 30; // عدد الخطوط
+      for (let i = 0; i < lines; i++) {
+        const points = [];
+        const pointCount = 5 + Math.floor(Math.random() * 5);
+        for (let j = 0; j < pointCount; j++) {
+          points.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height
+          });
+        }
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let k = 1; k < points.length; k++) {
+          ctx.lineTo(points[k].x, points[k].y);
+        }
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.lineWidth = 1 + Math.random();
+        ctx.stroke();
+      }
+    }
+    resizeCanvas();
+    </script>
+    <footer>
+        <a href="https://github.com/USERNAME" target="_blank" aria-label="GitHub">
+          <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24" height="24">
+            <path d="M12 0.3C5.4 0.3 0 5.7 0 12.3C0 17.6 3.4 22 8.2 23.6C8.8 23.7 9 23.3 9 23V20.9C5.7 21.6 5 19.2 5 19.2C4.5 17.9 3.8 17.5 3.8 17.5C2.8 16.8 3.9 16.8 3.9 16.8C5 16.9 5.6 18 5.6 18C6.6 19.7 8.3 19.2 9 18.9C9.1 18.1 9.4 17.6 9.7 17.3C7.1 17 4.3 16 4.3 11.4C4.3 10.1 4.8 9 5.6 8.1C5.5 7.8 5.1 6.6 5.7 5C5.7 5 6.8 4.7 9 6.1C9.9 5.9 10.9 5.8 12 5.8C13.1 5.8 14.1 5.9 15 6.1C17.2 4.7 18.3 5 18.3 5C18.9 6.6 18.5 7.8 18.4 8.1C19.2 9 19.7 10.1 19.7 11.4C19.7 16 16.9 17 14.3 17.3C14.7 17.7 15 18.4 15 19.5V23C15 23.3 15.2 23.7 15.8 23.6C20.6 22 24 17.6 24 12.3C24 5.7 18.6 0.3 12 0.3Z"/>
+          </svg>
+        </a>
+        <p>© Mahmoud El-Sheikh</p>
+      </footer>
+      
+    
+</body>
+</html>
