@@ -39,12 +39,32 @@
 
     /* Modal */
     #modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999; }
-    #modal .content { background:#000; border-radius:.5rem; max-width:90%; max-height:90%; padding:1rem; overflow:auto; position:relative; }
+    #modal .content { background:#000; height:60%; border-radius:.5rem; max-width:80%; max-height:70%; padding:1rem; overflow:auto; position:relative; }
     #modal .close { position:absolute; top:.5rem; right:.5rem; background:none; border:none; font-size:1.5rem; color:#fff; cursor:pointer; }
     #modal .controls { display:flex; justify-content:space-between; margin-top:1rem; }
     #modal button, #modal a { background:#1f1f1f; border:none; color:#fff; padding:.5rem 1rem; border-radius:.25rem; cursor:pointer; text-decoration:none; }
     #modal .like { font-size:1.2rem; color:#f55; }
     #modal pre { background:#111; padding:1rem; border-radius:.25rem; white-space:pre-wrap; }
+    #modal .content video,
+#modal .content img,
+#modal .content audio {
+  display: block;
+  width: 100%;          /* تمتد لملء عرض الحاوية */
+  height: auto;         /* ارتفاع يناسب العرض حفاظاً على نسبة الأبعاد */
+  max-height: 80vh;     /* لا يتجاوز 80% من ارتفاع النافذة */
+}
+
+/* إذا رغبتَ في تغطية كاملة (cover) دون تشويه الفيديو */
+#modal .content video {
+  object-fit: contain;  /* أو cover حسب رغبتك */
+}
+
+/* لضمان حركية سلسة على الأجهزة الصغيرة */
+@media (max-width: 480px) {
+  #modal .content {
+    width: 95vw;
+    padding: .5rem;
+  }}
     footer {
         position: fixed;
         bottom: 0;
