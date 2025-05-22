@@ -8,15 +8,16 @@
   <style>
     /* Reset & Base */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #121212; color: #e0e0e0; font-family: 'Roboto', sans-serif; overflow-x: hidden; }
+    body { background: #121212; color: #ffffff; font-family: 'Roboto', sans-serif; overflow-x: hidden; }
 
     /* Canvas Background */
     #bgCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
 
     /* Header */
-    header { text-align: center; position: relative; z-index: 1; padding: 1.5rem 0; }
-    header h1 { font-size: 2.8rem; margin: 0; color: #ffffff; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); }
-
+    header { text-align: center;color: #ffffff; ;position: relative; z-index: 1; padding: 1.5rem 0; }
+    header h1 { font-size: 2.8rem; margin: 0; color: #f4f4f4; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); }
+    header h1 a:hover, header h1 a:active { text-decoration: none; }
+    header h1 a { color: #ffffff; text-decoration: none; transition: color 0.3s ease; }
     /* Welcome Message */
     #welcomeMessage { display: flex; justify-content: center; align-items: center; margin: 1rem auto; max-width: 500px; background: #1f1f1f; padding: 1rem; border-radius: 1rem; text-align: center; font-size: 1.5rem; color: #0af; transition: transform 0.3s, box-shadow 0.3s; animation: fadeIn 0.5s ease forwards; }
     #welcomeMessage:hover { transform: scale(1.03); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
@@ -30,7 +31,7 @@
     /* Sections */
     section { display: none; padding: 2rem; position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
     .back-button { background: none; border: none; color: #0af; font-size: 1rem; cursor: pointer; margin-bottom: 1rem; transition: color 0.3s; }
-    .back-button:hover { color: #00ccff; }
+    .back-button:hover { color: #3ea4be; }
     input[type="text"] { width: 100%; padding: 0.75rem; background: #333; border: 1px solid #555; border-radius: 0.5rem; color: #fff; margin-bottom: 1rem; transition: border-color 0.3s; }
     input[type="text"]:focus { border-color: #0af; outline: none; }
 
@@ -52,7 +53,7 @@
     #modal .content { background: #1a1a1a; border-radius: 1rem; max-width: 90%; max-height: 85vh; padding: 1.5rem; overflow: auto; position: relative; transform: translateY(50px); transition: transform 0.4s ease; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); }
     #modal.show .content { transform: translateY(0); }
     #modal .close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: #fff; cursor: pointer; transition: color 0.3s; }
-    #modal .close:hover { color: #0af; }
+    #modal .close:hover { color: rgb(53, 105, 131); }
     #modal .content video,
     #modal .content img,
     #modal .content audio { display: block; width: 100%; height: auto; max-height: 70vh; border-radius: 0.5rem; }
@@ -65,7 +66,7 @@
     .loading { display: none; text-align: center; padding: 1rem; color: #0af; font-size: 1.2rem; }
 
     /* Footer */
-    footer { position: fixed; bottom: 0; width: 100%; background: #121212cc; color: #fff; text-align: center; padding: 0.5rem 0; font-size: 0.9rem; z-index: 1000; display: flex; justify-content: center; align-items: center; gap: 0.75rem; }
+    footer { position: fixed; bottom: 0; width: 100%; background: #12121200; color: #fff; text-align: center; padding: 0.5rem 0; font-size: 0.9rem; z-index: 1000; display: flex; justify-content: center; align-items: center; gap: 0.75rem; }
     footer .github-icon { fill: white; transition: transform 0.3s ease; }
     footer .github-icon:hover { transform: scale(1.2); }
     footer p { margin: 0; }
@@ -91,7 +92,7 @@
 </head>
 <body>
   <canvas id="bgCanvas"></canvas>
-  <header><h1>M4S</h1></header>
+ <header><h1><a href="https://mahmoudelsheikh7.github.io/M4S/">M4S</a></h1></header>
   <div id="welcomeMessage">إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ ۚ يَا أَيُّهَا الَّذِينَ آمَنُوا صَلُّوا عَلَيْهِ وَسَلِّمُوا تَسْلِيمًا</div>
   <div id="menu">
     <div class="menu-item" data-section="imagesSection">Images</div>
@@ -180,9 +181,9 @@
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 5 + 1;
-        this.speedX = Math.random() * 3 - 1.5;
-        this.speedY = Math.random() * 3 - 1.5;
+        this.size = Math.random() * 81110 + 1;
+        this.speedX = Math.random() * 0.1 - 0.05; // Extremely slow movement
+        this.speedY = Math.random() * 0.1 - 0.05; // Extremely slow movement
       }
       update() {
         this.x += this.speedX;
@@ -190,12 +191,18 @@
         if (this.size > 0.2) this.size -= 0.1;
       }
       draw() {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
+        // Draw a triangle with vertices relative to the particle's position
+        ctx.moveTo(this.x, this.y - this.size); // Top vertex
+        ctx.lineTo(this.x - this.size * Math.cos(Math.PI / 3), this.y + this.size * Math.sin(Math.PI / 3)); // Bottom-left vertex
+        ctx.lineTo(this.x + this.size * Math.cos(Math.PI / 3), this.y + this.size * Math.sin(Math.PI / 3)); // Bottom-right vertex
+        ctx.closePath();
+        ctx.stroke();
       }
     }
+
 
     function initParticles() {
       particlesArray = [];
