@@ -332,6 +332,9 @@
     <div class="menu-item" data-section="videosSection">Videos * الفيديوهات</div>
     <div class="menu-item" data-section="audioSection">Audio * الصوتيات</div>
     <div class="menu-item" data-section="textSection">Text * النص </div>
+    <div class="menu-item" data-section="booksSection">الكتب</div>
+    <div class="menu-item" data-section="weakHadithsSection">الاحاديث الضعيفه المنتشرة بين الناس</div>
+    <div class="menu-item" data-section="usefulSitesSection">مواقع وتطبيقات مفيدة</div>
   </div>
   <div id="message1">
     إذا مات ابنُ آدمَ انقطع عملُه إلا من ثلاثٍ: صدقةٍ جاريةٍ، وعلمٍ ينتفعُ به، وولدٍ صالحٍ يدعو له<br>
@@ -375,6 +378,27 @@
     <div class="loading" id="textLoading">Loading...</div>
     <div id="textList"></div>
   </section>
+  <section id="booksSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>الكتب</h2>
+    <input type="text" id="searchBooks" placeholder="Search books...">
+    <div class="loading" id="booksLoading">Loading...</div>
+    <div id="booksList"></div>
+  </section>
+  <section id="weakHadithsSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>الاحاديث الضعيفه المنتشرة بين الناس</h2>
+    <input type="text" id="searchWeakHadiths" placeholder="Search weak hadiths...">
+    <div class="loading" id="weakHadithsLoading">Loading...</div>
+    <div id="weakHadithsList"></div>
+  </section>
+  <section id="usefulSitesSection">
+    <button class="back-button" data-back>← Back</button>
+    <h2>مواقع وتطبيقات مفيدة</h2>
+    <input type="text" id="searchUsefulSites" placeholder="Search useful sites and apps...">
+    <div class="loading" id="usefulSitesLoading">Loading...</div>
+    <div id="usefulSitesList"></div>
+  </section>
   <div id="modal">
     <div class="content">
       <button class="close">✕</button>
@@ -402,8 +426,7 @@
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
-
-    class Particle {
+class Particle {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
@@ -427,6 +450,7 @@
         ctx.stroke();
       }
     }
+
 
     function initParticles() {
       particlesArray = [];
@@ -454,6 +478,8 @@
     const githubUser = 'mahmoudelsheikh7', repoName = 'M4S', branch = 'main';
     let imagesList = [], videosList = [], audioList = [], textList = [];
     let imagesLoaded = false, videosLoaded = false, audioLoaded = false, textLoaded = false;
+    let booksList = [], weakHadithsList = [], usefulSitesList = [];
+    let booksLoaded = false, weakHadithsLoaded = false, usefulSitesLoaded = false;
 
     // Navigation
     function showMenu() {
@@ -477,6 +503,9 @@
       if (id === 'videosSection' && !videosLoaded) loadVideos();
       if (id === 'audioSection' && !audioLoaded) loadAudio();
       if (id === 'textSection' && !textLoaded) loadText();
+      if (id === 'booksSection' && !booksLoaded) loadBooks();
+      if (id === 'weakHadithsSection' && !weakHadithsLoaded) loadWeakHadiths();
+      if (id === 'usefulSitesSection' && !usefulSitesLoaded) loadUsefulSites();
     }
     document.querySelectorAll('.menu-item').forEach(i => i.addEventListener('click', () => showSection(i.dataset.section)));
     document.querySelectorAll('.back-button').forEach(b => b.addEventListener('click', showMenu));
@@ -494,6 +523,7 @@
       } else if (type === 'video') {
         media = document.createElement('video');
         media.src = encodeURI(item.download_url);
+        media.poster = `https://raw.githubusercontent.com/${githubUser}/${repoName}/${branch}/images/${item.name.replace(/\.\w+$/, '.jpg')}`;
         media.controls = true;
         media.autoplay = true;
       } else if (type === 'audio') {
@@ -570,6 +600,7 @@
         d.addEventListener('click', () => openModal('video', item));
         const vid = document.createElement('video');
         vid.src = encodeURI(item.download_url);
+        vid.poster = `https://raw.githubusercontent.com/${githubUser}/${repoName}/${branch}/images/${item.name.replace(/\.\w+$/, '.jpg')}`;
         vid.muted = true;
         vid.preload = 'none';
         const title = document.createElement('div');
@@ -635,6 +666,84 @@
       });
     }
     document.getElementById('searchText').addEventListener('input', e => displayTextList(textList.filter(t => t.name.toLowerCase().includes(e.target.value.toLowerCase()))));
+
+    function loadBooks() {
+      document.getElementById('booksLoading').style.display = 'block';
+      fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/books?ref=${branch}`)
+        .then(r => r.json()).then(data => {
+          booksList = data.filter(f => f.type === 'file');
+          displayBooksList(booksList);
+          booksLoaded = true;
+          document.getElementById('booksLoading').style.display = 'none';
+        });
+    }
+    function displayBooksList(list) {
+      const c = document.getElementById('booksList');
+      c.innerHTML = '';
+      list.forEach(item => {
+        const d = document.createElement('div');
+        d.className = 'media-item';
+        d.addEventListener('click', () => openModal('text', item));
+        const title = document.createElement('div');
+        title.className = 'media-title';
+        title.textContent = item.name;
+        d.appendChild(title);
+        c.appendChild(d);
+      });
+    }
+    document.getElementById('searchBooks').addEventListener('input', e => displayBooksList(booksList.filter(t => t.name.toLowerCase().includes(e.target.value.toLowerCase()))));
+
+    function loadWeakHadiths() {
+      document.getElementById('weakHadithsLoading').style.display = 'block';
+      fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/weak_hadiths?ref=${branch}`)
+        .then(r => r.json()).then(data => {
+          weakHadithsList = data.filter(f => f.type === 'file');
+          displayWeakHadithsList(weakHadithsList);
+          weakHadithsLoaded = true;
+          document.getElementById('weakHadithsLoading').style.display = 'none';
+        });
+    }
+    function displayWeakHadithsList(list) {
+      const c = document.getElementById('weakHadithsList');
+      c.innerHTML = '';
+      list.forEach(item => {
+        const d = document.createElement('div');
+        d.className = 'media-item';
+        d.addEventListener('click', () => openModal('text', item));
+        const title = document.createElement('div');
+        title.className = 'media-title';
+        title.textContent = item.name;
+        d.appendChild(title);
+        c.appendChild(d);
+      });
+    }
+    document.getElementById('searchWeakHadiths').addEventListener('input', e => displayWeakHadithsList(weakHadithsList.filter(t => t.name.toLowerCase().includes(e.target.value.toLowerCase()))));
+
+    function loadUsefulSites() {
+      document.getElementById('usefulSitesLoading').style.display = 'block';
+      fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/useful_sites?ref=${branch}`)
+        .then(r => r.json()).then(data => {
+          usefulSitesList = data.filter(f => f.type === 'file');
+          displayUsefulSitesList(usefulSitesList);
+          usefulSitesLoaded = true;
+          document.getElementById('usefulSitesLoading').style.display = 'none';
+        });
+    }
+    function displayUsefulSitesList(list) {
+      const c = document.getElementById('usefulSitesList');
+      c.innerHTML = '';
+      list.forEach(item => {
+        const d = document.createElement('div');
+        d.className = 'media-item';
+        d.addEventListener('click', () => openModal('text', item));
+        const title = document.createElement('div');
+        title.className = 'media-title';
+        title.textContent = item.name;
+        d.appendChild(title);
+        c.appendChild(d);
+      });
+    }
+    document.getElementById('searchUsefulSites').addEventListener('input', e => displayUsefulSitesList(usefulSitesList.filter(t => t.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
     // Initialize
     showMenu();
