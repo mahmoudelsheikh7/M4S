@@ -19,6 +19,17 @@
       --transition: all 0.25s ease;
     }
 
+    [data-theme="light"] {
+      --primary-dark: #f8f9fa;
+      --secondary-dark: #e9ecef;
+      --accent-gold: #f39c12;
+      --accent-blue: #3498db;
+      --text-primary: #2c3e50;
+      --text-secondary: #7f8c8d;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
     * { 
       box-sizing: border-box; 
       margin: 0; 
@@ -32,6 +43,39 @@
       overflow-x: hidden;
       min-height: 100vh;
       position: relative;
+      transition: var(--transition);
+    }
+
+    [data-theme="light"] body {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #ffffff 100%);
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      background: var(--card-bg);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .theme-toggle i {
+      font-size: 20px;
+      color: var(--accent-gold);
+      transition: var(--transition);
     }
 
     /* Simplified Background */
@@ -115,10 +159,19 @@
       transition: var(--transition);
     }
 
+    [data-theme="light"] .search-box input {
+      background: rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
     .search-box input:focus {
       outline: none;
       border-color: var(--accent-gold);
       background: rgba(255, 255, 255, 0.12);
+    }
+
+    [data-theme="light"] .search-box input:focus {
+      background: rgba(0, 0, 0, 0.08);
     }
 
     .search-box i {
@@ -128,6 +181,40 @@
       transform: translateY(-50%);
       color: var(--accent-gold);
       font-size: 1.1rem;
+    }
+
+    .search-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border-radius: 12px;
+      margin-top: 0.5rem;
+      box-shadow: var(--shadow);
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 100;
+      display: none;
+    }
+
+    .search-suggestions.show {
+      display: block;
+    }
+
+    .suggestion-item {
+      padding: 0.8rem 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .suggestion-item:hover {
+      background: rgba(212, 175, 55, 0.1);
+    }
+
+    .suggestion-item:last-child {
+      border-bottom: none;
     }
 
     .search-filters {
@@ -330,6 +417,10 @@
       transition: var(--transition);
     }
 
+    [data-theme="light"] .media-overlay {
+      background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9));
+    }
+
     .media-item:hover .media-overlay {
       transform: translateY(0);
     }
@@ -343,6 +434,59 @@
     .media-overlay p {
       color: var(--text-secondary);
       font-size: 0.85rem;
+    }
+
+    /* Download button in overlay */
+    .media-download {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(212, 175, 55, 0.9);
+      color: var(--primary-dark);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0;
+      transform: scale(0.8);
+      z-index: 2;
+    }
+
+    .media-item:hover .media-download {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .media-download:hover {
+      background: var(--accent-gold);
+      transform: scale(1.1);
+    }
+
+    /* Audio playing indicator */
+    .audio-playing {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(44, 95, 141, 0.9);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+      z-index: 2;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
     }
 
     /* Text Content */
@@ -372,6 +516,10 @@
       margin-bottom: 1.2rem;
       padding-bottom: 0.8rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="light"] .text-header {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     .text-title {
@@ -479,6 +627,10 @@
       transition: opacity 0.3s ease; 
     }
     
+    [data-theme="light"] #modal {
+      background: rgba(255, 255, 255, 0.95);
+    }
+    
     #modal.show { 
       display: flex; 
       opacity: 1; 
@@ -535,6 +687,29 @@
       object-fit: contain; 
     }
 
+    /* Modal Download Button */
+    #modal .download-btn {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue));
+      color: var(--primary-dark);
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    #modal .download-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    }
+
     /* Loading */
     .loading { 
       text-align: center; 
@@ -572,7 +747,12 @@
     }
   </style>
 </head>
-<body>
+<body data-theme="dark">
+  <!-- Theme Toggle -->
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon" id="themeIcon"></i>
+  </div>
+
   <div class="bg-animation"></div>
   
   <header>
@@ -586,6 +766,7 @@
       <div class="search-box">
         <i class="fas fa-search"></i>
         <input type="text" id="globalSearch" placeholder="ابحث عن أي محتوى في الموقع...">
+        <div class="search-suggestions" id="searchSuggestions"></div>
       </div>
       <div class="search-filters">
         <div class="filter-chip active" data-filter="all">الكل</div>
@@ -755,6 +936,10 @@
     <div class="content">
       <button class="close">✕</button>
       <div id="previewContainer"></div>
+      <a id="modalDownloadBtn" class="download-btn" href="#" download>
+        <i class="fas fa-download"></i>
+        تحميل
+      </a>
     </div>
   </div>
   
@@ -785,7 +970,164 @@
     };
     let currentFilter = 'all';
     let currentVideo = null;
+    let currentAudio = null;
     let searchTimeout = null;
+    let currentModalItem = null;
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const htmlElement = document.documentElement;
+    
+    // Check for saved theme preference or default to dark
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    htmlElement.setAttribute('data-theme', currentTheme);
+    
+    if (currentTheme === 'light') {
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const theme = htmlElement.getAttribute('data-theme');
+      if (theme === 'dark') {
+        htmlElement.setAttribute('data-theme', 'light');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'light');
+      } else {
+        htmlElement.setAttribute('data-theme', 'dark');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
+    // Advanced Search with Arabic normalization
+    function normalizeArabic(text) {
+      return text
+        .replace(/[أإآ]/g, 'ا')
+        .replace(/[ى]/g, 'ي')
+        .replace(/[ة]/g, 'ه')
+        .replace(/[ؤ]/g, 'و')
+        .replace(/[ئ]/g, 'ي')
+        .replace(/[ًٌٍَُِّ]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function fuzzySearch(query, text) {
+      const normalizedQuery = normalizeArabic(query.toLowerCase());
+      const normalizedText = normalizeArabic(text.toLowerCase());
+      
+      // Exact match
+      if (normalizedText.includes(normalizedQuery)) {
+        return true;
+      }
+      
+      // Partial word match
+      const queryWords = normalizedQuery.split(' ');
+      const textWords = normalizedText.split(' ');
+      
+      for (let queryWord of queryWords) {
+        for (let textWord of textWords) {
+          if (textWord.includes(queryWord) || queryWord.includes(textWord)) {
+            return true;
+          }
+        }
+      }
+      
+      // Levenshtein distance for close matches
+      if (queryWords.length > 0 && textWords.length > 0) {
+        for (let queryWord of queryWords) {
+          for (let textWord of textWords) {
+            if (levenshteinDistance(queryWord, textWord) <= 2) {
+              return true;
+            }
+          }
+        }
+      }
+      
+      return false;
+    }
+
+    function levenshteinDistance(str1, str2) {
+      const matrix = [];
+      for (let i = 0; i <= str2.length; i++) {
+        matrix[i] = [i];
+      }
+      for (let j = 0; j <= str1.length; j++) {
+        matrix[0][j] = j;
+      }
+      for (let i = 1; i <= str2.length; i++) {
+        for (let j = 1; j <= str1.length; j++) {
+          if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1,
+              matrix[i][j - 1] + 1,
+              matrix[i - 1][j] + 1
+            );
+          }
+        }
+      }
+      return matrix[str2.length][str1.length];
+    }
+
+    // Search suggestions
+    function showSuggestions(query) {
+      const suggestionsContainer = document.getElementById('searchSuggestions');
+      suggestionsContainer.innerHTML = '';
+      
+      if (query.length < 2) {
+        suggestionsContainer.classList.remove('show');
+        return;
+      }
+      
+      const allItems = [
+        ...allContent.images.map(i => ({...i, type: 'images'})),
+        ...allContent.videos.map(i => ({...i, type: 'videos'})),
+        ...allContent.audio.map(i => ({...i, type: 'audio'})),
+        ...allContent.text.map(i => ({...i, type: 'text'})),
+        ...allContent.books.map(i => ({...i, type: 'books'}))
+      ];
+      
+      const suggestions = allItems.filter(item => 
+        fuzzySearch(query, item.name)
+      ).slice(0, 5);
+      
+      if (suggestions.length > 0) {
+        suggestions.forEach(item => {
+          const suggestionDiv = document.createElement('div');
+          suggestionDiv.className = 'suggestion-item';
+          suggestionDiv.innerHTML = `
+            <i class="fas fa-${getIconForType(item.type)}"></i>
+            ${item.name}
+          `;
+          suggestionDiv.addEventListener('click', () => {
+            document.getElementById('globalSearch').value = item.name;
+            suggestionsContainer.classList.remove('show');
+            performSearch();
+          });
+          suggestionsContainer.appendChild(suggestionDiv);
+        });
+        suggestionsContainer.classList.add('show');
+      } else {
+        suggestionsContainer.classList.remove('show');
+      }
+    }
+
+    function getIconForType(type) {
+      const icons = {
+        images: 'image',
+        videos: 'video',
+        audio: 'music',
+        text: 'file-alt',
+        books: 'book'
+      };
+      return icons[type] || 'file';
+    }
 
     // Navigation
     function showMenu() {
@@ -794,6 +1136,7 @@
       document.querySelector('.advanced-search').style.display = 'block';
       document.querySelectorAll('section').forEach(s => s.style.display = 'none');
       document.getElementById('modal').style.display = 'none';
+      document.getElementById('searchSuggestions').classList.remove('show');
       showFinalMessage();
     }
     
@@ -823,15 +1166,18 @@
     const modal = document.getElementById('modal');
     const preview = document.getElementById('previewContainer');
     const modalClose = modal.querySelector('.close');
+    const modalDownloadBtn = document.getElementById('modalDownloadBtn');
 
     function openModal(type, item) {
       preview.innerHTML = '';
+      currentModalItem = item;
+      
       let media;
       
       if (type === 'image') {
         media = document.createElement('img');
         media.src = encodeURI(item.download_url);
-        media.loading = 'lazy'; // Lazy loading for images
+        media.loading = 'lazy';
       } else if (type === 'video') {
         media = document.createElement('video');
         media.src = encodeURI(item.download_url);
@@ -841,6 +1187,12 @@
       }
       
       preview.appendChild(media);
+      
+      // Set download button
+      modalDownloadBtn.href = item.download_url;
+      modalDownloadBtn.download = item.name;
+      modalDownloadBtn.style.display = 'inline-flex';
+      
       modal.style.display = 'flex';
       setTimeout(() => modal.classList.add('show'), 10);
     }
@@ -851,6 +1203,9 @@
         currentVideo.currentTime = 0;
         currentVideo = null;
       }
+      
+      currentModalItem = null;
+      modalDownloadBtn.style.display = 'none';
       
       modal.classList.remove('show');
       setTimeout(() => modal.style.display = 'none', 300);
@@ -863,6 +1218,52 @@
         closeModal();
       }
     });
+
+    // Download function
+    function downloadFile(item) {
+      const link = document.createElement('a');
+      link.href = item.download_url;
+      link.download = item.name;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Audio control - stop other audio when playing new one
+    function stopAllAudio() {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        
+        // Remove playing indicator
+        const playingIndicator = currentAudio.parentElement.querySelector('.audio-playing');
+        if (playingIndicator) {
+          playingIndicator.remove();
+        }
+        
+        currentAudio = null;
+      }
+    }
+
+    function setAudioPlaying(audioElement) {
+      stopAllAudio();
+      currentAudio = audioElement;
+      
+      // Add playing indicator
+      const playingIndicator = document.createElement('div');
+      playingIndicator.className = 'audio-playing';
+      playingIndicator.innerHTML = '<i class="fas fa-volume-up"></i>';
+      audioElement.parentElement.appendChild(playingIndicator);
+      
+      // Remove indicator when audio ends
+      audioElement.addEventListener('ended', () => {
+        if (playingIndicator.parentElement) {
+          playingIndicator.remove();
+        }
+        currentAudio = null;
+      });
+    }
 
     // Final message control
     function showFinalMessage() {
@@ -904,12 +1305,20 @@
       limitedList.forEach(item => {
         const div = document.createElement('div');
         div.className = 'media-item';
-        div.addEventListener('click', () => openModal('image', item));
         
         const img = document.createElement('img');
         img.src = encodeURI(item.download_url);
         img.alt = 'صورة إسلامية';
         img.loading = 'lazy';
+        
+        // Download button
+        const downloadBtn = document.createElement('div');
+        downloadBtn.className = 'media-download';
+        downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+        downloadBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          downloadFile(item);
+        });
         
         const overlay = document.createElement('div');
         overlay.className = 'media-overlay';
@@ -918,7 +1327,9 @@
           <p>اضغط للعرض بالكامل</p>
         `;
         
-        div.append(img, overlay);
+        div.addEventListener('click', () => openModal('image', item));
+        
+        div.append(img, downloadBtn, overlay);
         container.appendChild(div);
       });
     }
@@ -954,14 +1365,22 @@
       limitedList.forEach(item => {
         const div = document.createElement('div');
         div.className = 'media-item';
-        div.addEventListener('click', () => openModal('video', item));
         
         const video = document.createElement('video');
         video.src = encodeURI(item.download_url);
         video.muted = true;
         video.loop = true;
         video.autoplay = true;
-        video.playsinline = true; // Better performance on mobile
+        video.playsinline = true;
+        
+        // Download button
+        const downloadBtn = document.createElement('div');
+        downloadBtn.className = 'media-download';
+        downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+        downloadBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          downloadFile(item);
+        });
         
         const overlay = document.createElement('div');
         overlay.className = 'media-overlay';
@@ -970,7 +1389,9 @@
           <p>اضغط للمشاهدة</p>
         `;
         
-        div.append(video, overlay);
+        div.addEventListener('click', () => openModal('video', item));
+        
+        div.append(video, downloadBtn, overlay);
         container.appendChild(div);
       });
     }
@@ -1011,12 +1432,26 @@
         audio.src = encodeURI(item.download_url);
         audio.controls = true;
         
+        // Add event listener to stop other audio when this plays
+        audio.addEventListener('play', () => {
+          setAudioPlaying(audio);
+        });
+        
+        // Download button
+        const downloadBtn = document.createElement('div');
+        downloadBtn.className = 'media-download';
+        downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+        downloadBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          downloadFile(item);
+        });
+        
         const title = document.createElement('h3');
         title.textContent = item.name.replace(/\.[^/.]+$/, "");
         title.style.color = 'var(--accent-gold)';
         title.style.marginTop = '1rem';
         
-        div.append(audio, title);
+        div.append(audio, downloadBtn, title);
         container.appendChild(div);
       });
     }
@@ -1058,6 +1493,9 @@
         header.innerHTML = `
           <div class="text-title">${item.name.replace(/\.[^/.]+$/, "")}</div>
           <div class="text-actions">
+            <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+              <i class="fas fa-download"></i> تحميل
+            </button>
             <button class="text-action-btn" onclick="copyText('${item.name}')">
               <i class="fas fa-copy"></i> نسخ
             </button>
@@ -1167,6 +1605,9 @@
         header.innerHTML = `
           <div class="text-title">${item.name.replace(/\.[^/.]+$/, "")}</div>
           <div class="text-actions">
+            <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+              <i class="fas fa-download"></i> تحميل
+            </button>
             <button class="text-action-btn" onclick="copyText('${item.name}')">
               <i class="fas fa-copy"></i> نسخ
             </button>
@@ -1223,6 +1664,9 @@
         header.innerHTML = `
           <div class="text-title">${item.name.replace(/\.[^/.]+$/, "")}</div>
           <div class="text-actions">
+            <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+              <i class="fas fa-download"></i> تحميل
+            </button>
             <button class="text-action-btn" onclick="copyText('${item.name}')">
               <i class="fas fa-copy"></i> نسخ
             </button>
@@ -1242,10 +1686,23 @@
       });
     }
 
-    // Advanced Search with debounce for performance
+    // Advanced Search with debounce and suggestions
     document.getElementById('globalSearch').addEventListener('input', function() {
+      const query = this.value;
       clearTimeout(searchTimeout);
+      
+      // Show suggestions
+      showSuggestions(query);
+      
+      // Perform search with debounce
       searchTimeout = setTimeout(performSearch, 300);
+    });
+    
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.search-box')) {
+        document.getElementById('searchSuggestions').classList.remove('show');
+      }
     });
     
     document.querySelectorAll('.filter-chip').forEach(chip => {
@@ -1279,7 +1736,7 @@
       if (currentFilter === 'all' || currentFilter === 'images') {
         if (!loadedContent.images) loadImages();
         results = results.concat(allContent.images.filter(i => 
-          i.name.toLowerCase().includes(searchTerm)
+          fuzzySearch(searchTerm, i.name)
         ));
         if (results.length > 0) {
           document.getElementById('imagesSection').style.display = 'block';
@@ -1290,7 +1747,7 @@
       if (currentFilter === 'all' || currentFilter === 'videos') {
         if (!loadedContent.videos) loadVideos();
         results = results.concat(allContent.videos.filter(v => 
-          v.name.toLowerCase().includes(searchTerm)
+          fuzzySearch(searchTerm, v.name)
         ));
         if (results.length > 0) {
           document.getElementById('videosSection').style.display = 'block';
@@ -1298,10 +1755,21 @@
         }
       }
       
+      if (currentFilter === 'all' || currentFilter === 'audio') {
+        if (!loadedContent.audio) loadAudio();
+        results = results.concat(allContent.audio.filter(a => 
+          fuzzySearch(searchTerm, a.name)
+        ));
+        if (results.length > 0) {
+          document.getElementById('audioSection').style.display = 'block';
+          displayAudio(results);
+        }
+      }
+      
       if (currentFilter === 'all' || currentFilter === 'text') {
         if (!loadedContent.text) loadText();
         results = results.concat(allContent.text.filter(t => 
-          t.name.toLowerCase().includes(searchTerm)
+          fuzzySearch(searchTerm, t.name)
         ));
         if (results.length > 0) {
           document.getElementById('textSection').style.display = 'block';
@@ -1312,7 +1780,7 @@
       if (currentFilter === 'all' || currentFilter === 'books') {
         if (!loadedContent.books) loadBooks();
         results = results.concat(allContent.books.filter(b => 
-          b.name.toLowerCase().includes(searchTerm)
+          fuzzySearch(searchTerm, b.name)
         ));
         if (results.length > 0) {
           document.getElementById('booksSection').style.display = 'block';
