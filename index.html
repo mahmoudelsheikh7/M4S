@@ -489,6 +489,69 @@
       100% { transform: scale(1); }
     }
 
+    /* Audio Player Styles */
+    .audio-player {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .audio-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .play-btn {
+      background: var(--accent-gold);
+      color: var(--primary-dark);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .play-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .audio-progress {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .audio-progress-bar {
+      height: 100%;
+      background: var(--accent-gold);
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    .audio-time {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .audio-title {
+      color: var(--accent-gold);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
     /* Text Content */
     .text-container {
       background: var(--card-bg);
@@ -541,10 +604,19 @@
       cursor: pointer;
       transition: var(--transition);
       font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
     .text-action-btn:hover {
       background: rgba(212, 175, 55, 0.2);
+    }
+
+    .text-action-btn.copied {
+      background: rgba(39, 174, 96, 0.2);
+      color: #27ae60;
+      border-color: rgba(39, 174, 96, 0.3);
     }
 
     /* Books Grid */
@@ -973,6 +1045,7 @@
     let currentAudio = null;
     let searchTimeout = null;
     let currentModalItem = null;
+    let audioPlayers = new Map(); // Store audio players
 
     // Theme Toggle
     const themeToggle = document.getElementById('themeToggle');
@@ -1129,6 +1202,59 @@
       return icons[type] || 'file';
     }
 
+    // Copy to clipboard function
+    async function copyToClipboard(text, button) {
+      try {
+        // Use the modern Clipboard API
+        await navigator.clipboard.writeText(text);
+        
+        // Show success feedback
+        if (button) {
+          const originalHTML = button.innerHTML;
+          button.innerHTML = '<i class="fas fa-check"></i> تم النسخ';
+          button.classList.add('copied');
+          
+          setTimeout(() => {
+            button.innerHTML = originalHTML;
+            button.classList.remove('copied');
+          }, 2000);
+        }
+        
+        return true;
+      } catch (err) {
+        // Fallback for older browsers
+        try {
+          const textArea = document.createElement('textarea');
+          textArea.value = text;
+          textArea.style.position = 'fixed';
+          textArea.style.left = '-999999px';
+          textArea.style.top = '-999999px';
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          
+          const successful = document.execCommand('copy');
+          document.body.removeChild(textArea);
+          
+          if (successful && button) {
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i> تم النسخ';
+            button.classList.add('copied');
+            
+            setTimeout(() => {
+              button.innerHTML = originalHTML;
+              button.classList.remove('copied');
+            }, 2000);
+          }
+          
+          return successful;
+        } catch (fallbackErr) {
+          console.error('Failed to copy text: ', fallbackErr);
+          return false;
+        }
+      }
+    }
+
     // Navigation
     function showMenu() {
       document.getElementById('menu').style.display = 'grid';
@@ -1232,37 +1358,136 @@
 
     // Audio control - stop other audio when playing new one
     function stopAllAudio() {
-      if (currentAudio) {
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
+      audioPlayers.forEach((player, key) => {
+        if (player.audio && !player.audio.paused) {
+          player.audio.pause();
+          player.audio.currentTime = 0;
+          
+          // Update UI
+          player.playBtn.innerHTML = '<i class="fas fa-play"></i>';
+          player.progressBar.style.width = '0%';
+          player.timeDisplay.textContent = '0:00';
+          
+          // Remove playing indicator
+          const playingIndicator = player.container.querySelector('.audio-playing');
+          if (playingIndicator) {
+            playingIndicator.remove();
+          }
+        }
+      });
+    }
+
+    function createAudioPlayer(item, container) {
+      const audioPlayer = document.createElement('div');
+      audioPlayer.className = 'audio-player';
+      
+      const title = document.createElement('div');
+      title.className = 'audio-title';
+      title.textContent = item.name.replace(/\.[^/.]+$/, "");
+      
+      const controls = document.createElement('div');
+      controls.className = 'audio-controls';
+      
+      const playBtn = document.createElement('button');
+      playBtn.className = 'play-btn';
+      playBtn.innerHTML = '<i class="fas fa-play"></i>';
+      
+      const progress = document.createElement('div');
+      progress.className = 'audio-progress';
+      
+      const progressBar = document.createElement('div');
+      progressBar.className = 'audio-progress-bar';
+      
+      const timeDisplay = document.createElement('div');
+      timeDisplay.className = 'audio-time';
+      timeDisplay.textContent = '0:00';
+      
+      const audio = new Audio(item.download_url);
+      audio.preload = 'metadata';
+      
+      progress.appendChild(progressBar);
+      controls.appendChild(playBtn);
+      controls.appendChild(progress);
+      controls.appendChild(timeDisplay);
+      
+      audioPlayer.appendChild(title);
+      audioPlayer.appendChild(controls);
+      
+      // Store player reference
+      const playerRef = {
+        audio: audio,
+        playBtn: playBtn,
+        progressBar: progressBar,
+        timeDisplay: timeDisplay,
+        container: container
+      };
+      
+      audioPlayers.set(item.name, playerRef);
+      
+      // Play/Pause functionality
+      playBtn.addEventListener('click', () => {
+        if (audio.paused) {
+          stopAllAudio();
+          audio.play();
+          playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+          
+          // Add playing indicator
+          const playingIndicator = document.createElement('div');
+          playingIndicator.className = 'audio-playing';
+          playingIndicator.innerHTML = '<i class="fas fa-volume-up"></i>';
+          container.appendChild(playingIndicator);
+        } else {
+          audio.pause();
+          playBtn.innerHTML = '<i class="fas fa-play"></i>';
+          
+          // Remove playing indicator
+          const playingIndicator = container.querySelector('.audio-playing');
+          if (playingIndicator) {
+            playingIndicator.remove();
+          }
+        }
+      });
+      
+      // Update progress
+      audio.addEventListener('timeupdate', () => {
+        const progressPercent = (audio.currentTime / audio.duration) * 100;
+        progressBar.style.width = progressPercent + '%';
+        timeDisplay.textContent = formatTime(audio.currentTime);
+      });
+      
+      // Handle audio end
+      audio.addEventListener('ended', () => {
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        progressBar.style.width = '0%';
+        timeDisplay.textContent = '0:00';
         
         // Remove playing indicator
-        const playingIndicator = currentAudio.parentElement.querySelector('.audio-playing');
+        const playingIndicator = container.querySelector('.audio-playing');
         if (playingIndicator) {
           playingIndicator.remove();
         }
-        
-        currentAudio = null;
-      }
+      });
+      
+      // Handle metadata loaded
+      audio.addEventListener('loadedmetadata', () => {
+        timeDisplay.textContent = formatTime(0) + ' / ' + formatTime(audio.duration);
+      });
+      
+      // Progress bar click
+      progress.addEventListener('click', (e) => {
+        const rect = progress.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = percent * audio.duration;
+      });
+      
+      return audioPlayer;
     }
 
-    function setAudioPlaying(audioElement) {
-      stopAllAudio();
-      currentAudio = audioElement;
-      
-      // Add playing indicator
-      const playingIndicator = document.createElement('div');
-      playingIndicator.className = 'audio-playing';
-      playingIndicator.innerHTML = '<i class="fas fa-volume-up"></i>';
-      audioElement.parentElement.appendChild(playingIndicator);
-      
-      // Remove indicator when audio ends
-      audioElement.addEventListener('ended', () => {
-        if (playingIndicator.parentElement) {
-          playingIndicator.remove();
-        }
-        currentAudio = null;
-      });
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00';
+      const minutes = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${minutes}:${secs.toString().padStart(2, '0')}`;
     }
 
     // Final message control
@@ -1428,14 +1653,8 @@
         const div = document.createElement('div');
         div.className = 'media-item';
         
-        const audio = document.createElement('audio');
-        audio.src = encodeURI(item.download_url);
-        audio.controls = true;
-        
-        // Add event listener to stop other audio when this plays
-        audio.addEventListener('play', () => {
-          setAudioPlaying(audio);
-        });
+        // Create custom audio player
+        const audioPlayer = createAudioPlayer(item, div);
         
         // Download button
         const downloadBtn = document.createElement('div');
@@ -1446,12 +1665,7 @@
           downloadFile(item);
         });
         
-        const title = document.createElement('h3');
-        title.textContent = item.name.replace(/\.[^/.]+$/, "");
-        title.style.color = 'var(--accent-gold)';
-        title.style.marginTop = '1rem';
-        
-        div.append(audio, downloadBtn, title);
+        div.append(audioPlayer, downloadBtn);
         container.appendChild(div);
       });
     }
@@ -1496,7 +1710,7 @@
             <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
               <i class="fas fa-download"></i> تحميل
             </button>
-            <button class="text-action-btn" onclick="copyText('${item.name}')">
+            <button class="text-action-btn" id="copy-${item.name.replace(/[^a-zA-Z0-9]/g, '')}" onclick="copyTextContent('${item.download_url}', this)">
               <i class="fas fa-copy"></i> نسخ
             </button>
           </div>
@@ -1505,6 +1719,7 @@
         const content = document.createElement('div');
         content.className = 'text-content';
         content.textContent = 'جاري التحميل...';
+        content.id = `content-${item.name.replace(/[^a-zA-Z0-9]/g, '')}`;
         
         fetch(item.download_url).then(r => r.text()).then(txt => {
           content.textContent = txt;
@@ -1513,6 +1728,17 @@
         textContainer.append(header, content);
         container.appendChild(textContainer);
       });
+    }
+
+    // Copy text content function
+    async function copyTextContent(url, button) {
+      try {
+        const response = await fetch(url);
+        const text = await response.text();
+        await copyToClipboard(text, button);
+      } catch (error) {
+        console.error('Error copying text:', error);
+      }
     }
 
     // Load Books
@@ -1608,7 +1834,7 @@
             <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
               <i class="fas fa-download"></i> تحميل
             </button>
-            <button class="text-action-btn" onclick="copyText('${item.name}')">
+            <button class="text-action-btn" id="copy-${item.name.replace(/[^a-zA-Z0-9]/g, '')}" onclick="copyTextContent('${item.download_url}', this)">
               <i class="fas fa-copy"></i> نسخ
             </button>
           </div>
@@ -1617,6 +1843,7 @@
         const content = document.createElement('div');
         content.className = 'text-content';
         content.textContent = 'جاري التحميل...';
+        content.id = `content-${item.name.replace(/[^a-zA-Z0-9]/g, '')}`;
         
         fetch(item.download_url).then(r => r.text()).then(txt => {
           content.textContent = txt;
@@ -1667,7 +1894,7 @@
             <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
               <i class="fas fa-download"></i> تحميل
             </button>
-            <button class="text-action-btn" onclick="copyText('${item.name}')">
+            <button class="text-action-btn" id="copy-${item.name.replace(/[^a-zA-Z0-9]/g, '')}" onclick="copyTextContent('${item.download_url}', this)">
               <i class="fas fa-copy"></i> نسخ
             </button>
           </div>
@@ -1676,6 +1903,7 @@
         const content = document.createElement('div');
         content.className = 'text-content';
         content.textContent = 'جاري التحميل...';
+        content.id = `content-${item.name.replace(/[^a-zA-Z0-9]/g, '')}`;
         
         fetch(item.download_url).then(r => r.text()).then(txt => {
           content.textContent = txt;
@@ -1787,11 +2015,6 @@
           displayBooksList(results);
         }
       }
-    }
-
-    // Copy text function
-    function copyText(fileName) {
-      console.log('Copying text from:', fileName);
     }
 
     // Initialize
