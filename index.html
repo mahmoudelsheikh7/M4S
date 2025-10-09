@@ -1,182 +1,549 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>M4S</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>M4S - منصة المحتوى الإسلامي الفاخرة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Reset & Base */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #121212; color: #ffffff; font-family: 'Roboto', sans-serif; overflow-x: hidden; }
+    :root {
+      --primary-dark: #0a0e1a;
+      --secondary-dark: #1a1f2e;
+      --card-dark: rgba(26, 31, 46, 0.7);
+      --accent-gold: #d4af37;
+      --accent-blue: #2c5f8d;
+      --text-primary: #f8f9fa;
+      --text-secondary: #b8c1d1;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-    /* Canvas Background */
-    #bgCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    body { 
+      background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 50%, #0f1419 100%);
+      color: var(--text-primary); 
+      font-family: 'Tajawal', sans-serif; 
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-animation::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Islamic Pattern Overlay */
+    .islamic-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(44, 95, 141, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+      opacity: 0.5;
+      z-index: -1;
+      pointer-events: none;
+    }
 
     /* Header */
-    header { text-align: center; color: #ffffff; position: relative; z-index: 1; padding: 1.5rem 0; }
-    header h1 { font-size: 2.8rem; margin: 0; color: #f4f4f4; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); }
-    header h1 a { color: #ffffff; text-decoration: none; transition: color 0.3s ease; }
-    header h1 a:hover, header h1 a:active { text-decoration: none; }
-
-    /* Welcome Message */
-    #welcomeMessage { 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      margin: 1rem auto; 
-      max-width: 500px; 
-      background: #1f1f1f; 
-      padding: 1rem; 
-      border-radius: 1rem; 
+    header { 
       text-align: center; 
-      font-size: 1.5rem; 
-      color: #e0e0e0; 
-      transition: transform 0.3s, box-shadow 0.3s; 
-      animation: fadeIn 0.5s ease forwards; 
+      padding: 3rem 1rem 2rem;
+      position: relative;
+      background: linear-gradient(180deg, rgba(10, 14, 26, 0.9) 0%, transparent 100%);
+      margin-bottom: 2rem;
     }
-    #welcomeMessage:hover { transform: scale(1.03); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
-    @media (max-width: 480px) { 
-      #welcomeMessage { font-size: 1.2rem; padding: 0.75rem; max-width: 90%; } 
+    
+    header h1 { 
+      font-family: 'Amiri', serif;
+      font-size: 3.5rem; 
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+      margin-bottom: 0.5rem;
+      animation: glow 3s ease-in-out infinite alternate;
     }
 
-    /* Message 1 and Message 2 */
-    #message1, #message2 { 
-      display: flex; 
-      flex-direction: column; 
-      justify-content: center; 
-      align-items: center; 
-      margin: 1rem auto; 
-      max-width: 600px; 
-      background: #1f1f1f; 
-      padding: 1.5rem; 
-      border-radius: 1rem; 
-      text-align: center; 
-      font-size: 1.2rem; 
-      color: #e0e0e0; 
-      transition: transform 0.3s, box-shadow 0.3s; 
-      animation: fadeIn 0.5s ease forwards; 
-      white-space: pre-wrap; 
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.3)); }
+      to { filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.5)); }
     }
-    #message1:hover, #message2:hover { 
-      transform: scale(1.03); 
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
+    
+    header .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      font-weight: 300;
     }
-    @media (max-width: 480px) { 
-      #message1, #message2 { 
-        font-size: 1rem; 
-        padding: 1rem; 
-        max-width: 90%; 
-      } 
+
+    /* Advanced Search */
+    .advanced-search {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .search-container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 1rem 3rem 1rem 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 15px;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      transition: var(--transition);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-gold);
+      font-size: 1.2rem;
+    }
+
+    .search-filters {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .filter-chip {
+      padding: 0.5rem 1rem;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    .filter-chip:hover, .filter-chip.active {
+      background: rgba(212, 175, 55, 0.2);
+      color: var(--accent-gold);
+      transform: translateY(-2px);
     }
 
     /* Main Menu */
     #menu { 
       display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
-      gap: 1rem; 
-      padding: 1rem; 
-      position: relative; 
-      z-index: 1; 
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+      gap: 1.5rem; 
+      padding: 0 1rem;
       max-width: 1200px; 
-      margin: 0 auto; 
+      margin: 0 auto 3rem;
     }
+    
     .menu-item { 
-      background: #1f1f1f; 
-      padding: 1.5rem; 
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
       text-align: center; 
-      border-radius: 1rem; 
       cursor: pointer; 
-      transition: background 0.3s, transform 0.3s, box-shadow 0.3s; 
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: var(--shadow);
     }
+
+    .menu-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(44, 95, 141, 0.1));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .menu-item:hover::before {
+      opacity: 1;
+    }
+
+    .menu-item i {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: var(--transition);
+    }
+
+    .menu-item span {
+      color: var(--text-primary);
+      font-weight: 500;
+      font-size: 1.1rem;
+      z-index: 1;
+    }
+    
     .menu-item:hover { 
-      background: #333; 
-      transform: scale(1.05); 
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+
+    .menu-item:hover i {
+      transform: scale(1.1);
+    }
+
+    /* Welcome Messages */
+    .welcome-container {
+      max-width: 900px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+    }
+
+    #welcomeMessage, #message1 { 
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 25px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #welcomeMessage::before, #message1::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent-gold), var(--accent-blue));
+    }
+
+    #welcomeMessage {
+      font-family: 'Amiri', serif;
+      font-size: 2rem;
+      line-height: 1.8;
+      color: var(--text-primary);
+    }
+
+    #message1 {
+      font-size: 1.2rem;
+      line-height: 2;
+      color: var(--text-secondary);
+      text-align: right;
+    }
+
+    /* Final Message - Hidden by default */
+    .final-message-container {
+      max-width: 900px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      display: none; /* Hidden by default */
+    }
+
+    .final-message-container.show {
+      display: block; /* Show only when needed */
     }
 
     /* Sections */
     section { 
       display: none; 
-      padding: 2rem; 
-      position: relative; 
-      z-index: 1; 
-      max-width: 1200px; 
-      margin: 0 auto; 
+      padding: 2rem 1rem;
+      max-width: 1400px; 
+      margin: 0 auto;
     }
+    
     .back-button { 
-      background: none; 
-      border: none; 
-      color: #0af; 
-      font-size: 1rem; 
-      cursor: pointer; 
-      margin-bottom: 1rem; 
-      transition: color 0.3s; 
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-bottom: 2rem;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
     }
+    
     .back-button:hover { 
-      color: #3ea4be; 
-    }
-    input[type="text"] { 
-      width: 100%; 
-      padding: 0.75rem; 
-      background: #333; 
-      border: 1px solid #555; 
-      border-radius: 0.5rem; 
-      color: #fff; 
-      margin-bottom: 1rem; 
-      transition: border-color 0.3s; 
-    }
-    input[type="text"]:focus { 
-      border-color: #0af; 
-      outline: none; 
+      background: rgba(212, 175, 55, 0.1);
+      border-color: var(--accent-gold);
+      transform: translateX(5px);
     }
 
-    /* Media Containers */
-    #imagesContainer, #videosContainer, #audioContainer { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-      gap: 1.5rem; 
-      justify-content: center; 
-    }
-    .media-item { 
-      background: #1f1f1f; 
-      border-radius: 0.75rem; 
-      padding: 1rem; 
-      text-align: center; 
-      cursor: pointer; 
-      transition: transform 0.3s, box-shadow 0.3s; 
-    }
-    .media-item:hover { 
-      transform: scale(1.03); 
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
-    }
-    .media-item img, .media-item video { 
-      width: 100%; 
-      height: auto; 
-      border-radius: 0.5rem; 
-      margin-bottom: 0.5rem; 
-      object-fit: cover; 
-    }
-    .media-item audio { 
-      width: 100%; 
-      margin-bottom: 0.5rem; 
-    }
-    .media-title { 
-      font-size: 1rem; 
-      word-break: break-word; 
-      color: #e0e0e0; 
+    section h2 {
+      font-family: 'Amiri', serif;
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    /* Text List */
-    #textList { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 0.75rem; 
+    /* Media Grids */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
     }
-    #textList .media-item { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
+
+    .media-item {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+
+    .media-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+
+    .media-item img, .media-item video {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .media-item:hover img, .media-item:hover video {
+      transform: scale(1.05);
+    }
+
+    .media-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, transparent, rgba(10, 14, 26, 0.9));
+      padding: 1.5rem;
+      transform: translateY(100%);
+      transition: var(--transition);
+    }
+
+    .media-item:hover .media-overlay {
+      transform: translateY(0);
+    }
+
+    .media-overlay h3 {
+      color: var(--accent-gold);
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .media-overlay p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Text Content */
+    .text-container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 25px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .text-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+
+    .text-content {
+      position: relative;
+      z-index: 1;
+      font-family: 'Amiri', serif;
+      font-size: 1.3rem;
+      line-height: 2.2;
+      color: var(--text-primary);
+      text-align: right;
+    }
+
+    .text-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .text-title {
+      font-size: 1.5rem;
+      color: var(--accent-gold);
+    }
+
+    .text-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .text-action-btn {
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--accent-gold);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    .text-action-btn:hover {
+      background: rgba(212, 175, 55, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Books Grid */
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .book-item {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .book-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--accent-gold), var(--accent-blue));
+    }
+
+    .book-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+    }
+
+    .book-icon {
+      font-size: 3rem;
+      color: var(--accent-gold);
+      margin-bottom: 1rem;
+    }
+
+    .book-title {
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .book-download {
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue));
+      color: var(--primary-dark);
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .book-download:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
     }
 
     /* Modal */
@@ -187,566 +554,855 @@
       left: 0; 
       width: 100%; 
       height: 100%; 
-      background: rgba(0, 0, 0, 0.85); 
+      background: rgba(10, 14, 26, 0.95); 
       justify-content: center; 
       align-items: center; 
       z-index: 9999; 
       opacity: 0; 
       transition: opacity 0.4s ease; 
     }
+    
     #modal.show { 
       display: flex; 
       opacity: 1; 
     }
+    
     #modal .content { 
-      background: #1a1a1a; 
-      border-radius: 1rem; 
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 25px;
       max-width: 90%; 
-      max-height: 85vh; 
-      padding: 1.5rem; 
+      max-height: 90vh; 
+      padding: 2rem; 
       overflow: auto; 
       position: relative; 
-      transform: translateY(50px); 
+      transform: scale(0.9); 
       transition: transform 0.4s ease; 
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     }
+    
     #modal.show .content { 
-      transform: translateY(0); 
+      transform: scale(1); 
     }
+    
     #modal .close { 
       position: absolute; 
-      top: 1rem; 
-      right: 1rem; 
-      background: none; 
-      border: none; 
-      font-size: 1.5rem; 
-      color: #fff; 
+      top: 1.5rem; 
+      left: 1.5rem; 
+      background: rgba(255, 255, 255, 0.1); 
+      border: 1px solid var(--glass-border);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: var(--text-primary);
+      font-size: 1.2rem;
       cursor: pointer; 
-      transition: color 0.3s; 
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+    
     #modal .close:hover { 
-      color: rgb(53, 105, 131); 
+      background: rgba(212, 175, 55, 0.2);
+      transform: rotate(90deg);
     }
+    
     #modal .content video,
-    #modal .content img,
-    #modal .content audio { 
-      display: block; 
+    #modal .content img { 
       width: 100%; 
-      height: auto; 
       max-height: 70vh; 
-      border-radius: 0.5rem; 
+      border-radius: 15px; 
     }
+    
     #modal .content video { 
       object-fit: contain; 
     }
-    #modal .content pre { 
-      background: #111; 
-      padding: 1rem; 
-      border-radius: 0.5rem; 
-      white-space: pre-wrap; 
-      color: #e0e0e0; 
-    }
-    #modal a { 
-      background: #0af; 
-      color: #fff; 
-      padding: 0.75rem 1.5rem; 
-      border-radius: 0.5rem; 
-      text-decoration: none; 
-      transition: background 0.3s; 
-    }
-    #modal a:hover { 
-      background: #00ccff; 
+
+    /* Loading */
+    .loading { 
+      text-align: center; 
+      padding: 3rem; 
+      color: var(--accent-gold);
+      font-size: 1.2rem;
     }
 
-    /* Loading Indicator */
-    .loading { 
-      display: none; 
-      text-align: center; 
-      padding: 1rem; 
-      color: #0af; 
-      font-size: 1.2rem; 
+    .loading i {
+      animation: spin 2s infinite linear;
+      margin-left: 0.5rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     /* Footer */
     footer { 
-      position: fixed; 
-      bottom: 0; 
-      width: 100%; 
-      background: #12121200; 
-      color: #fff; 
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--glass-border);
+      color: var(--text-secondary); 
       text-align: center; 
-      padding: 0.1rem 0; 
-      font-size: 0.7rem; 
-      z-index: 1000; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      gap: 0.75rem; 
-    }
-    footer .github-icon { 
-      fill: white; 
-      transition: transform 0.3s ease; 
-    }
-    footer .github-icon:hover { 
-      transform: scale(1.2); 
-    }
-    footer p { 
-      margin: 0; 
+      padding: 2rem; 
+      margin-top: 4rem;
     }
 
-    /* Responsive Design */
+    /* Responsive */
     @media (max-width: 768px) {
-      header h1 { font-size: 2rem; }
-      #menu { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
-      .media-item { flex: 1 1 45%; }
-      #modal .content { max-width: 95%; padding: 1rem; }
-    }
-    @media (max-width: 480px) {
-      #menu { grid-template-columns: 1fr; }
-      .media-item { flex: 1 1 100%; }
-      #modal .content { max-width: 98%; max-height: 90vh; padding: 0.75rem; }
-    }
-
-    /* Animations */
-    @keyframes fadeIn { 
-      from { opacity: 0; transform: translateY(20px); } 
-      to { opacity: 1; transform: translateY(0); } 
-    }
-    section.active { 
-      display: block; 
-      animation: fadeIn 0.5s ease; 
-    }
-    .media-item { 
-      animation: fadeIn 0.5s ease forwards; 
+      header h1 { font-size: 2.5rem; }
+      #menu { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+      .media-grid, .books-grid { grid-template-columns: 1fr; }
+      #welcomeMessage { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
-  <canvas id="bgCanvas"></canvas>
-  <header><h1><a href="https://mahmoudelsheikh7.github.io/profilecardwebpage-mahmoud/">M4S</a></h1></header>
-  <div id="welcomeMessage">
-    إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ ۚ يَا أَيُّهَا الَّذِينَ آمَنُوا صَلُّوا عَلَيْهِ وَسَلِّمُوا تَسْلِيمًا
+  <div class="bg-animation"></div>
+  <div class="islamic-pattern"></div>
+  
+  <header>
+    <h1>M4S</h1>
+    <p class="subtitle">منصة المحتوى الإسلامي الفاخرة</p>
+  </header>
+  
+  <!-- Advanced Search -->
+  <div class="advanced-search">
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="globalSearch" placeholder="ابحث عن أي محتوى في الموقع...">
+      </div>
+      <div class="search-filters">
+        <div class="filter-chip active" data-filter="all">الكل</div>
+        <div class="filter-chip" data-filter="images">الصور</div>
+        <div class="filter-chip" data-filter="videos">الفيديوهات</div>
+        <div class="filter-chip" data-filter="audio">الصوتيات</div>
+        <div class="filter-chip" data-filter="text">النصوص</div>
+        <div class="filter-chip" data-filter="books">الكتب</div>
+      </div>
+    </div>
   </div>
+  
+  <!-- Welcome Messages -->
+  <div class="welcome-container">
+    <div id="welcomeMessage">
+      إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ ۚ يَا أَيُّهَا الَّذِينَ آمَنُوا صَلُّوا عَلَيْهِ وَسَلِّمُوا تَسْلِيمًا
+    </div>
+    
+    <div id="message1">
+      إذا مات ابنُ آدمَ انقطع عملُه إلا من ثلاثٍ: صدقةٍ جاريةٍ، وعلمٍ ينتفعُ به، وولدٍ صالحٍ يدعو له<br>
+      خلاصة حكم المحدث: صحيح<br>
+      الراوي: - | المحدث: ابن تيمية | المصدر: مجموع الفتاوى | الصفحة أو الرقم: 1/191
+    </div>
+  </div>
+  
+  <!-- Main Menu -->
   <div id="menu">
-    <div class="menu-item" data-section="imagesSection">Images * الصور </div>
-    <div class="menu-item" data-section="videosSection">Videos * الفيديوهات</div>
-    <div class="menu-item" data-section="audioSection">Audio * الصوتيات</div>
-    <div class="menu-item" data-section="textSection">Text * النص </div>
-    <div class="menu-item" data-section="booksSection">الكتب</div>
-    <div class="menu-item" data-section="weakHadithsSection">الاحاديث الضعيفه المنتشرة بين الناس</div>
-    <div class="menu-item" data-section="usefulSitesSection">مواقع وتطبيقات مفيدة</div>
+    <div class="menu-item" data-section="imagesSection">
+      <i class="fas fa-images"></i>
+      <span>الصور الإسلامية</span>
+    </div>
+    <div class="menu-item" data-section="videosSection">
+      <i class="fas fa-video"></i>
+      <span>الفيديوهات</span>
+    </div>
+    <div class="menu-item" data-section="audioSection">
+      <i class="fas fa-music"></i>
+      <span>الصوتيات</span>
+    </div>
+    <div class="menu-item" data-section="textSection">
+      <i class="fas fa-file-alt"></i>
+      <span>النصوص</span>
+    </div>
+    <div class="menu-item" data-section="booksSection">
+      <i class="fas fa-book"></i>
+      <span>الكتب</span>
+    </div>
+    <div class="menu-item" data-section="weakHadithsSection">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>الأحاديث الضعيفة</span>
+    </div>
+    <div class="menu-item" data-section="usefulSitesSection">
+      <i class="fas fa-link"></i>
+      <span>مواقع مفيدة</span>
+    </div>
   </div>
-  <div id="message1">
-    إذا مات ابنُ آدمَ انقطع عملُه إلا من ثلاثٍ: صدقةٍ جاريةٍ، وعلمٍ ينتفعُ به، وولدٍ صالحٍ يدعو له<br>
-    خلاصة حكم المحدث: صحيح<br>
-    الراوي: - | المحدث: ابن تيمية | المصدر: مجموع الفتاوى | الصفحة أو الرقم: 1/191
+  
+  <!-- Final Message - Hidden by default -->
+  <div class="final-message-container" id="finalMessageContainer">
+    <div id="message2" class="text-container">
+      <div class="text-content">
+        الحمد لله، والصلاة والسلام على رسول الله، وعلى آله وصحبه، أما بعد:<br>
+        فإن أفضل الدعاء هو ما جاء في القرآن الكريم، وهو كثير وشامل لخيري الدنيا والآخرة، ومن أمثلته قول الله تبارك وتعالى: رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ {البقرة:201}.<br>
+        وما جاء في السنة النبوية وصرحت الأحاديث بأفضليته، ومن ذلك: الحمد لله، ومنه: سؤال العفو والعافية، ومنه: سيد الاستغفار في طلب المغفرة، فقد روى الترمذي وابن ماجه وغيرهما أن رسول الله صلى الله عليه وسلم قال: أَفْضَلُ الذِّكْرِ: لَا إِلَهَ إِلَّا اللهُ، وَأَفْضَلُ الدُّعَاءِ: الْحَمْدُ للهِ. حسنه الألباني.<br>
+        وَقَالَ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ: أَفْضَلُ الْكَلَامِ بَعْدَ الْقُرْآنِ ـ وَهُو مِنَ الْقُرْآنِ ـ أَرْبَعٌ لَا يَضُرُّكَ بِأَيِّهِنَّ بَدَأْتَ: سُبْحَانَ اللهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللهُ، وَاللهُ أَكْبَرُ.<br>
+        وقال صلى الله عليه وسلم: مَا مِنْ دَعْوَةٍ يَدْعُو بِهَا الْعَبْدُ أَفْضَلَ مِنْ: اللَّهُمَّ إِنِّي أَسْأَلُكَ الْمُعَافَاةَ فِي الدُّنْيَا وَالْآخِرَةِ. رواه ابن ماجه وغيره، وصححه الألباني.<br>
+        وعَنْ عَائِشَة ـ رضي الله عنها ـ قَالَتْ: قُلْتُ: يَا رَسُولَ اللهِ؛ أَرَأَيْتَ إِنْ عَلِمْتُ أَيَّ لَيْلَةٍ لَيْلَةُ الْقَدْرِ مَا أَقُولُ فِيهَا؟ قَالَ: قُولِي: اللَّهُمَّ إِنَّكَ عُفُوٌّ تُحِبُّ الْعَفْوَ، فَاعْفُ عَنِّي. رواه الترمذي وغيره، وصححه الألباني.<br>
+        وقال صلى الله عليه وسلم: سيد الاستغفار أن يقول العبد: اللهم أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك، وأنا على عهدك ووعدك ما استطعت، أعوذ بك من شر ما صنعت، أبوء لك بنعمتك علي، وأبوء لك بذنبي فاغفر لي، فإنه لا يغفر الذنوب إلا أنت، قال: ومن قالها من النهار موقنا بها فمات من يومه قبل أن يمسي فهو من أهل الجنة، ومن قالها من الليل وهو موقن بها فمات قبل أن يصبح فهو من أهل الجنة. رواه البخاري.
+      </div>
+    </div>
   </div>
-  <div id="message2">
-    الحمد لله، والصلاة والسلام على رسول الله، وعلى آله وصحبه، أما بعد:<br>
-    فإن أفضل الدعاء هو ما جاء في القرآن الكريم، وهو كثير وشامل لخيري الدنيا والآخرة، ومن أمثلته قول الله تبارك وتعالى: رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ {البقرة:201}.<br>
-    وما جاء في السنة النبوية وصرحت الأحاديث بأفضليته، ومن ذلك: الحمد لله، ومنه: سؤال العفو والعافية، ومنه: سيد الاستغفار في طلب المغفرة، فقد روى الترمذي وابن ماجه وغيرهما أن رسول الله صلى الله عليه وسلم قال: أَفْضَلُ الذِّكْرِ: لَا إِلَهَ إِلَّا اللهُ، وَأَفْضَلُ الدُّعَاءِ: الْحَمْدُ للهِ. حسنه الألباني.<br>
-    وَقَالَ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ: أَفْضَلُ الْكَلَامِ بَعْدَ الْقُرْآنِ ـ وَهُو مِنَ الْقُرْآنِ ـ أَرْبَعٌ لَا يَضُرُّكَ بِأَيِّهِنَّ بَدَأْتَ: سُبْحَانَ اللهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللهُ، وَاللهُ أَكْبَرُ.<br>
-    وقال صلى الله عليه وسلم: مَا مِنْ دَعْوَةٍ يَدْعُو بِهَا الْعَبْدُ أَفْضَلَ مِنْ: اللَّهُمَّ إِنِّي أَسْأَلُكَ الْمُعَافَاةَ فِي الدُّنْيَا وَالْآخِرَةِ. رواه ابن ماجه وغيره، وصححه الألباني.<br>
-    وعَنْ عَائِشَة ـ رضي الله عنها ـ قَالَتْ: قُلْتُ: يَا رَسُولَ اللهِ؛ أَرَأَيْتَ إِنْ عَلِمْتُ أَيَّ لَيْلَةٍ لَيْلَةُ الْقَدْرِ مَا أَقُولُ فِيهَا؟ قَالَ: قُولِي: اللَّهُمَّ إِنَّكَ عُفُوٌّ تُحِبُّ الْعَفْوَ، فَاعْفُ عَنِّي. رواه الترمذي وغيره، وصححه الألباني.<br>
-    وقال صلى الله عليه وسلم: سيد الاستغفار أن يقول العبد: اللهم أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك، وأنا على عهدك ووعدك ما استطعت، أعوذ بك من شر ما صنعت، أبوء لك بنعمتك علي، وأبوء لك بذنبي فاغفر لي، فإنه لا يغفر الذنوب إلا أنت، قال: ومن قالها من النهار موقنا بها فمات من يومه قبل أن يمسي فهو من أهل الجنة، ومن قالها من الليل وهو موقن بها فمات قبل أن يصبح فهو من أهل الجنة. رواه البخاري.
-  </div>
+  
+  <!-- Sections -->
   <section id="imagesSection">
-    <button class="back-button" data-back>← Back</button>
-    <h2>Images</h2>
-    <input type="text" id="searchImages" placeholder="Search images...">
-    <div class="loading" id="imagesLoading">Loading...</div>
-    <div id="imagesContainer"></div>
+    <button class="back-button" data-back>
+      <i class="fas fa-arrow-right"></i>
+      العودة
+    </button>
+    <h2>الصور الإسلامية</h2>
+    <div class="loading" id="imagesLoading">
+      جاري التحميل
+      <i class="fas fa-spinner"></i>
+    </div>
+    <div class="media-grid" id="imagesContainer"></div>
   </section>
+  
   <section id="videosSection">
-    <button class="back-button" data-back>← Back</button>
-    <h2>Videos</h2>
-    <input type="text" id="searchVideos" placeholder="Search videos...">
-    <div class="loading" id="videosLoading">Loading...</div>
-    <div id="videosContainer"></div>
+    <button class="back-button" data-back>
+      <i class="fas fa-arrow-right"></i>
+      العودة
+    </button>
+    <h2>الفيديوهات الإسلامية</h2>
+    <div class="loading" id="videosLoading">
+      جاري التحميل
+      <i class="fas fa-spinner"></i>
+    </div>
+    <div class="media-grid" id="videosContainer"></div>
   </section>
+  
   <section id="audioSection">
-    <button class="back-button" data-back>← Back</button>
-    <h2>Audio</h2>
-    <input type="text" id="searchAudio" placeholder="Search audio...">
-    <div class="loading" id="audioLoading">Loading...</div>
-    <div id="audioContainer"></div>
+    <button class="back-button" data-back>
+      <i class="fas fa-arrow-right"></i>
+      العودة
+    </button>
+    <h2>الصوتيات الإسلامية</h2>
+    <div class="loading" id="audioLoading">
+      جاري التحميل
+      <i class="fas fa-spinner"></i>
+    </div>
+    <div class="media-grid" id="audioContainer"></div>
   </section>
+  
   <section id="textSection">
-    <button class="back-button" data-back>← Back</button>
-    <h2>Text Files</h2>
-    <input type="text" id="searchText" placeholder="Search text files...">
-    <div class="loading" id="textLoading">Loading...</div>
+    <button class="back-button" data-back>
+      <i class="fas fa-arrow-right"></i>
+      العودة
+    </button>
+    <h2>النصوص الإسلامية</h2>
+    <div class="loading" id="textLoading">
+      جاري التحميل
+      <i class="fas fa-spinner"></i>
+    </div>
     <div id="textList"></div>
   </section>
+  
   <section id="booksSection">
-    <button class="back-button" data-back>← Back</button>
-    <h2>الكتب</h2>
-    <input type="text" id="searchBooks" placeholder="Search books...">
-    <div class="loading" id="booksLoading">Loading...</div>
-    <div id="booksList"></div>
+    <button class="back-button" data-back>
+      <i class="fas fa-arrow-right"></i>
+      العودة
+    </button>
+    <h2>الكتب الإسلامية</h2>
+    <div class="loading" id="booksLoading">
+      جاري التحميل
+      <i class="fas fa-spinner"></i>
+    </div>
+    <div class="books-grid" id="booksList"></div>
   </section>
+  
   <section id="weakHadithsSection">
-    <button class="back-button" data-back>← Back</button>
-    <h2>الاحاديث الضعيفه المنتشرة بين الناس</h2>
-    <input type="text" id="searchWeakHadiths" placeholder="Search weak hadiths...">
-    <div class="loading" id="weakHadithsLoading">Loading...</div>
+    <button class="back-button" data-back>
+      <i class="fas fa-arrow-right"></i>
+      العودة
+    </button>
+    <h2>الأحاديث الضعيفة المنتشرة</h2>
+    <div class="loading" id="weakHadithsLoading">
+      جاري التحميل
+      <i class="fas fa-spinner"></i>
+    </div>
     <div id="weakHadithsList"></div>
   </section>
+  
   <section id="usefulSitesSection">
-    <button class="back-button" data-back>← Back</button>
-    <h2>مواقع وتطبيقات مفيدة</h2>
-    <input type="text" id="searchUsefulSites" placeholder="Search useful sites and apps...">
-    <div class="loading" id="usefulSitesLoading">Loading...</div>
+    <button class="back-button" data-back>
+      <i class="fas fa-arrow-right"></i>
+      العودة
+    </button>
+    <h2>مواقع وتطبيقات إسلامية مفيدة</h2>
+    <div class="loading" id="usefulSitesLoading">
+      جاري التحميل
+      <i class="fas fa-spinner"></i>
+    </div>
     <div id="usefulSitesList"></div>
   </section>
+  
+  <!-- Modal -->
   <div id="modal">
     <div class="content">
       <button class="close">✕</button>
       <div id="previewContainer"></div>
-      <a id="downloadBtn" href="#" download>Download</a>
     </div>
   </div>
+  
   <footer>
-    <a href="https://mahmoudelsheikh7.github.io/profilecardwebpage-mahmoud/" target="_blank" aria-label="GitHub">
-      <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24" height="24">
-        <path d="M12 0.3C5.4 0.3 0 5.7 0 12.3C0 17.6 3.4 22 8.2 23.6C8.8 23.7 9 23.3 9 23V20.9C5.7 21.6 5 19.2 5 19.2C4.5 17.9 3.8 17.5 3.8 17.5C2.8 16.8 3.9 16.8 3.9 16.8C5 16.9 5.6 18 5.6 18C6.6 19.7 8.3 19.2 9 18.9C9.1 18.1 9.4 17.6 9.7 17.3C7.1 17 4.3 16 4.3 11.4C4.3 10.1 4.8 9 5.6 8.1C5.5 7.8 5.1 6.6 5.7 5C5.7 5 6.8 4.7 9 6.1C9.9 5.9 10.9 5.8 12 5.8C13.1 5.8 14.1 5.9 15 6.1C17.2 4.7 18.3 5 18.3 5C18.9 6.6 18.5 7.8 18.4 8.1C19.2 9 19.7 10.1 19.7 11.4C19.7 16 16.9 17 14.3 17.3C14.7 17.7 15 18.4 15 19.5V23C15 23.3 15.2 23.7 15.8 23.6C20.6 22 24 17.6 24 12.3C24 5.7 18.6 0.3 12 0.3Z"/>
-      </svg>
-    </a>
-    <p>© Mahmoud El-Sheikh</p>
+    <p>© جميع الحقوق محفوظة - M4S منصة المحتوى الإسلامي الفاخرة</p>
   </footer>
+  
   <script>
-    // Particles Background
-    const canvas = document.getElementById('bgCanvas');
-    const ctx = canvas.getContext('2d');
-    let particlesArray = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 58811 + 1; // Fixed size range
-        this.speedX = Math.random() * 0.1 - 0.02; // Extremely slow movement
-        this.speedY = Math.random() * 0.1 - 0.01; // Extremely slow movement
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.size > 0.2) this.size -= 0.1;
-      }
-      draw() {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y - this.size); // Top vertex
-        ctx.lineTo(this.x - this.size * Math.cos(Math.PI / 3), this.y + this.size * Math.sin(Math.PI / 3)); // Bottom-left vertex
-        ctx.lineTo(this.x + this.size * Math.cos(Math.PI / 3), this.y + this.size * Math.sin(Math.PI / 3)); // Bottom-right vertex
-        ctx.closePath();
-        ctx.stroke();
-      }
-    }
-
-
-    function initParticles() {
-      particlesArray = [];
-      for (let i = 0; i < 100; i++) {
-        particlesArray.push(new Particle());
-      }
-    }
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
-        if (particlesArray[i].size <= 0.2) {
-          particlesArray.splice(i, 1);
-          particlesArray.push(new Particle());
-          i--;
-        }
-      }
-      requestAnimationFrame(animateParticles);
-    }
-    initParticles();
-    animateParticles();
-
     // Config & State
     const githubUser = 'mahmoudelsheikh7', repoName = 'M4S', branch = 'main';
-    let imagesList = [], videosList = [], audioList = [], textList = [];
-    let imagesLoaded = false, videosLoaded = false, audioLoaded = false, textLoaded = false;
-    let booksList = [], weakHadithsList = [], usefulSitesList = [];
-    let booksLoaded = false, weakHadithsLoaded = false, usefulSitesLoaded = false;
+    let allContent = {
+      images: [],
+      videos: [],
+      audio: [],
+      text: [],
+      books: [],
+      weakHadiths: [],
+      usefulSites: []
+    };
+    let loadedContent = {
+      images: false,
+      videos: false,
+      audio: false,
+      text: false,
+      books: false,
+      weakHadiths: false,
+      usefulSites: false
+    };
+    let currentFilter = 'all';
+    let currentVideo = null;
 
     // Navigation
     function showMenu() {
       document.getElementById('menu').style.display = 'grid';
-      document.getElementById('welcomeMessage').style.display = 'flex';
-      document.getElementById('message1').style.display = 'flex';
-      document.getElementById('message2').style.display = 'flex';
+      document.querySelector('.welcome-container').style.display = 'block';
+      document.querySelector('.advanced-search').style.display = 'block';
       document.querySelectorAll('section').forEach(s => s.style.display = 'none');
       document.getElementById('modal').style.display = 'none';
+      showFinalMessage(); // Show final message when returning to menu
     }
+    
     function showSection(id) {
       showMenu();
       document.getElementById('menu').style.display = 'none';
-      document.getElementById('welcomeMessage').style.display = 'none';
-      document.getElementById('message1').style.display = 'none';
-      document.getElementById('message2').style.display = 'none';
+      document.querySelector('.welcome-container').style.display = 'none';
+      document.querySelector('.advanced-search').style.display = 'none';
+      hideFinalMessage(); // Hide final message when entering section
       const section = document.getElementById(id);
       section.style.display = 'block';
-      section.classList.add('active');
-      if (id === 'imagesSection' && !imagesLoaded) loadImages();
-      if (id === 'videosSection' && !videosLoaded) loadVideos();
-      if (id === 'audioSection' && !audioLoaded) loadAudio();
-      if (id === 'textSection' && !textLoaded) loadText();
-      if (id === 'booksSection' && !booksLoaded) loadBooks();
-      if (id === 'weakHadithsSection' && !weakHadithsLoaded) loadWeakHadiths();
-      if (id === 'usefulSitesSection' && !usefulSitesLoaded) loadUsefulSites();
+      
+      // Load content based on section
+      if (id === 'imagesSection' && !loadedContent.images) loadImages();
+      if (id === 'videosSection' && !loadedContent.videos) loadVideos();
+      if (id === 'audioSection' && !loadedContent.audio) loadAudio();
+      if (id === 'textSection' && !loadedContent.text) loadText();
+      if (id === 'booksSection' && !loadedContent.books) loadBooks();
+      if (id === 'weakHadithsSection' && !loadedContent.weakHadiths) loadWeakHadiths();
+      if (id === 'usefulSitesSection' && !loadedContent.usefulSites) loadUsefulSites();
     }
+    
     document.querySelectorAll('.menu-item').forEach(i => i.addEventListener('click', () => showSection(i.dataset.section)));
     document.querySelectorAll('.back-button').forEach(b => b.addEventListener('click', showMenu));
 
-    // Modal & Preview
-    const modal = document.getElementById('modal'), preview = document.getElementById('previewContainer');
-    const downloadBtn = document.getElementById('downloadBtn');
+    // Modal with video control
+    const modal = document.getElementById('modal');
+    const preview = document.getElementById('previewContainer');
+    const modalClose = modal.querySelector('.close');
 
     function openModal(type, item) {
       preview.innerHTML = '';
       let media;
+      
       if (type === 'image') {
         media = document.createElement('img');
         media.src = encodeURI(item.download_url);
       } else if (type === 'video') {
         media = document.createElement('video');
         media.src = encodeURI(item.download_url);
-        media.poster = `https://raw.githubusercontent.com/${githubUser}/${repoName}/${branch}/images/${item.name.replace(/\.\w+$/, '.jpg')}`;
         media.controls = true;
         media.autoplay = true;
-      } else if (type === 'audio') {
-        media = document.createElement('audio');
-        media.src = encodeURI(item.download_url);
-        media.controls = true;
-      } else if (type === 'text') {
-        media = document.createElement('pre');
-        media.textContent = 'Loading...';
-        fetch(item.download_url).then(r => r.text()).then(txt => media.textContent = txt);
+        currentVideo = media; // Store reference to video
       }
-      downloadBtn.href = item.download_url;
-      downloadBtn.download = item.name;
+      
       preview.appendChild(media);
       modal.style.display = 'flex';
       setTimeout(() => modal.classList.add('show'), 10);
     }
-    modal.querySelector('.close').addEventListener('click', () => {
+    
+    function closeModal() {
+      // Stop video if playing
+      if (currentVideo) {
+        currentVideo.pause();
+        currentVideo.currentTime = 0;
+        currentVideo = null;
+      }
+      
       modal.classList.remove('show');
       setTimeout(() => modal.style.display = 'none', 400);
-    });
+    }
+    
+    modalClose.addEventListener('click', closeModal);
+    
     window.addEventListener('click', e => {
       if (e.target === modal) {
-        modal.classList.remove('show');
-        setTimeout(() => modal.style.display = 'none', 400);
+        closeModal();
       }
     });
 
-    // Load & Display
+    // Final message control
+    function showFinalMessage() {
+      document.getElementById('finalMessageContainer').classList.add('show');
+    }
+
+    function hideFinalMessage() {
+      document.getElementById('finalMessageContainer').classList.remove('show');
+    }
+
+    // Load Images
     function loadImages() {
       document.getElementById('imagesLoading').style.display = 'block';
       fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/images?ref=${branch}`)
         .then(r => r.json()).then(data => {
-          imagesList = data.filter(f => f.type === 'file' && /\.(jpe?g|png|gif|webp)$/i.test(f.name));
-          displayImages(imagesList);
-          imagesLoaded = true;
+          allContent.images = data.filter(f => f.type === 'file' && /\.(jpe?g|png|gif|webp)$/i.test(f.name));
+          displayImages(allContent.images);
+          loadedContent.images = true;
           document.getElementById('imagesLoading').style.display = 'none';
+        })
+        .catch(error => {
+          console.error('Error loading images:', error);
+          document.getElementById('imagesLoading').innerHTML = 'حدث خطأ أثناء التحميل';
         });
     }
+    
     function displayImages(list) {
-      const c = document.getElementById('imagesContainer');
-      c.innerHTML = '';
+      const container = document.getElementById('imagesContainer');
+      container.innerHTML = '';
+      
+      if (list.length === 0) {
+        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        return;
+      }
+      
       list.forEach(item => {
-        const d = document.createElement('div');
-        d.className = 'media-item';
-        d.addEventListener('click', () => openModal('image', item));
+        const div = document.createElement('div');
+        div.className = 'media-item';
+        div.addEventListener('click', () => openModal('image', item));
+        
         const img = document.createElement('img');
         img.src = encodeURI(item.download_url);
-        const title = document.createElement('div');
-        title.className = 'media-title';
-        title.textContent = item.name;
-        d.append(img, title);
-        c.appendChild(d);
+        img.alt = 'صورة إسلامية';
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'media-overlay';
+        overlay.innerHTML = `
+          <h3>صورة إسلامية</h3>
+          <p>اضغط للعرض بالكامل</p>
+        `;
+        
+        div.append(img, overlay);
+        container.appendChild(div);
       });
     }
-    document.getElementById('searchImages').addEventListener('input', e => displayImages(imagesList.filter(i => i.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
+    // Load Videos
     function loadVideos() {
       document.getElementById('videosLoading').style.display = 'block';
       fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/videos?ref=${branch}`)
         .then(r => r.json()).then(data => {
-          videosList = data.filter(f => f.type === 'file' && /\.(mp4|webm|ogg)$/i.test(f.name));
-          displayVideos(videosList);
-          videosLoaded = true;
+          allContent.videos = data.filter(f => f.type === 'file' && /\.(mp4|webm|ogg)$/i.test(f.name));
+          displayVideos(allContent.videos);
+          loadedContent.videos = true;
           document.getElementById('videosLoading').style.display = 'none';
+        })
+        .catch(error => {
+          console.error('Error loading videos:', error);
+          document.getElementById('videosLoading').innerHTML = 'حدث خطأ أثناء التحميل';
         });
     }
+    
     function displayVideos(list) {
-      const c = document.getElementById('videosContainer');
-      c.innerHTML = '';
+      const container = document.getElementById('videosContainer');
+      container.innerHTML = '';
+      
+      if (list.length === 0) {
+        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        return;
+      }
+      
       list.forEach(item => {
-        const d = document.createElement('div');
-        d.className = 'media-item';
-        d.addEventListener('click', () => openModal('video', item));
-        const vid = document.createElement('video');
-        vid.src = encodeURI(item.download_url);
-        vid.poster = `https://raw.githubusercontent.com/${githubUser}/${repoName}/${branch}/images/${item.name.replace(/\.\w+$/, '.jpg')}`;
-        vid.muted = true;
-        vid.preload = 'none';
-        const title = document.createElement('div');
-        title.className = 'media-title';
-        title.textContent = item.name;
-        d.append(vid, title);
-        c.appendChild(d);
+        const div = document.createElement('div');
+        div.className = 'media-item';
+        div.addEventListener('click', () => openModal('video', item));
+        
+        const video = document.createElement('video');
+        video.src = encodeURI(item.download_url);
+        video.muted = true;
+        video.loop = true;
+        video.autoplay = true;
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'media-overlay';
+        overlay.innerHTML = `
+          <h3>فيديو إسلامي</h3>
+          <p>اضغط للمشاهدة</p>
+        `;
+        
+        div.append(video, overlay);
+        container.appendChild(div);
       });
     }
-    document.getElementById('searchVideos').addEventListener('input', e => displayVideos(videosList.filter(v => v.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
+    // Load Audio
     function loadAudio() {
       document.getElementById('audioLoading').style.display = 'block';
       fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/audio?ref=${branch}`)
         .then(r => r.json()).then(data => {
-          audioList = data.filter(f => f.type === 'file');
-          displayAudio(audioList);
-          audioLoaded = true;
+          allContent.audio = data.filter(f => f.type === 'file');
+          displayAudio(allContent.audio);
+          loadedContent.audio = true;
           document.getElementById('audioLoading').style.display = 'none';
+        })
+        .catch(error => {
+          console.error('Error loading audio:', error);
+          document.getElementById('audioLoading').innerHTML = 'حدث خطأ أثناء التحميل';
         });
     }
+    
     function displayAudio(list) {
-      const c = document.getElementById('audioContainer');
-      c.innerHTML = '';
+      const container = document.getElementById('audioContainer');
+      container.innerHTML = '';
+      
+      if (list.length === 0) {
+        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        return;
+      }
+      
       list.forEach(item => {
-        const d = document.createElement('div');
-        d.className = 'media-item';
-        d.addEventListener('click', () => openModal('audio', item));
-        const a = document.createElement('audio');
-        a.src = encodeURI(item.download_url);
-        a.controls = true;
-        const title = document.createElement('div');
-        title.className = 'media-title';
-        title.textContent = item.name;
-        d.append(a, title);
-        c.appendChild(d);
+        const div = document.createElement('div');
+        div.className = 'media-item';
+        
+        const audio = document.createElement('audio');
+        audio.src = encodeURI(item.download_url);
+        audio.controls = true;
+        
+        const title = document.createElement('h3');
+        title.textContent = item.name.replace(/\.[^/.]+$/, "");
+        title.style.color = 'var(--accent-gold)';
+        title.style.marginTop = '1rem';
+        
+        div.append(audio, title);
+        container.appendChild(div);
       });
     }
-    document.getElementById('searchAudio').addEventListener('input', e => displayAudio(audioList.filter(a => a.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
+    // Load Text
     function loadText() {
       document.getElementById('textLoading').style.display = 'block';
       fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/text?ref=${branch}`)
         .then(r => r.json()).then(data => {
-          textList = data.filter(f => f.type === 'file');
-          displayTextList(textList);
-          textLoaded = true;
+          allContent.text = data.filter(f => f.type === 'file');
+          displayTextList(allContent.text);
+          loadedContent.text = true;
           document.getElementById('textLoading').style.display = 'none';
+        })
+        .catch(error => {
+          console.error('Error loading text:', error);
+          document.getElementById('textLoading').innerHTML = 'حدث خطأ أثناء التحميل';
         });
     }
+    
     function displayTextList(list) {
-      const c = document.getElementById('textList');
-      c.innerHTML = '';
+      const container = document.getElementById('textList');
+      container.innerHTML = '';
+      
+      if (list.length === 0) {
+        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        return;
+      }
+      
       list.forEach(item => {
-        const d = document.createElement('div');
-        d.className = 'media-item';
-        d.addEventListener('click', () => openModal('text', item));
-        const title = document.createElement('div');
-        title.className = 'media-title';
-        title.textContent = item.name;
-        d.appendChild(title);
-        c.appendChild(d);
+        const textContainer = document.createElement('div');
+        textContainer.className = 'text-container';
+        
+        const header = document.createElement('div');
+        header.className = 'text-header';
+        header.innerHTML = `
+          <div class="text-title">${item.name.replace(/\.[^/.]+$/, "")}</div>
+          <div class="text-actions">
+            <button class="text-action-btn" onclick="copyText('${item.name}')">
+              <i class="fas fa-copy"></i> نسخ
+            </button>
+          </div>
+        `;
+        
+        const content = document.createElement('div');
+        content.className = 'text-content';
+        content.textContent = 'جاري التحميل...';
+        
+        fetch(item.download_url).then(r => r.text()).then(txt => {
+          content.textContent = txt;
+        });
+        
+        textContainer.append(header, content);
+        container.appendChild(textContainer);
       });
     }
-    document.getElementById('searchText').addEventListener('input', e => displayTextList(textList.filter(t => t.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
+    // Load Books
     function loadBooks() {
       document.getElementById('booksLoading').style.display = 'block';
       fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/books?ref=${branch}`)
         .then(r => r.json()).then(data => {
-          booksList = data.filter(f => f.type === 'file');
-          displayBooksList(booksList);
-          booksLoaded = true;
+          allContent.books = data.filter(f => f.type === 'file');
+          displayBooksList(allContent.books);
+          loadedContent.books = true;
           document.getElementById('booksLoading').style.display = 'none';
+        })
+        .catch(error => {
+          console.error('Error loading books:', error);
+          document.getElementById('booksLoading').innerHTML = 'حدث خطأ أثناء التحميل';
         });
     }
+    
     function displayBooksList(list) {
-      const c = document.getElementById('booksList');
-      c.innerHTML = '';
+      const container = document.getElementById('booksList');
+      container.innerHTML = '';
+      
+      if (list.length === 0) {
+        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        return;
+      }
+      
       list.forEach(item => {
-        const d = document.createElement('div');
-        d.className = 'media-item';
-        d.addEventListener('click', () => openModal('text', item));
+        const div = document.createElement('div');
+        div.className = 'book-item';
+        
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-book book-icon';
+        
         const title = document.createElement('div');
-        title.className = 'media-title';
-        title.textContent = item.name;
-        d.appendChild(title);
-        c.appendChild(d);
+        title.className = 'book-title';
+        title.textContent = item.name.replace(/\.[^/.]+$/, "");
+        
+        const download = document.createElement('a');
+        download.className = 'book-download';
+        download.href = item.download_url;
+        download.download = item.name;
+        download.innerHTML = `
+          <i class="fas fa-download"></i>
+          تحميل الكتاب
+        `;
+        
+        div.append(icon, title, download);
+        container.appendChild(div);
       });
     }
-    document.getElementById('searchBooks').addEventListener('input', e => displayBooksList(booksList.filter(t => t.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
+    // Load Weak Hadiths
     function loadWeakHadiths() {
       document.getElementById('weakHadithsLoading').style.display = 'block';
       fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/weak_hadiths?ref=${branch}`)
         .then(r => r.json()).then(data => {
-          weakHadithsList = data.filter(f => f.type === 'file');
-          displayWeakHadithsList(weakHadithsList);
-          weakHadithsLoaded = true;
+          allContent.weakHadiths = data.filter(f => f.type === 'file');
+          displayWeakHadithsList(allContent.weakHadiths);
+          loadedContent.weakHadiths = true;
           document.getElementById('weakHadithsLoading').style.display = 'none';
+        })
+        .catch(error => {
+          console.error('Error loading weak hadiths:', error);
+          document.getElementById('weakHadithsLoading').innerHTML = 'حدث خطأ أثناء التحميل';
         });
     }
+    
     function displayWeakHadithsList(list) {
-      const c = document.getElementById('weakHadithsList');
-      c.innerHTML = '';
+      const container = document.getElementById('weakHadithsList');
+      container.innerHTML = '';
+      
+      if (list.length === 0) {
+        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        return;
+      }
+      
       list.forEach(item => {
-        const d = document.createElement('div');
-        d.className = 'media-item';
-        d.addEventListener('click', () => openModal('text', item));
-        const title = document.createElement('div');
-        title.className = 'media-title';
-        title.textContent = item.name;
-        d.appendChild(title);
-        c.appendChild(d);
+        const textContainer = document.createElement('div');
+        textContainer.className = 'text-container';
+        
+        const header = document.createElement('div');
+        header.className = 'text-header';
+        header.innerHTML = `
+          <div class="text-title">${item.name.replace(/\.[^/.]+$/, "")}</div>
+          <div class="text-actions">
+            <button class="text-action-btn" onclick="copyText('${item.name}')">
+              <i class="fas fa-copy"></i> نسخ
+            </button>
+          </div>
+        `;
+        
+        const content = document.createElement('div');
+        content.className = 'text-content';
+        content.textContent = 'جاري التحميل...';
+        
+        fetch(item.download_url).then(r => r.text()).then(txt => {
+          content.textContent = txt;
+        });
+        
+        textContainer.append(header, content);
+        container.appendChild(textContainer);
       });
     }
-    document.getElementById('searchWeakHadiths').addEventListener('input', e => displayWeakHadithsList(weakHadithsList.filter(t => t.name.toLowerCase().includes(e.target.value.toLowerCase()))));
 
+    // Load Useful Sites
     function loadUsefulSites() {
       document.getElementById('usefulSitesLoading').style.display = 'block';
       fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/useful_sites?ref=${branch}`)
         .then(r => r.json()).then(data => {
-          usefulSitesList = data.filter(f => f.type === 'file');
-          displayUsefulSitesList(usefulSitesList);
-          usefulSitesLoaded = true;
+          allContent.usefulSites = data.filter(f => f.type === 'file');
+          displayUsefulSitesList(allContent.usefulSites);
+          loadedContent.usefulSites = true;
           document.getElementById('usefulSitesLoading').style.display = 'none';
+        })
+        .catch(error => {
+          console.error('Error loading useful sites:', error);
+          document.getElementById('usefulSitesLoading').innerHTML = 'حدث خطأ أثناء التحميل';
         });
     }
+    
     function displayUsefulSitesList(list) {
-      const c = document.getElementById('usefulSitesList');
-      c.innerHTML = '';
+      const container = document.getElementById('usefulSitesList');
+      container.innerHTML = '';
+      
+      if (list.length === 0) {
+        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        return;
+      }
+      
       list.forEach(item => {
-        const d = document.createElement('div');
-        d.className = 'media-item';
-        d.addEventListener('click', () => openModal('text', item));
-        const title = document.createElement('div');
-        title.className = 'media-title';
-        title.textContent = item.name;
-        d.appendChild(title);
-        c.appendChild(d);
+        const textContainer = document.createElement('div');
+        textContainer.className = 'text-container';
+        
+        const header = document.createElement('div');
+        header.className = 'text-header';
+        header.innerHTML = `
+          <div class="text-title">${item.name.replace(/\.[^/.]+$/, "")}</div>
+          <div class="text-actions">
+            <button class="text-action-btn" onclick="copyText('${item.name}')">
+              <i class="fas fa-copy"></i> نسخ
+            </button>
+          </div>
+        `;
+        
+        const content = document.createElement('div');
+        content.className = 'text-content';
+        content.textContent = 'جاري التحميل...';
+        
+        fetch(item.download_url).then(r => r.text()).then(txt => {
+          content.textContent = txt;
+        });
+        
+        textContainer.append(header, content);
+        container.appendChild(textContainer);
       });
     }
-    document.getElementById('searchUsefulSites').addEventListener('input', e => displayUsefulSitesList(usefulSitesList.filter(t => t.name.toLowerCase().includes(e.target.value.toLowerCase()))));
+
+    // Advanced Search
+    document.getElementById('globalSearch').addEventListener('input', performSearch);
+    
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', function() {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        currentFilter = this.dataset.filter;
+        performSearch();
+      });
+    });
+
+    function performSearch() {
+      const searchTerm = document.getElementById('globalSearch').value.toLowerCase();
+      
+      if (!searchTerm) {
+        showMenu();
+        return;
+      }
+      
+      // Hide menu and welcome
+      document.getElementById('menu').style.display = 'none';
+      document.querySelector('.welcome-container').style.display = 'none';
+      document.querySelector('.advanced-search').style.display = 'block';
+      hideFinalMessage();
+      
+      // Show all sections or specific based on filter
+      document.querySelectorAll('section').forEach(s => s.style.display = 'none');
+      
+      let results = [];
+      
+      if (currentFilter === 'all' || currentFilter === 'images') {
+        if (!loadedContent.images) loadImages();
+        results = results.concat(allContent.images.filter(i => 
+          i.name.toLowerCase().includes(searchTerm)
+        ));
+        if (results.length > 0) {
+          document.getElementById('imagesSection').style.display = 'block';
+          displayImages(results);
+        }
+      }
+      
+      if (currentFilter === 'all' || currentFilter === 'videos') {
+        if (!loadedContent.videos) loadVideos();
+        results = results.concat(allContent.videos.filter(v => 
+          v.name.toLowerCase().includes(searchTerm)
+        ));
+        if (results.length > 0) {
+          document.getElementById('videosSection').style.display = 'block';
+          displayVideos(results);
+        }
+      }
+      
+      if (currentFilter === 'all' || currentFilter === 'text') {
+        if (!loadedContent.text) loadText();
+        results = results.concat(allContent.text.filter(t => 
+          t.name.toLowerCase().includes(searchTerm)
+        ));
+        if (results.length > 0) {
+          document.getElementById('textSection').style.display = 'block';
+          displayTextList(results);
+        }
+      }
+      
+      if (currentFilter === 'all' || currentFilter === 'books') {
+        if (!loadedContent.books) loadBooks();
+        results = results.concat(allContent.books.filter(b => 
+          b.name.toLowerCase().includes(searchTerm)
+        ));
+        if (results.length > 0) {
+          document.getElementById('booksSection').style.display = 'block';
+          displayBooksList(results);
+        }
+      }
+    }
+
+    // Copy text function
+    function copyText(fileName) {
+      console.log('Copying text from:', fileName);
+    }
 
     // Initialize
-    showMenu();
+    document.addEventListener('DOMContentLoaded', function() {
+      showMenu();
+    });
+
+    // Add no-results style
+    const style = document.createElement('style');
+    style.textContent = `
+      .no-results {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-secondary);
+        font-size: 1.2rem;
+        grid-column: 1 / -1;
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
