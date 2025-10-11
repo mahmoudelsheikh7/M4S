@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>M4S</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -50,6 +50,19 @@
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #ffffff 100%);
     }
 
+    /* Language specific fonts */
+    body[data-lang="en"] {
+      font-family: 'Roboto', sans-serif;
+    }
+    
+    body[data-lang="de"] {
+      font-family: 'Roboto', sans-serif;
+    }
+    
+    body[data-lang="fr"] {
+      font-family: 'Roboto', sans-serif;
+    }
+
     /* Theme Toggle */
     .theme-toggle {
       position: fixed;
@@ -76,6 +89,44 @@
       font-size: 20px;
       color: var(--accent-gold);
       transition: var(--transition);
+    }
+
+    /* Language Selector in Header */
+    .language-selector-header {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      padding: 0.5rem;
+      border-radius: 25px;
+      box-shadow: var(--shadow);
+    }
+
+    .lang-btn-header {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.5rem 0.8rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .lang-btn-header:hover {
+      background: rgba(212, 175, 55, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .lang-btn-header.active {
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue));
+      color: var(--primary-dark);
     }
 
     /* Simplified Background */
@@ -109,7 +160,7 @@
     /* Header */
     header { 
       text-align: center; 
-      padding: 2rem 1rem 1.5rem;
+      padding: 3rem 1rem 2rem;
       position: relative;
       margin-bottom: 1.5rem;
     }
@@ -121,6 +172,12 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.5rem;
+    }
+    
+    body[data-lang="en"] header h1,
+    body[data-lang="de"] header h1,
+    body[data-lang="fr"] header h1 {
+      font-family: 'Playfair Display', serif;
     }
     
     header .subtitle {
@@ -181,6 +238,13 @@
       transform: translateY(-50%);
       color: var(--accent-gold);
       font-size: 1.1rem;
+    }
+
+    body[data-lang="en"] .search-box i,
+    body[data-lang="de"] .search-box i,
+    body[data-lang="fr"] .search-box i {
+      left: auto;
+      right: 1.2rem;
     }
 
     .search-suggestions {
@@ -309,10 +373,26 @@
       background: linear-gradient(180deg, var(--accent-gold), var(--accent-blue));
     }
 
+    body[data-lang="en"] #welcomeMessage::before,
+    body[data-lang="en"] #message1::before,
+    body[data-lang="de"] #welcomeMessage::before,
+    body[data-lang="de"] #message1::before,
+    body[data-lang="fr"] #welcomeMessage::before,
+    body[data-lang="fr"] #message1::before {
+      right: auto;
+      left: 0;
+    }
+
     #welcomeMessage {
       font-family: 'Amiri', serif;
       font-size: 1.8rem;
       line-height: 1.7;
+    }
+
+    body[data-lang="en"] #welcomeMessage,
+    body[data-lang="de"] #welcomeMessage,
+    body[data-lang="fr"] #welcomeMessage {
+      font-family: 'Playfair Display', serif;
     }
 
     #message1 {
@@ -320,6 +400,12 @@
       line-height: 1.8;
       color: var(--text-secondary);
       text-align: right;
+    }
+
+    body[data-lang="en"] #message1,
+    body[data-lang="de"] #message1,
+    body[data-lang="fr"] #message1 {
+      text-align: left;
     }
 
     /* Final Message */
@@ -362,6 +448,12 @@
       transform: translateX(3px);
     }
 
+    body[data-lang="en"] .back-button:hover,
+    body[data-lang="de"] .back-button:hover,
+    body[data-lang="fr"] .back-button:hover {
+      transform: translateX(-3px);
+    }
+
     section h2 {
       font-family: 'Amiri', serif;
       font-size: 2.2rem;
@@ -370,6 +462,12 @@
       background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+    }
+
+    body[data-lang="en"] section h2,
+    body[data-lang="de"] section h2,
+    body[data-lang="fr"] section h2 {
+      font-family: 'Playfair Display', serif;
     }
 
     /* Media Grids */
@@ -456,6 +554,13 @@
       z-index: 2;
     }
 
+    body[data-lang="en"] .media-download,
+    body[data-lang="de"] .media-download,
+    body[data-lang="fr"] .media-download {
+      left: auto;
+      right: 10px;
+    }
+
     .media-item:hover .media-download {
       opacity: 1;
       transform: scale(1);
@@ -481,6 +586,13 @@
       justify-content: center;
       animation: pulse 2s infinite;
       z-index: 2;
+    }
+
+    body[data-lang="en"] .audio-playing,
+    body[data-lang="de"] .audio-playing,
+    body[data-lang="fr"] .audio-playing {
+      right: auto;
+      left: 10px;
     }
 
     @keyframes pulse {
@@ -570,6 +682,13 @@
       line-height: 2;
       color: var(--text-primary);
       text-align: right;
+    }
+
+    body[data-lang="en"] .text-content,
+    body[data-lang="de"] .text-content,
+    body[data-lang="fr"] .text-content {
+      font-family: 'Playfair Display', serif;
+      text-align: left;
     }
 
     .text-header {
@@ -683,6 +802,117 @@
       box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
     }
 
+    /* Useful Sites Styles */
+    .sites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .site-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .site-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue));
+      opacity: 0.1;
+      border-radius: 50%;
+      transform: translate(30px, -30px);
+    }
+
+    body[data-lang="en"] .site-card::before,
+    body[data-lang="de"] .site-card::before,
+    body[data-lang="fr"] .site-card::before {
+      right: auto;
+      left: 0;
+      transform: translate(-30px, -30px);
+    }
+
+    .site-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .site-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-dark);
+      font-size: 1.5rem;
+    }
+
+    .site-title {
+      font-size: 1.2rem;
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+
+    .site-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+      min-height: 60px;
+    }
+
+    .site-actions {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .site-btn {
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue));
+      color: var(--primary-dark);
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+    }
+
+    .site-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .site-btn.secondary {
+      background: rgba(212, 175, 55, 0.1);
+      color: var(--accent-gold);
+    }
+
+    .site-btn.secondary:hover {
+      background: rgba(212, 175, 55, 0.2);
+    }
+
     /* Modal */
     #modal { 
       display: none; 
@@ -743,6 +973,13 @@
       justify-content: center;
     }
     
+    body[data-lang="en"] #modal .close,
+    body[data-lang="de"] #modal .close,
+    body[data-lang="fr"] #modal .close {
+      left: auto;
+      right: 1rem;
+    }
+    
     #modal .close:hover { 
       background: rgba(212, 175, 55, 0.2);
       transform: rotate(90deg);
@@ -777,6 +1014,13 @@
       z-index: 10;
     }
 
+    body[data-lang="en"] #modal .download-btn,
+    body[data-lang="de"] #modal .download-btn,
+    body[data-lang="fr"] #modal .download-btn {
+      left: auto;
+      right: 1rem;
+    }
+
     #modal .download-btn:hover {
       transform: scale(1.05);
       box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
@@ -793,6 +1037,13 @@
     .loading i {
       animation: spin 2s infinite linear;
       margin-left: 0.5rem;
+    }
+
+    body[data-lang="en"] .loading i,
+    body[data-lang="de"] .loading i,
+    body[data-lang="fr"] .loading i {
+      margin-left: 0;
+      margin-right: 0.5rem;
     }
 
     @keyframes spin {
@@ -814,12 +1065,34 @@
     @media (max-width: 768px) {
       header h1 { font-size: 2.2rem; }
       #menu { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
-      .media-grid, .books-grid { grid-template-columns: 1fr; }
+      .media-grid, .books-grid, .sites-grid { grid-template-columns: 1fr; }
       #welcomeMessage { font-size: 1.4rem; }
+      .language-selector-header { 
+        top: auto; 
+        bottom: 20px; 
+        right: 50%; 
+        transform: translateX(50%);
+      }
     }
   </style>
 </head>
-<body data-theme="dark">
+<body data-theme="dark" data-lang="ar">
+  <!-- Language Selector in Header -->
+  <div class="language-selector-header">
+    <button class="lang-btn-header active" data-lang="ar">
+      <i class="fas fa-language"></i> العربية
+    </button>
+    <button class="lang-btn-header" data-lang="en">
+      <i class="fas fa-language"></i> English
+    </button>
+    <button class="lang-btn-header" data-lang="de">
+      <i class="fas fa-language"></i> Deutsch
+    </button>
+    <button class="lang-btn-header" data-lang="fr">
+      <i class="fas fa-language"></i> Français
+    </button>
+  </div>
+
   <!-- Theme Toggle -->
   <div class="theme-toggle" id="themeToggle">
     <i class="fas fa-moon" id="themeIcon"></i>
@@ -829,7 +1102,7 @@
   
   <header>
     <h1><a href="https://mahmoudelsheikh7.github.io/profilecardwebpage-mahmoud/">M4S</a></h1>
-    <p class="subtitle">نِعمَ العَبدُ إِنَّهُ أَوّابٌ ⁦♡ </p>
+    <p class="subtitle" data-translate="subtitle">نِعمَ العَبدُ إِنَّهُ أَوّابٌ ⁦♡ </p>
   </header>
   
   <!-- Advanced Search -->
@@ -837,27 +1110,27 @@
     <div class="search-container">
       <div class="search-box">
         <i class="fas fa-search"></i>
-        <input type="text" id="globalSearch" placeholder="ابحث عن أي محتوى في الموقع...">
+        <input type="text" id="globalSearch" data-translate-placeholder="searchPlaceholder" placeholder="ابحث عن أي محتوى في الموقع...">
         <div class="search-suggestions" id="searchSuggestions"></div>
       </div>
       <div class="search-filters">
-        <div class="filter-chip active" data-filter="all">الكل</div>
-        <div class="filter-chip" data-filter="images">الصور</div>
-        <div class="filter-chip" data-filter="videos">الفيديوهات</div>
-        <div class="filter-chip" data-filter="audio">الصوتيات</div>
-        <div class="filter-chip" data-filter="text">النصوص</div>
-        <div class="filter-chip" data-filter="books">الكتب</div>
+        <div class="filter-chip active" data-filter="all" data-translate="filterAll">الكل</div>
+        <div class="filter-chip" data-filter="images" data-translate="filterImages">الصور</div>
+        <div class="filter-chip" data-filter="videos" data-translate="filterVideos">الفيديوهات</div>
+        <div class="filter-chip" data-filter="audio" data-translate="filterAudio">الصوتيات</div>
+        <div class="filter-chip" data-filter="text" data-translate="filterText">النصوص</div>
+        <div class="filter-chip" data-filter="books" data-translate="filterBooks">الكتب</div>
       </div>
     </div>
   </div>
   
   <!-- Welcome Messages -->
   <div class="welcome-container">
-    <div id="welcomeMessage">
+    <div id="welcomeMessage" data-translate="welcomeMessage">
       إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ ۚ يَا أَيُّهَا الَّذِينَ آمَنُوا صَلُّوا عَلَيْهِ وَسَلِّمُوا تَسْلِيمًا
     </div>
     
-    <div id="message1">
+    <div id="message1" data-translate="message1">
       إذا مات ابنُ آدمَ انقطع عملُه إلا من ثلاثٍ: صدقةٍ جاريةٍ، وعلمٍ ينتفعُ به، وولدٍ صالحٍ يدعو له<br>
       خلاصة حكم المحدث: صحيح<br>
       الراوي: - | المحدث: ابن تيمية | المصدر: مجموع الفتاوى | الصفحة أو الرقم: 1/191
@@ -868,38 +1141,38 @@
   <div id="menu">
     <div class="menu-item" data-section="imagesSection">
       <i class="fas fa-images"></i>
-      <span>الصور </span>
+      <span data-translate="menuImages">الصور </span>
     </div>
     <div class="menu-item" data-section="videosSection">
       <i class="fas fa-video"></i>
-      <span>الفيديوهات</span>
+      <span data-translate="menuVideos">الفيديوهات</span>
     </div>
     <div class="menu-item" data-section="audioSection">
       <i class="fas fa-music"></i>
-      <span>الصوتيات</span>
+      <span data-translate="menuAudio">الصوتيات</span>
     </div>
     <div class="menu-item" data-section="textSection">
       <i class="fas fa-file-alt"></i>
-      <span>النصوص</span>
+      <span data-translate="menuText">النصوص</span>
     </div>
     <div class="menu-item" data-section="booksSection">
       <i class="fas fa-book"></i>
-      <span>الكتب</span>
+      <span data-translate="menuBooks">الكتب</span>
     </div>
     <div class="menu-item" data-section="weakHadithsSection">
       <i class="fas fa-exclamation-triangle"></i>
-      <span>الأحاديث الضعيفة</span>
+      <span data-translate="menuWeakHadiths">الأحاديث الضعيفة</span>
     </div>
     <div class="menu-item" data-section="usefulSitesSection">
       <i class="fas fa-link"></i>
-      <span>مواقع مفيدة</span>
+      <span data-translate="menuUsefulSites">مواقع مفيدة</span>
     </div>
   </div>
   
   <!-- Final Message - Hidden by default -->
   <div class="final-message-container" id="finalMessageContainer">
     <div id="message2" class="text-container">
-      <div class="text-content">
+      <div class="text-content" data-translate="finalMessage">
         الحمد لله، والصلاة والسلام على رسول الله، وعلى آله وصحبه، أما بعد:<br>
         فإن أفضل الدعاء هو ما جاء في القرآن الكريم، وهو كثير وشامل لخيري الدنيا والآخرة، ومن أمثلته قول الله تبارك وتعالى: رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ {البقرة:201}.<br>
         وما جاء في السنة النبوية وصرحت الأحاديث بأفضليته، ومن ذلك: الحمد لله، ومنه: سؤال العفو والعافية، ومنه: سيد الاستغفار في طلب المغفرة، فقد روى الترمذي وابن ماجه وغيرهما أن رسول الله صلى الله عليه وسلم قال: أَفْضَلُ الذِّكْرِ: لَا إِلَهَ إِلَّا اللهُ، وَأَفْضَلُ الدُّعَاءِ: الْحَمْدُ للهِ. حسنه الألباني.<br>
@@ -915,11 +1188,11 @@
   <section id="imagesSection">
     <button class="back-button" data-back>
       <i class="fas fa-arrow-right"></i>
-      العودة
+      <span data-translate="back">العودة</span>
     </button>
-    <h2>الصور </h2>
+    <h2 data-translate="sectionImages">الصور </h2>
     <div class="loading" id="imagesLoading">
-      جاري التحميل
+      <span data-translate="loading">جاري التحميل</span>
       <i class="fas fa-spinner"></i>
     </div>
     <div class="media-grid" id="imagesContainer"></div>
@@ -928,11 +1201,11 @@
   <section id="videosSection">
     <button class="back-button" data-back>
       <i class="fas fa-arrow-right"></i>
-      العودة
+      <span data-translate="back">العودة</span>
     </button>
-    <h2>الفيديوهات </h2>
+    <h2 data-translate="sectionVideos">الفيديوهات </h2>
     <div class="loading" id="videosLoading">
-      جاري التحميل
+      <span data-translate="loading">جاري التحميل</span>
       <i class="fas fa-spinner"></i>
     </div>
     <div class="media-grid" id="videosContainer"></div>
@@ -941,11 +1214,11 @@
   <section id="audioSection">
     <button class="back-button" data-back>
       <i class="fas fa-arrow-right"></i>
-      العودة
+      <span data-translate="back">العودة</span>
     </button>
-    <h2>الصوتيات </h2>
+    <h2 data-translate="sectionAudio">الصوتيات </h2>
     <div class="loading" id="audioLoading">
-      جاري التحميل
+      <span data-translate="loading">جاري التحميل</span>
       <i class="fas fa-spinner"></i>
     </div>
     <div class="media-grid" id="audioContainer"></div>
@@ -954,11 +1227,11 @@
   <section id="textSection">
     <button class="back-button" data-back>
       <i class="fas fa-arrow-right"></i>
-      العودة
+      <span data-translate="back">العودة</span>
     </button>
-    <h2>النصوص والأحاديث الصحيحة </h2>
+    <h2 data-translate="sectionText">النصوص والأحاديث الصحيحة </h2>
     <div class="loading" id="textLoading">
-      جاري التحميل
+      <span data-translate="loading">جاري التحميل</span>
       <i class="fas fa-spinner"></i>
     </div>
     <div id="textList"></div>
@@ -967,11 +1240,11 @@
   <section id="booksSection">
     <button class="back-button" data-back>
       <i class="fas fa-arrow-right"></i>
-      العودة
+      <span data-translate="back">العودة</span>
     </button>
-    <h2>الكتب </h2>
+    <h2 data-translate="sectionBooks">الكتب </h2>
     <div class="loading" id="booksLoading">
-      جاري التحميل
+      <span data-translate="loading">جاري التحميل</span>
       <i class="fas fa-spinner"></i>
     </div>
     <div class="books-grid" id="booksList"></div>
@@ -980,11 +1253,11 @@
   <section id="weakHadithsSection">
     <button class="back-button" data-back>
       <i class="fas fa-arrow-right"></i>
-      العودة
+      <span data-translate="back">العودة</span>
     </button>
-    <h2>الأحاديث الضعيفة المنتشرة</h2>
+    <h2 data-translate="sectionWeakHadiths">الأحاديث الضعيفة المنتشرة</h2>
     <div class="loading" id="weakHadithsLoading">
-      جاري التحميل
+      <span data-translate="loading">جاري التحميل</span>
       <i class="fas fa-spinner"></i>
     </div>
     <div id="weakHadithsList"></div>
@@ -993,14 +1266,15 @@
   <section id="usefulSitesSection">
     <button class="back-button" data-back>
       <i class="fas fa-arrow-right"></i>
-      العودة
+      <span data-translate="back">العودة</span>
     </button>
-    <h2>مواقع وتطبيقات إسلامية مفيدة</h2>
+    <h2 data-translate="sectionUsefulSites">مواقع وتطبيقات إسلامية مفيدة</h2>
+    
     <div class="loading" id="usefulSitesLoading">
-      جاري التحميل
+      <span data-translate="loading">جاري التحميل</span>
       <i class="fas fa-spinner"></i>
     </div>
-    <div id="usefulSitesList"></div>
+    <div class="sites-grid" id="usefulSitesList"></div>
   </section>
   
   <!-- Modal -->
@@ -1010,13 +1284,13 @@
       <div id="previewContainer"></div>
       <a id="modalDownloadBtn" class="download-btn" href="#" download>
         <i class="fas fa-download"></i>
-        تحميل
+        <span data-translate="download">تحميل</span>
       </a>
     </div>
   </div>
   
   <footer>
-    <p>© جميع الحقوق محفوظة - Mahmoud elsheikh </p>
+    <p data-translate="footer">© جميع الحقوق محفوظة - Mahmoud elsheikh </p>
   </footer>
   
   <script>
@@ -1046,6 +1320,248 @@
     let searchTimeout = null;
     let currentModalItem = null;
     let audioPlayers = new Map(); // Store audio players
+    let currentLanguage = localStorage.getItem('preferredLanguage') || 'ar'; // Default to Arabic
+    let translatedSites = new Map(); // Store translated content
+
+    // Comprehensive translation dictionary
+    const translations = {
+      ar: {
+        // Header and Navigation
+        subtitle: "نِعمَ العَبدُ إِنَّهُ أَوّابٌ ⁦♡ ",
+        searchPlaceholder: "ابحث عن أي محتوى في الموقع...",
+        filterAll: "الكل",
+        filterImages: "الصور",
+        filterVideos: "الفيديوهات",
+        filterAudio: "الصوتيات",
+        filterText: "النصوص",
+        filterBooks: "الكتب",
+        
+        // Menu items
+        menuImages: "الصور",
+        menuVideos: "الفيديوهات",
+        menuAudio: "الصوتيات",
+        menuText: "النصوص",
+        menuBooks: "الكتب",
+        menuWeakHadiths: "الأحاديث الضعيفة",
+        menuUsefulSites: "مواقع مفيدة",
+        
+        // Sections
+        sectionImages: "الصور",
+        sectionVideos: "الفيديوهات",
+        sectionAudio: "الصوتيات",
+        sectionText: "النصوص والأحاديث الصحيحة",
+        sectionBooks: "الكتب",
+        sectionWeakHadiths: "الأحاديث الضعيفة المنتشرة",
+        sectionUsefulSites: "مواقع وتطبيقات إسلامية مفيدة",
+        
+        // Common actions
+        back: "العودة",
+        loading: "جاري التحميل",
+        download: "تحميل",
+        visitSite: "زيارة الموقع",
+        copy: "نسخ",
+        copied: "تم النسخ",
+        noResults: "لا توجد نتائج",
+        error: "حدث خطأ",
+        
+        // Welcome messages
+        welcomeMessage: "إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ ۚ يَا أَيُّهَا الَّذِينَ آمَنُوا صَلُّوا عَلَيْهِ وَسَلِّمُوا تَسْلِيمًا",
+        message1: "إذا مات ابنُ آدمَ انقطع عملُه إلا من ثلاثٍ: صدقةٍ جاريةٍ، وعلمٍ ينتفعُ به، وولدٍ صالحٍ يدعو له<br>خلاصة حكم المحدث: صحيح<br>الراوي: - | المحدث: ابن تيمية | المصدر: مجموع الفتاوى | الصفحة أو الرقم: 1/191",
+        finalMessage: "الحمد لله، والصلاة والسلام على رسول الله، وعلى آله وصحبه، أما بعد:<br>فإن أفضل الدعاء هو ما جاء في القرآن الكريم، وهو كثير وشامل لخيري الدنيا والآخرة، ومن أمثلته قول الله تبارك وتعالى: رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ {البقرة:201}.<br>وما جاء في السنة النبوية وصرحت الأحاديث بأفضليته، ومن ذلك: الحمد لله، ومنه: سؤال العفو والعافية، ومنه: سيد الاستغفار في طلب المغفرة، فقد روى الترمذي وابن ماجه وغيرهما أن رسول الله صلى الله عليه وسلم قال: أَفْضَلُ الذِّكْرِ: لَا إِلَهَ إِلَّا اللهُ، وَأَفْضَلُ الدُّعَاءِ: الْحَمْدُ للهِ. حسنه الألباني.<br>وَقَالَ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ: أَفْضَلُ الْكَلَامِ بَعْدَ الْقُرْآنِ ـ وَهُو مِنَ الْقُرْآنِ ـ أَرْبَعٌ لَا يَضُرُّكَ بِأَيِّهِنَّ بَدَأْتَ: سُبْحَانَ اللهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللهُ، وَاللهُ أَكْبَرُ.<br>وقال صلى الله عليه وسلم: مَا مِنْ دَعْوَةٍ يَدْعُو بِهَا الْعَبْدُ أَفْضَلَ مِنْ: اللَّهُمَّ إِنِّي أَسْأَلُكَ الْمُعَافَاةَ فِي الدُّنْيَا وَالْآخِرَةِ. رواه ابن ماجه وغيره، وصححه الألباني.<br>وعَنْ عَائِشَة ـ رضي الله عنها ـ قَالَتْ: قُلْتُ: يَا رَسُولَ اللهِ؛ أَرَأَيْتَ إِنْ عَلِمْتُ أَيَّ لَيْلَةٍ لَيْلَةُ الْقَدْرِ مَا أَقُولُ فِيهَا؟ قَالَ: قُولِي: اللَّهُمَّ إِنَّكَ عُفُوٌّ تُحِبُّ الْعَفْوَ، فَاعْفُ عَنِّي. رواه الترمذي وغيره، وصححه الألباني.<br>وقال صلى الله عليه وسلم: سيد الاستغفار أن يقول العبد: اللهم أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك، وأنا على عهدك ووعدك ما استطعت، أعوذ بك من شر ما صنعت، أبوء لك بنعمتك علي، وأبوء لك بذنبي فاغفر لي، فإنه لا يغفر الذنوب إلا أنت، قال: ومن قالها من النهار موقنا بها فمات من يومه قبل أن يمسي فهو من أهل الجنة، ومن قالها من الليل وهو موقن بها فمات قبل أن يصبح فهو من أهل الجنة. رواه البخاري.",
+        
+        // Footer
+        footer: "© جميع الحقوق محفوظة - Mahmoud elsheikh",
+        
+        // Media overlays
+        imageTitle: "صورة إسلامية",
+        imageDescription: "اضغط للعرض بالكامل",
+        videoTitle: "فيديو إسلامي",
+        videoDescription: "اضغط للمشاهدة",
+        
+        // Site actions
+        translateSite: "ترجمة الموقع",
+        restoreOriginal: "استعادة الأصلي",
+        translating: "جاري الترجمة...",
+        translationFailed: "فشلت الترجمة"
+      },
+      en: {
+        // Header and Navigation
+        subtitle: "Indeed, the servant is indeed oft‑returning ♡",
+        searchPlaceholder: "Search for any content on the site...",
+        filterAll: "All",
+        filterImages: "Images",
+        filterVideos: "Videos",
+        filterAudio: "Audio",
+        filterText: "Text",
+        filterBooks: "Books",
+        
+        // Menu items
+        menuImages: "Images",
+        menuVideos: "Videos",
+        menuAudio: "Audio",
+        menuText: "Text",
+        menuBooks: "Books",
+        menuWeakHadiths: "Weak Hadiths",
+        menuUsefulSites: "Useful Sites",
+        
+        // Sections
+        sectionImages: "Images",
+        sectionVideos: "Videos",
+        sectionAudio: "Audio",
+        sectionText: "Texts and Authentic Hadiths",
+        sectionBooks: "Books",
+        sectionWeakHadiths: "Common Weak Hadiths",
+        sectionUsefulSites: "Useful Islamic Websites and Apps",
+        
+        // Common actions
+        back: "Back",
+        loading: "Loading",
+        download: "Download",
+        visitSite: "Visit Site",
+        copy: "Copy",
+        copied: "Copied",
+        noResults: "No results",
+        error: "Error occurred",
+        
+        // Welcome messages
+        welcomeMessage: "Indeed, Allah and His angels send blessings upon the Prophet. O you who have believed, ask [ Allah to confer] blessing upon him and peace.",
+        message1: "When the son of Adam dies, his deeds stop except for three: ongoing charity, beneficial knowledge, or a righteous child who prays for him.<br>Summary: Authentic<br>Narrator: - | Scholar: Ibn Taymiyyah | Source: Majmu' al-Fatawa | Page: 1/191",
+        finalMessage: "Praise be to Allah, and blessings and peace be upon the Messenger of Allah, his family and companions. As for what follows:<br>The best supplication is that which is in the Qur'an, which is many and comprehensive for the good of this world and the Hereafter. Among its examples is the saying of Allah the Exalted: 'Our Lord, give us in this world [that which is] good and in the Hereafter [that which is] good and protect us from the punishment of the Fire.' [Al-Baqarah: 201].<br>And what came in the Prophetic Sunnah and hadiths indicated its superiority, including: Praising Allah, and from it: asking for forgiveness and well-being, and from it: the master of seeking forgiveness in asking for forgiveness, for At-Tirmidhi and Ibn Majah and others narrated that the Messenger of Allah, peace and blessings be upon him, said: 'The best remembrance is: There is no deity except Allah, and the best supplication is: Praise be to Allah.' Authenticated by Al-Albani.<br>And he, peace and blessings be upon him, said: 'The best speech after the Qur'an - and it is from the Qur'an - is four, it does not harm you with whichever you begin with: Glory be to Allah, and praise be to Allah, and there is no deity except Allah, and Allah is the Greatest.'<br>And the Messenger of Allah, peace and blessings be upon him, said: 'There is no supplication that the servant supplicates with better than: O Allah, I ask You for well-being in this world and in the Hereafter.' Narrated by Ibn Majah and others, authenticated by Al-Albani.<br>And from Aisha - may Allah be pleased with her - who said: I said: O Messenger of Allah; if I knew which night is the Night of Decree, what should I say in it? He said: Say: O Allah, You are Forgiving and love forgiveness, so forgive me. Narrated by At-Tirmidhi and others, authenticated by Al-Albani.<br>And the Messenger of Allah, peace and blessings be upon him, said: 'The master of seeking forgiveness is that the servant should say: O Allah, You are my Lord, there is no deity except You, You created me and I am Your servant, and I am upon Your covenant and promise as much as I can, I seek refuge in You from the evil of what I have done, I acknowledge Your blessings upon me, and I acknowledge my sin, so forgive me, for no one forgives sins except You.' He said: And whoever says it during the day, believing in it with certainty, then dies before evening, he is among the people of Paradise, and whoever says it during the night, believing in it with certainty, then dies before morning, he is among the people of Paradise. Narrated by Al-Bukhari.",
+        
+        // Footer
+        footer: "© All rights reserved - Mahmoud elsheikh",
+        
+        // Media overlays
+        imageTitle: "Islamic Image",
+        imageDescription: "Click to view in full",
+        videoTitle: "Islamic Video",
+        videoDescription: "Click to watch",
+        
+        // Site actions
+        translateSite: "Translate Site",
+        restoreOriginal: "Restore Original",
+        translating: "Translating...",
+        translationFailed: "Translation Failed"
+      },
+      de: {
+        // Header and Navigation
+        subtitle: "Wahrlich, der Diener ist wahrlich reumütig ♡",
+        searchPlaceholder: "Suche nach beliebigen Inhalten auf der Seite...",
+        filterAll: "Alle",
+        filterImages: "Bilder",
+        filterVideos: "Videos",
+        filterAudio: "Audio",
+        filterText: "Text",
+        filterBooks: "Bücher",
+        
+        // Menu items
+        menuImages: "Bilder",
+        menuVideos: "Videos",
+        menuAudio: "Audio",
+        menuText: "Texte",
+        menuBooks: "Bücher",
+        menuWeakHadiths: "Schwache Hadithe",
+        menuUsefulSites: "Nützliche Seiten",
+        
+        // Sections
+        sectionImages: "Bilder",
+        sectionVideos: "Videos",
+        sectionAudio: "Audio",
+        sectionText: "Texte und authentische Hadithe",
+        sectionBooks: "Bücher",
+        sectionWeakHadiths: "Verbreitete schwache Hadithe",
+        sectionUsefulSites: "Nützliche islamische Websites und Apps",
+        
+        // Common actions
+        back: "Zurück",
+        loading: "Laden",
+        download: "Herunterladen",
+        visitSite: "Seite besuchen",
+        copy: "Kopieren",
+        copied: "Kopiert",
+        noResults: "Keine Ergebnisse",
+        error: "Fehler aufgetreten",
+        
+        // Welcome messages
+        welcomeMessage: "Wahrlich, Allah und Seine Engel senden Segnungen auf den Propheten. O ihr, die ihr glaubt, bittet [Allah, Segnungen] auf ihn zu senden und Frieden.",
+        message1: "Wenn der Sohn Adams stirbt, hören seine Taten auf außer drei: laufende Wohltätigkeit, nützliches Wissen oder ein rechtschaffenes Kind, das für ihn betet.<br>Zusammenfassung: Authentisch<br>Erzähler: - | Gelehrter: Ibn Taymiyyah | Quelle: Majmu' al-Fatawa | Seite: 1/191",
+        finalMessage: "Lob sei Allah, und Segen und Frieden seien auf dem Gesandten Allahs, seiner Familie und seinen Gefährten. Was folgt:<br>Das beste Bittgebet ist das, was im Koran ist, das viele und umfassend für das Gute dieser Welt und des Jenseits ist. Zu seinen Beispielen gehört das Wort Allahs des Erhabenen: 'Unser Herr, gib uns in dieser Welt [das, was] gut ist und im Jenseits [das, was] gut ist und schütze uns vor der Strafe des Feuers.' [Al-Baqarah: 201].<br>Und was in der Propheten Sunna und Hadithen kam, wies auf seine Überlegenheit hin, einschließlich: Allah preisen, und davon: um Vergebung und Wohlergehen bitten, und davon: der Meister des Suchens nach Vergebung beim Bitten um Vergebung, denn At-Tirmidhi und Ibn Majah und andere überlieferten, dass der Gesandte Allahs, Segen und Frieden seien auf ihm, sagte: 'Das beste Gedenken ist: Es gibt keine Gottheit außer Allah, und das beste Bittgebet ist: Lob sei Allah.' Authentifiziert von Al-Albani.<br>Und er, Segen und Frieden seien auf ihm, sagte: 'Die beste Rede nach dem Koran - und sie ist aus dem Koran - ist vier, sie schadet Ihnen nicht, mit welcher Sie auch beginnen: Preis sei Allah, und Lob sei Allah, und es gibt keine Gottheit außer Allah, und Allah ist der Größte.'<br>Und der Gesandte Allahs, Segen und Frieden seien auf ihm, sagte: 'Es gibt kein Bittgebet, mit dem der Diener besser bittet als: O Allah, ich bitte Dich um Wohlergehen in dieser Welt und im Jenseits.' Überliefert von Ibn Majah und anderen, authentifiziert von Al-Albani.<br>Und von Aisha - möge Allah mit ihr zufrieden sein - die sagte: Ich sagte: O Gesandter Allahs; wenn ich wüsste, welche Nacht die Nacht der Bestimmung ist, was sollte ich darin sagen? Er sagte: Sag: O Allah, Du bist Vergebend und liebst Vergebung, also vergib mir. Überliefert von At-Tirmidhi und anderen, authentifiziert von Al-Albani.<br>Und der Gesandte Allahs, Segen und Frieden seien auf ihm, sagte: 'Der Meister des Suchens nach Vergebung ist, dass der Diener sagen sollte: O Allah, Du bist mein Herr, es gibt keine Gottheit außer Dir, Du hast mich erschaffen und ich bin Dein Diener, und ich bin auf Deinen Bund und Dein Versprechen, so viel ich kann, ich suche Zuflucht bei Dir vor dem Bösen dessen, was ich getan habe, ich erkenne Deine Segnungen für mich an, und ich erkenne meine Sünde an, also vergib mir, denn niemand vergibt Sünden außer Dir.' Er sagte: Und wer es am Tag sagt, fest daran glaubend, dann stirbt, bevor der Abend kommt, er ist unter den Menschen des Paradieses, und wer es in der Nacht sagt, fest daran glaubend, dann stirbt, bevor der Morgen kommt, er ist unter den Menschen des Paradieses. Überliefert von Al-Bukhari.",
+        
+        // Footer
+        footer: "© Alle Rechte vorbehalten - Mahmoud elsheikh",
+        
+        // Media overlays
+        imageTitle: "Islamisches Bild",
+        imageDescription: "Klicken Sie für Vollansicht",
+        videoTitle: "Islamisches Video",
+        videoDescription: "Klicken Sie zum Ansehen",
+        
+        // Site actions
+        translateSite: "Seite übersetzen",
+        restoreOriginal: "Original wiederherstellen",
+        translating: "Übersetzen...",
+        translationFailed: "Übersetzung fehlgeschlagen"
+      },
+      fr: {
+        // Header and Navigation
+        subtitle: "Certes, le serviteur est certes repentant ♡",
+        searchPlaceholder: "Rechercher du contenu sur le site...",
+        filterAll: "Tout",
+        filterImages: "Images",
+        filterVideos: "Vidéos",
+        filterAudio: "Audio",
+        filterText: "Texte",
+        filterBooks: "Livres",
+        
+        // Menu items
+        menuImages: "Images",
+        menuVideos: "Vidéos",
+        menuAudio: "Audio",
+        menuText: "Textes",
+        menuBooks: "Livres",
+        menuWeakHadiths: "Hadiths faibles",
+        menuUsefulSites: "Sites utiles",
+        
+        // Sections
+        sectionImages: "Images",
+        sectionVideos: "Vidéos",
+        sectionAudio: "Audio",
+        sectionText: "Textes et hadiths authentiques",
+        sectionBooks: "Livres",
+        sectionWeakHadiths: "Hadiths faibles courants",
+        sectionUsefulSites: "Sites web et applications islamiques utiles",
+        
+        // Common actions
+        back: "Retour",
+        loading: "Chargement",
+        download: "Télécharger",
+        visitSite: "Visiter le site",
+        copy: "Copier",
+        copied: "Copié",
+        noResults: "Aucun résultat",
+        error: "Une erreur est survenue",
+        
+        // Welcome messages
+        welcomeMessage: "Certes, Allah et Ses anges envoient des bénédictions sur le Prophète. Ô vous qui avez cru, demandez [à Allah de conférer] des bénédictions sur lui et la paix.",
+        message1: "Quand le fils d'Adam meurt, ses actes s'arrêtent sauf pour trois: charité continue, connaissance utile ou un enfant vertueux qui prie pour lui.<br>Résumé: Authentique<br>Narrateur: - | Savant: Ibn Taymiyyah | Source: Majmu' al-Fatawa | Page: 1/191",
+        finalMessage: "Louange soit à Allah, et bénédictions et paix soient sur le Messager d'Allah, sa famille et ses compagnons. Quant à ce qui suit:<br>La meilleure supplication est celle qui est dans le Coran, qui est nombreuse et complète pour le bien de ce monde et de l'au-delà. Parmi ses exemples est la parole d'Allah l'Exalté: 'Seigneur, accorde-nous en ce monde [ce qui est] bon et dans l'au-delà [ce qui est] bon et protège-nous du châtiment du Feu.' [Al-Baqarah: 201].<br>Et ce qui est venu dans la Sunna prophétique et les hadiths a indiqué sa supériorité, y compris: Louer Allah, et de cela: demander le pardon et le bien-être, et de cela: le maître de la recherche du pardon dans la demande de pardon, car At-Tirmidhi et Ibn Majah et d'autres ont rapporté que le Messager d'Allah, paix et bénédictions soient sur lui, a dit: 'Le meilleur rappel est: Il n'y a de divinité qu'Allah, et la meilleure supplication est: Louange soit à Allah.' Authentifié par Al-Albani.<br>Et il, paix et bénédictions soient sur lui, a dit: 'La meilleure parole après le Coran - et elle est du Coran - est quatre, elle ne vous nuit pas avec laquelle vous commencez: Gloire soit à Allah, et louange soit à Allah, et il n'y a de divinité qu'Allah, et Allah est le Plus Grand.'<br>Et le Messager d'Allah, paix et bénédictions soient sur lui, a dit: 'Il n'y a pas de supplication que le servant supplie avec meilleure que: Ô Allah, je te demande le bien-être dans ce monde et dans l'au-delà.' Rapporté par Ibn Majah et d'autres, authentifié par Al-Albani.<br>Et d'Aisha - qu'Allah soit satisfait d'elle - qui a dit: J'ai dit: Ô Messager d'Allah; si je savais quelle nuit est la Nuit du Décret, que devrais-je dire dedans? Il a dit: Dis: Ô Allah, Tu es Pardonneur et aimes le pardon, alors pardonne-moi. Rapporté par At-Tirmidhi et d'autres, authentifié par Al-Albani.<br>Et le Messager d'Allah, paix et bénédictions soient sur lui, a dit: 'Le maître de la recherche du pardon est que le servant devrait dire: Ô Allah, Tu es mon Seigneur, il n'y a de divinité que Toi, Tu m'as créé et je suis Ton serviteur, et je suis sur Ton alliance et Ta promesse autant que je peux, je cherche refuge en Toi contre le mal de ce que j'ai fait, je reconnais Tes bénédictions sur moi, et je reconnais mon péché, alors pardonne-moi, car personne ne pardonne les péchés sauf Toi.' Il a dit: Et quiconque le dit pendant le jour, y croyant avec certitude, puis meurt avant le soir, il est parmi les gens du Paradis, et quiconque le dit pendant la nuit, y croyant avec certitude, puis meurt avant le matin, il est parmi les gens du Paradis. Rapporté par Al-Bukhari.",
+        
+        // Footer
+        footer: "© Tous droits réservés - Mahmoud elsheikh",
+        
+        // Media overlays
+        imageTitle: "Image islamique",
+        imageDescription: "Cliquez pour voir en plein",
+        videoTitle: "Vidéo islamique",
+        videoDescription: "Cliquez pour regarder",
+        
+        // Site actions
+        translateSite: "Traduire le site",
+        restoreOriginal: "Restaurer l'original",
+        translating: "Traduction...",
+        translationFailed: "Traduction échouée"
+      }
+    };
 
     // Theme Toggle
     const themeToggle = document.getElementById('themeToggle');
@@ -1074,6 +1590,65 @@
         themeIcon.classList.add('fa-moon');
         localStorage.setItem('theme', 'dark');
       }
+    });
+
+    // Language change function
+    function changeLanguage(lang) {
+      currentLanguage = lang;
+      localStorage.setItem('preferredLanguage', lang);
+      
+      // Update HTML lang and dir attributes
+      document.documentElement.setAttribute('lang', lang);
+      document.documentElement.setAttribute('data-lang', lang);
+      
+      // Update text direction
+      if (lang === 'ar') {
+        document.documentElement.setAttribute('dir', 'rtl');
+      } else {
+        document.documentElement.setAttribute('dir', 'ltr');
+      }
+      
+      // Update all translatable elements
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+      
+      // Update placeholders
+      document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+        const key = element.getAttribute('data-translate-placeholder');
+        if (translations[lang][key]) {
+          element.placeholder = translations[lang][key];
+        }
+      });
+      
+      // Update language button states
+      document.querySelectorAll('.lang-btn-header').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-lang') === lang) {
+          btn.classList.add('active');
+        }
+      });
+      
+      // Reload useful sites if in that section
+      if (document.getElementById('usefulSitesSection').style.display === 'block') {
+        displayUsefulSitesList(allContent.usefulSites);
+      }
+    }
+
+    // Language selector functionality
+    document.querySelectorAll('.lang-btn-header').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const lang = this.getAttribute('data-lang');
+        changeLanguage(lang);
+      });
+    });
+
+    // Initialize language on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      changeLanguage(currentLanguage);
     });
 
     // Advanced Search with Arabic normalization
@@ -1211,7 +1786,7 @@
         // Show success feedback
         if (button) {
           const originalHTML = button.innerHTML;
-          button.innerHTML = '<i class="fas fa-check"></i> تم النسخ';
+          button.innerHTML = `<i class="fas fa-check"></i> ${translations[currentLanguage].copied}`;
           button.classList.add('copied');
           
           setTimeout(() => {
@@ -1238,7 +1813,7 @@
           
           if (successful && button) {
             const originalHTML = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-check"></i> تم النسخ';
+            button.innerHTML = `<i class="fas fa-check"></i> ${translations[currentLanguage].copied}`;
             button.classList.add('copied');
             
             setTimeout(() => {
@@ -1253,6 +1828,56 @@
           return false;
         }
       }
+    }
+
+    // Translation function using MyMemory API (free)
+    async function translateText(text, targetLang) {
+      if (targetLang === 'ar') return text; // Return original if target is Arabic
+      
+      const cacheKey = `${text}-${targetLang}`;
+      if (translatedSites.has(cacheKey)) {
+        return translatedSites.get(cacheKey);
+      }
+      
+      try {
+        // Using MyMemory Translation API (free tier)
+        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=ar|${targetLang}`);
+        const data = await response.json();
+        
+        if (data.responseStatus === 200 && data.responseData.translatedText) {
+          const translated = data.responseData.translatedText;
+          translatedSites.set(cacheKey, translated);
+          return translated;
+        }
+      } catch (error) {
+        console.error('Translation error:', error);
+      }
+      
+      return text; // Return original if translation fails
+    }
+
+    // Parse site content from text file
+    function parseSiteContent(content) {
+      const lines = content.split('\n').filter(line => line.trim());
+      const sites = [];
+      
+      for (let i = 0; i < lines.length; i += 3) {
+        if (i + 2 < lines.length) {
+          const title = lines[i].trim();
+          const description = lines[i + 1].trim();
+          const url = lines[i + 2].trim();
+          
+          if (title && description && url) {
+            sites.push({
+              title: title,
+              description: description,
+              url: url.startsWith('http') ? url : `https://${url}`
+            });
+          }
+        }
+      }
+      
+      return sites;
     }
 
     // Navigation
@@ -1512,7 +2137,7 @@
         })
         .catch(error => {
           console.error('Error loading images:', error);
-          document.getElementById('imagesLoading').innerHTML = 'حدث خطأ أثناء التحميل';
+          document.getElementById('imagesLoading').innerHTML = `<span>${translations[currentLanguage].error}</span>`;
         });
     }
     
@@ -1521,7 +2146,7 @@
       container.innerHTML = '';
       
       if (list.length === 0) {
-        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        container.innerHTML = `<div class="no-results">${translations[currentLanguage].noResults}</div>`;
         return;
       }
       
@@ -1549,8 +2174,8 @@
         const overlay = document.createElement('div');
         overlay.className = 'media-overlay';
         overlay.innerHTML = `
-          <h3>صورة إسلامية</h3>
-          <p>اضغط للعرض بالكامل</p>
+          <h3>${translations[currentLanguage].imageTitle}</h3>
+          <p>${translations[currentLanguage].imageDescription}</p>
         `;
         
         div.addEventListener('click', () => openModal('image', item));
@@ -1572,7 +2197,7 @@
         })
         .catch(error => {
           console.error('Error loading videos:', error);
-          document.getElementById('videosLoading').innerHTML = 'حدث خطأ أثناء التحميل';
+          document.getElementById('videosLoading').innerHTML = `<span>${translations[currentLanguage].error}</span>`;
         });
     }
     
@@ -1581,7 +2206,7 @@
       container.innerHTML = '';
       
       if (list.length === 0) {
-        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        container.innerHTML = `<div class="no-results">${translations[currentLanguage].noResults}</div>`;
         return;
       }
       
@@ -1609,8 +2234,8 @@
         const overlay = document.createElement('div');
         overlay.className = 'media-overlay';
         overlay.innerHTML = `
-          <h3>فيديو إسلامي</h3>
-          <p>اضغط للمشاهدة</p>
+          <h3>${translations[currentLanguage].videoTitle}</h3>
+          <p>${translations[currentLanguage].videoDescription}</p>
         `;
         
         div.addEventListener('click', () => openModal('video', item));
@@ -1632,7 +2257,7 @@
         })
         .catch(error => {
           console.error('Error loading audio:', error);
-          document.getElementById('audioLoading').innerHTML = 'حدث خطأ أثناء التحميل';
+          document.getElementById('audioLoading').innerHTML = `<span>${translations[currentLanguage].error}</span>`;
         });
     }
     
@@ -1641,7 +2266,7 @@
       container.innerHTML = '';
       
       if (list.length === 0) {
-        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        container.innerHTML = `<div class="no-results">${translations[currentLanguage].noResults}</div>`;
         return;
       }
       
@@ -1681,7 +2306,7 @@
         })
         .catch(error => {
           console.error('Error loading text:', error);
-          document.getElementById('textLoading').innerHTML = 'حدث خطأ أثناء التحميل';
+          document.getElementById('textLoading').innerHTML = `<span>${translations[currentLanguage].error}</span>`;
         });
     }
     
@@ -1690,7 +2315,7 @@
       container.innerHTML = '';
       
       if (list.length === 0) {
-        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        container.innerHTML = `<div class="no-results">${translations[currentLanguage].noResults}</div>`;
         return;
       }
       
@@ -1707,10 +2332,10 @@
           <div class="text-title">${item.name.replace(/\.[^/.]+$/, "")}</div>
           <div class="text-actions">
             <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
-              <i class="fas fa-download"></i> تحميل
+              <i class="fas fa-download"></i> ${translations[currentLanguage].download}
             </button>
             <button class="text-action-btn" id="copy-${item.name.replace(/[^a-zA-Z0-9]/g, '')}" onclick="copyTextContent('${item.download_url}', this)">
-              <i class="fas fa-copy"></i> نسخ
+              <i class="fas fa-copy"></i> ${translations[currentLanguage].copy}
             </button>
           </div>
         `;
@@ -1752,7 +2377,7 @@
         })
         .catch(error => {
           console.error('Error loading books:', error);
-          document.getElementById('booksLoading').innerHTML = 'حدث خطأ أثناء التحميل';
+          document.getElementById('booksLoading').innerHTML = `<span>${translations[currentLanguage].error}</span>`;
         });
     }
     
@@ -1761,7 +2386,7 @@
       container.innerHTML = '';
       
       if (list.length === 0) {
-        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        container.innerHTML = `<div class="no-results">${translations[currentLanguage].noResults}</div>`;
         return;
       }
       
@@ -1785,7 +2410,7 @@
         download.download = item.name;
         download.innerHTML = `
           <i class="fas fa-download"></i>
-          تحميل الكتاب
+          ${translations[currentLanguage].download}
         `;
         
         div.append(icon, title, download);
@@ -1805,7 +2430,7 @@
         })
         .catch(error => {
           console.error('Error loading weak hadiths:', error);
-          document.getElementById('weakHadithsLoading').innerHTML = 'حدث خطأ أثناء التحميل';
+          document.getElementById('weakHadithsLoading').innerHTML = `<span>${translations[currentLanguage].error}</span>`;
         });
     }
     
@@ -1814,7 +2439,7 @@
       container.innerHTML = '';
       
       if (list.length === 0) {
-        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        container.innerHTML = `<div class="no-results">${translations[currentLanguage].noResults}</div>`;
         return;
       }
       
@@ -1831,10 +2456,10 @@
           <div class="text-title">${item.name.replace(/\.[^/.]+$/, "")}</div>
           <div class="text-actions">
             <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
-              <i class="fas fa-download"></i> تحميل
+              <i class="fas fa-download"></i> ${translations[currentLanguage].download}
             </button>
             <button class="text-action-btn" id="copy-${item.name.replace(/[^a-zA-Z0-9]/g, '')}" onclick="copyTextContent('${item.download_url}', this)">
-              <i class="fas fa-copy"></i> نسخ
+              <i class="fas fa-copy"></i> ${translations[currentLanguage].copy}
             </button>
           </div>
         `;
@@ -1865,52 +2490,108 @@
         })
         .catch(error => {
           console.error('Error loading useful sites:', error);
-          document.getElementById('usefulSitesLoading').innerHTML = 'حدث خطأ أثناء التحميل';
+          document.getElementById('usefulSitesLoading').innerHTML = `<span>${translations[currentLanguage].error}</span>`;
         });
     }
     
-    function displayUsefulSitesList(list) {
+    async function displayUsefulSitesList(list) {
       const container = document.getElementById('usefulSitesList');
       container.innerHTML = '';
       
       if (list.length === 0) {
-        container.innerHTML = '<div class="no-results">لا توجد نتائج</div>';
+        container.innerHTML = `<div class="no-results">${translations[currentLanguage].noResults}</div>`;
         return;
       }
       
-      // Limit to first 5 sites for performance
-      const limitedList = list.slice(0, 5);
+      // Load and parse all site files
+      for (const item of list) {
+        try {
+          const response = await fetch(item.download_url);
+          const content = await response.text();
+          const sites = parseSiteContent(content);
+          
+          sites.forEach((site, index) => {
+            const siteCard = document.createElement('div');
+            siteCard.className = 'site-card';
+            siteCard.dataset.originalTitle = site.title;
+            siteCard.dataset.originalDescription = site.description;
+            siteCard.dataset.url = site.url;
+            
+            const siteHeader = document.createElement('div');
+            siteHeader.className = 'site-header';
+            
+            const siteIcon = document.createElement('div');
+            siteIcon.className = 'site-icon';
+            siteIcon.innerHTML = '<i class="fas fa-globe"></i>';
+            
+            const siteTitle = document.createElement('div');
+            siteTitle.className = 'site-title';
+            siteTitle.textContent = site.title;
+            
+            siteHeader.append(siteIcon, siteTitle);
+            
+            const siteDescription = document.createElement('div');
+            siteDescription.className = 'site-description';
+            siteDescription.textContent = site.description;
+            
+            const siteActions = document.createElement('div');
+            siteActions.className = 'site-actions';
+            
+            const visitBtn = document.createElement('a');
+            visitBtn.className = 'site-btn';
+            visitBtn.href = site.url;
+            visitBtn.target = '_blank';
+            visitBtn.rel = 'noopener noreferrer';
+            visitBtn.innerHTML = `
+              <i class="fas fa-external-link-alt"></i>
+              ${translations[currentLanguage].visitSite}
+            `;
+            
+            const translateBtn = document.createElement('button');
+            translateBtn.className = 'site-btn secondary';
+            translateBtn.innerHTML = `
+              <i class="fas fa-language"></i>
+              ${translations[currentLanguage].translateSite}
+            `;
+            translateBtn.addEventListener('click', () => translateSite(siteCard, translateBtn));
+            
+            siteActions.append(visitBtn, translateBtn);
+            
+            siteCard.append(siteHeader, siteDescription, siteActions);
+            container.appendChild(siteCard);
+          });
+        } catch (error) {
+          console.error('Error loading site content:', error);
+        }
+      }
+    }
+    
+    // Translate site function
+    async function translateSite(siteCard, button) {
+      const originalTitle = siteCard.dataset.originalTitle;
+      const originalDescription = siteCard.dataset.originalDescription;
       
-      limitedList.forEach(item => {
-        const textContainer = document.createElement('div');
-        textContainer.className = 'text-container';
+      button.disabled = true;
+      button.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${translations[currentLanguage].translating}`;
+      
+      try {
+        const translatedTitle = await translateText(originalTitle, currentLanguage);
+        const translatedDescription = await translateText(originalDescription, currentLanguage);
         
-        const header = document.createElement('div');
-        header.className = 'text-header';
-        header.innerHTML = `
-          <div class="text-title">${item.name.replace(/\.[^/.]+$/, "")}</div>
-          <div class="text-actions">
-            <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
-              <i class="fas fa-download"></i> تحميل
-            </button>
-            <button class="text-action-btn" id="copy-${item.name.replace(/[^a-zA-Z0-9]/g, '')}" onclick="copyTextContent('${item.download_url}', this)">
-              <i class="fas fa-copy"></i> نسخ
-            </button>
-          </div>
-        `;
+        siteCard.querySelector('.site-title').textContent = translatedTitle;
+        siteCard.querySelector('.site-description').textContent = translatedDescription;
         
-        const content = document.createElement('div');
-        content.className = 'text-content';
-        content.textContent = 'جاري التحميل...';
-        content.id = `content-${item.name.replace(/[^a-zA-Z0-9]/g, '')}`;
-        
-        fetch(item.download_url).then(r => r.text()).then(txt => {
-          content.textContent = txt;
-        });
-        
-        textContainer.append(header, content);
-        container.appendChild(textContainer);
-      });
+        button.innerHTML = `<i class="fas fa-undo"></i> ${translations[currentLanguage].restoreOriginal}`;
+        button.addEventListener('click', () => {
+          siteCard.querySelector('.site-title').textContent = originalTitle;
+          siteCard.querySelector('.site-description').textContent = originalDescription;
+          button.innerHTML = `<i class="fas fa-language"></i> ${translations[currentLanguage].translateSite}`;
+          button.disabled = false;
+        }, { once: true });
+      } catch (error) {
+        console.error('Translation error:', error);
+        button.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${translations[currentLanguage].translationFailed}`;
+      }
     }
 
     // Advanced Search with debounce and suggestions
