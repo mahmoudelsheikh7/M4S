@@ -1120,6 +1120,7 @@
         <div class="filter-chip" data-filter="audio" data-translate="filterAudio">الصوتيات</div>
         <div class="filter-chip" data-filter="text" data-translate="filterText">النصوص</div>
         <div class="filter-chip" data-filter="books" data-translate="filterBooks">الكتب</div>
+        <div class="filter-chip" data-filter="ahd" data-translate="filterAhd">الأحاديث الصحيحة</div>
       </div>
     </div>
   </div>
@@ -1154,6 +1155,10 @@
     <div class="menu-item" data-section="textSection">
       <i class="fas fa-file-alt"></i>
       <span data-translate="menuText">النصوص</span>
+    </div>
+    <div class="menu-item" data-section="ahdSection">
+      <i class="fas fa-book-open"></i>
+      <span data-translate="menuAhd">الأحاديث الصحيحة</span>
     </div>
     <div class="menu-item" data-section="booksSection">
       <i class="fas fa-book"></i>
@@ -1237,6 +1242,19 @@
     <div id="textList"></div>
   </section>
   
+  <section id="ahdSection">
+    <button class="back-button" data-back>
+      <i class="fas fa-arrow-right"></i>
+      <span data-translate="back">العودة</span>
+    </button>
+    <h2 data-translate="sectionAhd">الأحاديث الصحيحة</h2>
+    <div class="loading" id="ahdLoading">
+      <span data-translate="loading">جاري التحميل</span>
+      <i class="fas fa-spinner"></i>
+    </div>
+    <div id="ahdList"></div>
+  </section>
+  
   <section id="booksSection">
     <button class="back-button" data-back>
       <i class="fas fa-arrow-right"></i>
@@ -1301,6 +1319,7 @@
       videos: [],
       audio: [],
       text: [],
+      ahd: [],
       books: [],
       weakHadiths: [],
       usefulSites: []
@@ -1310,6 +1329,7 @@
       videos: false,
       audio: false,
       text: false,
+      ahd: false,
       books: false,
       weakHadiths: false,
       usefulSites: false
@@ -1335,12 +1355,14 @@
         filterAudio: "الصوتيات",
         filterText: "النصوص",
         filterBooks: "الكتب",
+        filterAhd: "الأحاديث الصحيحة",
         
         // Menu items
         menuImages: "الصور",
         menuVideos: "الفيديوهات",
         menuAudio: "الصوتيات",
         menuText: "النصوص",
+        menuAhd: "الأحاديث الصحيحة",
         menuBooks: "الكتب",
         menuWeakHadiths: "الأحاديث الضعيفة",
         menuUsefulSites: "مواقع مفيدة",
@@ -1350,6 +1372,7 @@
         sectionVideos: "الفيديوهات",
         sectionAudio: "الصوتيات",
         sectionText: "النصوص والأحاديث الصحيحة",
+        sectionAhd: "الأحاديث الصحيحة",
         sectionBooks: "الكتب",
         sectionWeakHadiths: "الأحاديث الضعيفة المنتشرة",
         sectionUsefulSites: "مواقع وتطبيقات إسلامية مفيدة",
@@ -1394,12 +1417,14 @@
         filterAudio: "Audio",
         filterText: "Text",
         filterBooks: "Books",
+        filterAhd: "Authentic Hadiths",
         
         // Menu items
         menuImages: "Images",
         menuVideos: "Videos",
         menuAudio: "Audio",
         menuText: "Text",
+        menuAhd: "Authentic Hadiths",
         menuBooks: "Books",
         menuWeakHadiths: "Weak Hadiths",
         menuUsefulSites: "Useful Sites",
@@ -1409,6 +1434,7 @@
         sectionVideos: "Videos",
         sectionAudio: "Audio",
         sectionText: "Texts and Authentic Hadiths",
+        sectionAhd: "Authentic Hadiths",
         sectionBooks: "Books",
         sectionWeakHadiths: "Common Weak Hadiths",
         sectionUsefulSites: "Useful Islamic Websites and Apps",
@@ -1453,12 +1479,14 @@
         filterAudio: "Audio",
         filterText: "Text",
         filterBooks: "Bücher",
+        filterAhd: "Authentische Hadithe",
         
         // Menu items
         menuImages: "Bilder",
         menuVideos: "Videos",
         menuAudio: "Audio",
         menuText: "Texte",
+        menuAhd: "Authentische Hadithe",
         menuBooks: "Bücher",
         menuWeakHadiths: "Schwache Hadithe",
         menuUsefulSites: "Nützliche Seiten",
@@ -1468,6 +1496,7 @@
         sectionVideos: "Videos",
         sectionAudio: "Audio",
         sectionText: "Texte und authentische Hadithe",
+        sectionAhd: "Authentische Hadithe",
         sectionBooks: "Bücher",
         sectionWeakHadiths: "Verbreitete schwache Hadithe",
         sectionUsefulSites: "Nützliche islamische Websites und Apps",
@@ -1512,12 +1541,14 @@
         filterAudio: "Audio",
         filterText: "Texte",
         filterBooks: "Livres",
+        filterAhd: "Hadiths authentiques",
         
         // Menu items
         menuImages: "Images",
         menuVideos: "Vidéos",
         menuAudio: "Audio",
         menuText: "Textes",
+        menuAhd: "Hadiths authentiques",
         menuBooks: "Livres",
         menuWeakHadiths: "Hadiths faibles",
         menuUsefulSites: "Sites utiles",
@@ -1527,6 +1558,7 @@
         sectionVideos: "Vidéos",
         sectionAudio: "Audio",
         sectionText: "Textes et hadiths authentiques",
+        sectionAhd: "Hadiths authentiques",
         sectionBooks: "Livres",
         sectionWeakHadiths: "Hadiths faibles courants",
         sectionUsefulSites: "Sites web et applications islamiques utiles",
@@ -1738,6 +1770,7 @@
         ...allContent.videos.map(i => ({...i, type: 'videos'})),
         ...allContent.audio.map(i => ({...i, type: 'audio'})),
         ...allContent.text.map(i => ({...i, type: 'text'})),
+        ...allContent.ahd.map(i => ({...i, type: 'ahd'})),
         ...allContent.books.map(i => ({...i, type: 'books'}))
       ];
       
@@ -1772,6 +1805,7 @@
         videos: 'video',
         audio: 'music',
         text: 'file-alt',
+        ahd: 'book-open',
         books: 'book'
       };
       return icons[type] || 'file';
@@ -1934,6 +1968,7 @@
       if (id === 'videosSection' && !loadedContent.videos) loadVideos();
       if (id === 'audioSection' && !loadedContent.audio) loadAudio();
       if (id === 'textSection' && !loadedContent.text) loadText();
+      if (id === 'ahdSection' && !loadedContent.ahd) loadAhd();
       if (id === 'booksSection' && !loadedContent.books) loadBooks();
       if (id === 'weakHadithsSection' && !loadedContent.weakHadiths) loadWeakHadiths();
       if (id === 'usefulSitesSection' && !loadedContent.usefulSites) loadUsefulSites();
@@ -2377,6 +2412,64 @@
       });
     }
 
+    // Load Ahd (Authentic Hadiths)
+    function loadAhd() {
+      document.getElementById('ahdLoading').style.display = 'block';
+      fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/ahd?ref=${branch}`)
+        .then(r => r.json()).then(data => {
+          allContent.ahd = data.filter(f => f.type === 'file');
+          displayAhdList(allContent.ahd);
+          loadedContent.ahd = true;
+          document.getElementById('ahdLoading').style.display = 'none';
+        })
+        .catch(error => {
+          console.error('Error loading ahd:', error);
+          document.getElementById('ahdLoading').innerHTML = `<span>${translations[currentLanguage].error}</span>`;
+        });
+    }
+    
+    function displayAhdList(list) {
+      const container = document.getElementById('ahdList');
+      container.innerHTML = '';
+      
+      if (list.length === 0) {
+        container.innerHTML = `<div class="no-results">${translations[currentLanguage].noResults}</div>`;
+        return;
+      }
+      
+      // عرض جميع الأحاديث الصحيحة بدون تحديد عدد محدد
+      list.forEach(item => {
+        const textContainer = document.createElement('div');
+        textContainer.className = 'text-container';
+        
+        const header = document.createElement('div');
+        header.className = 'text-header';
+        header.innerHTML = `
+          <div class="text-title">${item.name.replace(/\.[^/.]+$/, "")}</div>
+          <div class="text-actions">
+            <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+              <i class="fas fa-download"></i> ${translations[currentLanguage].download}
+            </button>
+            <button class="text-action-btn" id="copy-ahd-${item.name.replace(/[^a-zA-Z0-9]/g, '')}" onclick="copyTextContent('${item.download_url}', this)">
+              <i class="fas fa-copy"></i> ${translations[currentLanguage].copy}
+            </button>
+          </div>
+        `;
+        
+        const content = document.createElement('div');
+        content.className = 'text-content';
+        content.textContent = 'جاري التحميل...';
+        content.id = `content-ahd-${item.name.replace(/[^a-zA-Z0-9]/g, '')}`;
+        
+        fetch(item.download_url).then(r => r.text()).then(txt => {
+          content.textContent = txt;
+        });
+        
+        textContainer.append(header, content);
+        container.appendChild(textContainer);
+      });
+    }
+
     // Copy text content function
     async function copyTextContent(url, button) {
       try {
@@ -2477,7 +2570,7 @@
             <button class="text-action-btn" onclick="downloadFile(${JSON.stringify(item).replace(/"/g, '&quot;')})">
               <i class="fas fa-download"></i> ${translations[currentLanguage].download}
             </button>
-            <button class="text-action-btn" id="copy-${item.name.replace(/[^a-zA-Z0-9]/g, '')}" onclick="copyTextContent('${item.download_url}', this)">
+            <button class="text-action-btn" id="copy-weak-${item.name.replace(/[^a-zA-Z0-9]/g, '')}" onclick="copyTextContent('${item.download_url}', this)">
               <i class="fas fa-copy"></i> ${translations[currentLanguage].copy}
             </button>
           </div>
@@ -2486,7 +2579,7 @@
         const content = document.createElement('div');
         content.className = 'text-content';
         content.textContent = 'جاري التحميل...';
-        content.id = `content-${item.name.replace(/[^a-zA-Z0-9]/g, '')}`;
+        content.id = `content-weak-${item.name.replace(/[^a-zA-Z0-9]/g, '')}`;
         
         fetch(item.download_url).then(r => r.text()).then(txt => {
           content.textContent = txt;
@@ -2716,6 +2809,17 @@
         if (results.length > 0) {
           document.getElementById('textSection').style.display = 'block';
           displayTextList(results);
+        }
+      }
+      
+      if (currentFilter === 'all' || currentFilter === 'ahd') {
+        if (!loadedContent.ahd) loadAhd();
+        results = results.concat(allContent.ahd.filter(a => 
+          fuzzySearch(searchTerm, a.name)
+        ));
+        if (results.length > 0) {
+          document.getElementById('ahdSection').style.display = 'block';
+          displayAhdList(results);
         }
       }
       
