@@ -2179,10 +2179,8 @@
         return;
       }
       
-      // Limit to first 12 images for performance
-      const limitedList = list.slice(0, 12);
-      
-      limitedList.forEach(item => {
+      // عرض جميع الصور بدون تحديد عدد محدد
+      list.forEach(item => {
         const div = document.createElement('div');
         div.className = 'media-item';
         
@@ -2299,10 +2297,8 @@
         return;
       }
       
-      // Limit to first 8 audio files for performance
-      const limitedList = list.slice(0, 8);
-      
-      limitedList.forEach(item => {
+      // عرض جميع الملفات الصوتية بدون تحديد عدد محدد
+      list.forEach(item => {
         const div = document.createElement('div');
         div.className = 'media-item';
         
@@ -2348,10 +2344,8 @@
         return;
       }
       
-      // Limit to first 5 text files for performance
-      const limitedList = list.slice(0, 5);
-      
-      limitedList.forEach(item => {
+      // عرض جميع الملفات النصية بدون تحديد عدد محدد
+      list.forEach(item => {
         const textContainer = document.createElement('div');
         textContainer.className = 'text-container';
         
@@ -2419,10 +2413,8 @@
         return;
       }
       
-      // Limit to first 8 books for performance
-      const limitedList = list.slice(0, 8);
-      
-      limitedList.forEach(item => {
+      // عرض جميع الكتب بدون تحديد عدد محدد
+      list.forEach(item => {
         const div = document.createElement('div');
         div.className = 'book-item';
         
@@ -2472,10 +2464,8 @@
         return;
       }
       
-      // Limit to first 5 hadiths for performance
-      const limitedList = list.slice(0, 5);
-      
-      limitedList.forEach(item => {
+      // عرض جميع الأحاديث الضعيفة بدون تحديد عدد محدد
+      list.forEach(item => {
         const textContainer = document.createElement('div');
         textContainer.className = 'text-container';
         
