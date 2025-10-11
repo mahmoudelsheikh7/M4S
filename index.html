@@ -1308,7 +1308,8 @@
         media = document.createElement('video');
         media.src = encodeURI(item.download_url);
         media.controls = true;
-        media.autoplay = false; // تعطيل التشغيل التلقائي في النافذة المنبثقة
+        media.autoplay = true; // تفعيل التشغيل التلقائي عند فتح النافذة المنبثقة
+        media.muted = false; // إلغاء كتم الصوت عند التشغيل
         currentVideo = media;
       }
       
@@ -1593,7 +1594,7 @@
         video.src = encodeURI(item.download_url);
         video.muted = true;
         video.loop = true;
-        video.autoplay = false; // تعطيل التشغيل التلقائي
+        video.autoplay = false; // تعطيل التشغيل التلقائي للصور المصغرة
         video.playsinline = true;
         
         // Download button
