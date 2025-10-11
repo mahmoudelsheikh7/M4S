@@ -1856,28 +1856,57 @@
       return text; // Return original if translation fails
     }
 
-    // Parse site content from text file
-    function parseSiteContent(content) {
+    // Parse individual site content from text file
+    function parseSiteContent(content, fileName) {
       const lines = content.split('\n').filter(line => line.trim());
-      const sites = [];
       
-      for (let i = 0; i < lines.length; i += 3) {
-        if (i + 2 < lines.length) {
-          const title = lines[i].trim();
-          const description = lines[i + 1].trim();
-          const url = lines[i + 2].trim();
-          
-          if (title && description && url) {
-            sites.push({
-              title: title,
-              description: description,
-              url: url.startsWith('http') ? url : `https://${url}`
-            });
-          }
+      if (lines.length === 0) return null;
+      
+      // Try to extract URL from the content
+      let url = '';
+      let title = fileName.replace(/\.[^/.]+$/, ""); // Default title is filename without extension
+      let description = '';
+      
+      // Look for URLs in the content
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      const urls = content.match(urlRegex);
+      
+      if (urls && urls.length > 0) {
+        url = urls[0]; // Take the first URL found
+      }
+      
+      // Look for title patterns (lines that might be titles)
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        
+        // Skip if it's a URL
+        if (urlRegex.test(line)) continue;
+        
+        // If line is short and doesn't look like a description, treat it as title
+        if (line.length < 50 && !description) {
+          title = line;
+        } else if (line.length > 20 && !description) {
+          // Treat longer lines as description
+          description = line;
         }
       }
       
-      return sites;
+      // If no description found, use a generic one
+      if (!description) {
+        description = translations[currentLanguage].visitSite;
+      }
+      
+      // Ensure URL has protocol
+      if (url && !url.startsWith('http')) {
+        url = 'https://' + url;
+      }
+      
+      return {
+        title: title,
+        description: description,
+        url: url,
+        fileName: fileName
+      };
     }
 
     // Navigation
@@ -2503,19 +2532,20 @@
         return;
       }
       
-      // Load and parse all site files
+      // Process each file individually
       for (const item of list) {
         try {
           const response = await fetch(item.download_url);
           const content = await response.text();
-          const sites = parseSiteContent(content);
+          const siteData = parseSiteContent(content, item.name);
           
-          sites.forEach((site, index) => {
+          if (siteData) {
             const siteCard = document.createElement('div');
             siteCard.className = 'site-card';
-            siteCard.dataset.originalTitle = site.title;
-            siteCard.dataset.originalDescription = site.description;
-            siteCard.dataset.url = site.url;
+            siteCard.dataset.originalTitle = siteData.title;
+            siteCard.dataset.originalDescription = siteData.description;
+            siteCard.dataset.url = siteData.url;
+            siteCard.dataset.fileName = siteData.fileName;
             
             const siteHeader = document.createElement('div');
             siteHeader.className = 'site-header';
@@ -2526,27 +2556,42 @@
             
             const siteTitle = document.createElement('div');
             siteTitle.className = 'site-title';
-            siteTitle.textContent = site.title;
+            siteTitle.textContent = siteData.title;
             
             siteHeader.append(siteIcon, siteTitle);
             
             const siteDescription = document.createElement('div');
             siteDescription.className = 'site-description';
-            siteDescription.textContent = site.description;
+            siteDescription.textContent = siteData.description;
             
             const siteActions = document.createElement('div');
             siteActions.className = 'site-actions';
             
-            const visitBtn = document.createElement('a');
-            visitBtn.className = 'site-btn';
-            visitBtn.href = site.url;
-            visitBtn.target = '_blank';
-            visitBtn.rel = 'noopener noreferrer';
-            visitBtn.innerHTML = `
-              <i class="fas fa-external-link-alt"></i>
-              ${translations[currentLanguage].visitSite}
-            `;
+            // Visit Site button - only show if URL exists
+            if (siteData.url) {
+              const visitBtn = document.createElement('a');
+              visitBtn.className = 'site-btn';
+              visitBtn.href = siteData.url;
+              visitBtn.target = '_blank';
+              visitBtn.rel = 'noopener noreferrer';
+              visitBtn.innerHTML = `
+                <i class="fas fa-external-link-alt"></i>
+                ${translations[currentLanguage].visitSite}
+              `;
+              siteActions.appendChild(visitBtn);
+            }
             
+            // Download file button
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'site-btn secondary';
+            downloadBtn.innerHTML = `
+              <i class="fas fa-download"></i>
+              ${translations[currentLanguage].download}
+            `;
+            downloadBtn.addEventListener('click', () => downloadFile(item));
+            siteActions.appendChild(downloadBtn);
+            
+            // Translate button
             const translateBtn = document.createElement('button');
             translateBtn.className = 'site-btn secondary';
             translateBtn.innerHTML = `
@@ -2554,12 +2599,11 @@
               ${translations[currentLanguage].translateSite}
             `;
             translateBtn.addEventListener('click', () => translateSite(siteCard, translateBtn));
-            
-            siteActions.append(visitBtn, translateBtn);
+            siteActions.appendChild(translateBtn);
             
             siteCard.append(siteHeader, siteDescription, siteActions);
             container.appendChild(siteCard);
-          });
+          }
         } catch (error) {
           console.error('Error loading site content:', error);
         }
