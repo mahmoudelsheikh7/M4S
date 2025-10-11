@@ -1308,7 +1308,7 @@
         media = document.createElement('video');
         media.src = encodeURI(item.download_url);
         media.controls = true;
-        media.autoplay = true;
+        media.autoplay = false; // تعطيل التشغيل التلقائي في النافذة المنبثقة
         currentVideo = media;
       }
       
@@ -1584,10 +1584,8 @@
         return;
       }
       
-      // Limit to first 6 videos for performance
-      const limitedList = list.slice(0, 6);
-      
-      limitedList.forEach(item => {
+      // عرض جميع الفيديوهات بدون تحديد عدد محدد
+      list.forEach(item => {
         const div = document.createElement('div');
         div.className = 'media-item';
         
@@ -1595,7 +1593,7 @@
         video.src = encodeURI(item.download_url);
         video.muted = true;
         video.loop = true;
-        video.autoplay = true;
+        video.autoplay = false; // تعطيل التشغيل التلقائي
         video.playsinline = true;
         
         // Download button
