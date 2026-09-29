@@ -2,7 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e1a">
   <title>M4S</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1065,7 +1066,6 @@
     @media (max-width: 768px) {
       header h1 { font-size: 2.2rem; }
       #menu { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
-      .media-grid, .books-grid, .sites-grid { grid-template-columns: 1fr; }
       #welcomeMessage { font-size: 1.4rem; }
       .language-selector-header { 
         top: auto; 
@@ -1074,6 +1074,65 @@
         transform: translateX(50%);
       }
     }
+
+    /* ===== Responsive + feature upgrades ===== */
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body { min-height: 100vh; min-height: 100dvh; }
+    img, video { max-width: 100%; }
+    header { padding-top: max(4.5rem, calc(env(safe-area-inset-top) + 3.5rem)); }
+    header h1 { font-size: clamp(2rem, 7vw, 3rem); }
+    header h1 a { color: inherit; text-decoration: none; }
+    .theme-toggle { top: max(12px, env(safe-area-inset-top)); left: max(12px, env(safe-area-inset-left)); width: 46px; height: 46px; }
+    .language-selector-header { top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); }
+    .search-box input { padding: .85rem 3rem; }
+    .search-filters { gap: .5rem; }
+    .filter-chip, .back-button, .text-action-btn, .site-btn, .book-download { min-height: 40px; }
+    .filter-chip { display: inline-flex; align-items: center; }
+    .media-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
+    .books-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
+    .sites-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+    .media-item img, .media-item video { height: clamp(160px, 45vw, 220px); }
+    .text-container { padding: clamp(1rem, 4vw, 2rem); overflow-wrap: anywhere; }
+    .text-header { flex-wrap: wrap; gap: .6rem; }
+    #textList .text-content, #ahdList .text-content, #weakHadithsList .text-content, .random-body { white-space: pre-wrap; font-size: clamp(1.05rem, 3.4vw, 1.2rem); }
+    #modal .content { width: min(92vw, 960px); max-width: none; max-height: 90vh; max-height: 90dvh; padding-bottom: 4.5rem; }
+    #modal .content video, #modal .content img { max-height: 65vh; object-fit: contain; }
+    footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom)); }
+
+    .random-wrap { display: flex; justify-content: center; }
+    .random-btn { display: inline-flex; align-items: center; gap: .6rem; min-height: 48px; padding: .8rem 1.6rem; border: none; border-radius: 28px; cursor: pointer; font: inherit; font-weight: 500; font-size: 1.05rem; color: var(--primary-dark); background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue)); box-shadow: var(--shadow); transition: var(--transition); }
+    .random-btn:hover { transform: translateY(-2px) scale(1.02); }
+    .random-btn:active { transform: scale(.98); }
+    #randomModal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 1rem; background: rgba(10, 14, 26, .88); z-index: 9998; }
+    [data-theme="light"] #randomModal { background: rgba(255, 255, 255, .94); }
+    #randomModal.show { display: flex; }
+    #randomModal .content { position: relative; width: min(100%, 720px); max-height: 90vh; max-height: 90dvh; overflow: auto; padding: 3rem 1.5rem 1.5rem; background: var(--card-bg); border: 1px solid rgba(212, 175, 55, .2); border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, .4); }
+    #randomModal .close { position: absolute; top: .8rem; inset-inline-end: .8rem; width: 36px; height: 36px; border: none; border-radius: 50%; background: rgba(212, 175, 55, .15); color: var(--text-primary); cursor: pointer; }
+    .random-kind { display: inline-flex; align-items: center; gap: .4rem; padding: .2rem .8rem; font-size: .85rem; color: var(--accent-gold); background: rgba(212, 175, 55, .12); border: 1px solid rgba(212, 175, 55, .25); border-radius: 14px; }
+    #randomTitle { margin: .7rem 0 1rem; font-size: 1.2rem; color: var(--text-primary); overflow-wrap: anywhere; }
+    .random-body { max-height: 50vh; overflow: auto; }
+    .random-actions { flex-wrap: wrap; margin-top: 1.2rem; }
+    .fab { position: fixed; z-index: 900; inset-inline-end: 16px; bottom: calc(20px + env(safe-area-inset-bottom)); width: 46px; height: 46px; border: none; border-radius: 50%; background: var(--card-bg); color: var(--accent-gold); box-shadow: var(--shadow); cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: var(--transition); }
+    .fab.show { opacity: 1; pointer-events: auto; }
+
+    @media (max-width: 768px) {
+      body { padding-bottom: 4.5rem; }
+      .language-selector-header { top: auto; bottom: max(10px, env(safe-area-inset-bottom)); left: 8px; right: 8px; margin-inline: auto; transform: none; width: max-content; max-width: calc(100vw - 16px); overflow-x: auto; }
+      #toTop { bottom: calc(4.6rem + env(safe-area-inset-bottom)); }
+    }
+    @media (max-width: 480px) {
+      #menu { grid-template-columns: repeat(2, 1fr); gap: .8rem; }
+      .menu-item { padding: 1.1rem .5rem; }
+      .lang-btn-header { padding: .5rem .7rem; }
+      .lang-btn-header i { display: none; }
+      #welcomeMessage { font-size: 1.25rem; padding: 1.1rem; }
+      #message1 { font-size: 1rem; padding: 1.1rem; }
+      section h2 { font-size: 1.7rem; }
+      .site-actions .site-btn { flex: 1 1 100%; justify-content: center; }
+    }
+    @media (hover: none) { .media-download { opacity: 1; transform: none; } }
+    @media (min-width: 1400px) { #menu, section { max-width: 1320px; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
   </style>
 </head>
 <body data-theme="dark" data-lang="ar">
@@ -1136,8 +1195,11 @@
       خلاصة حكم المحدث: صحيح<br>
       الراوي: - | المحدث: ابن تيمية | المصدر: مجموع الفتاوى | الصفحة أو الرقم: 1/191
     </div>
+    <div class="random-wrap">
+      <button class="random-btn" id="randomBtn" type="button"><i class="fas fa-dice"></i> <span data-translate="randomBtn">حديث أو نص عشوائي</span></button>
+    </div>
   </div>
-  
+
   <!-- Main Menu -->
   <div id="menu">
     <div class="menu-item" data-section="imagesSection">
@@ -1295,6 +1357,23 @@
     <div class="sites-grid" id="usefulSitesList"></div>
   </section>
   
+  <!-- Random item dialog -->
+  <div id="randomModal" role="dialog" aria-modal="true" aria-labelledby="randomTitle">
+    <div class="content">
+      <button class="close" id="randomClose" type="button" aria-label="Close">✕</button>
+      <span class="random-kind" id="randomKind"></span>
+      <h3 id="randomTitle" dir="auto"></h3>
+      <div class="text-content random-body" id="randomBody" dir="auto"></div>
+      <div class="text-actions random-actions">
+        <button class="text-action-btn" id="randomAgain" type="button"><i class="fas fa-shuffle"></i> <span data-translate="randomAgain">آخر</span></button>
+        <button class="text-action-btn" id="randomCopy" type="button"><i class="fas fa-copy"></i> <span data-translate="copy">نسخ</span></button>
+        <button class="text-action-btn" id="randomShare" type="button"><i class="fas fa-share-nodes"></i> <span data-translate="share">مشاركة</span></button>
+        <button class="text-action-btn" id="randomOpen" type="button"><i class="fas fa-arrow-up-right-from-square"></i> <span data-translate="randomOpen">فتح القسم</span></button>
+      </div>
+    </div>
+  </div>
+  <button class="fab" id="toTop" type="button" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
+
   <!-- Modal -->
   <div id="modal">
     <div class="content">
@@ -1595,6 +1674,11 @@
       }
     };
 
+    Object.assign(translations.ar, { randomBtn: 'حديث أو نص عشوائي', randomAgain: 'آخر', randomOpen: 'فتح القسم', randomKindAhd: 'حديث صحيح', randomKindText: 'نص', share: 'مشاركة' });
+    Object.assign(translations.en, { randomBtn: 'Random Hadith or Text', randomAgain: 'Another', randomOpen: 'Open section', randomKindAhd: 'Authentic Hadith', randomKindText: 'Text', share: 'Share' });
+    Object.assign(translations.de, { randomBtn: 'Zufälliger Hadith oder Text', randomAgain: 'Nächster', randomOpen: 'Bereich öffnen', randomKindAhd: 'Authentischer Hadith', randomKindText: 'Text', share: 'Teilen' });
+    Object.assign(translations.fr, { randomBtn: 'Hadith ou texte au hasard', randomAgain: 'Un autre', randomOpen: 'Ouvrir la section', randomKindAhd: 'Hadith authentique', randomKindText: 'Texte', share: 'Partager' });
+
     // Theme Toggle
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
@@ -1632,6 +1716,8 @@
       // Update HTML lang and dir attributes
       document.documentElement.setAttribute('lang', lang);
       document.documentElement.setAttribute('data-lang', lang);
+      document.body.setAttribute('data-lang', lang);
+      document.querySelectorAll('.back-button i').forEach(i => { i.className = 'fas fa-arrow-' + (lang === 'ar' ? 'right' : 'left'); });
       
       // Update text direction
       if (lang === 'ar') {
@@ -1644,7 +1730,8 @@
       document.querySelectorAll('[data-translate]').forEach(element => {
         const key = element.getAttribute('data-translate');
         if (translations[lang][key]) {
-          element.textContent = translations[lang][key];
+          const v = translations[lang][key];
+          if (v.includes('<br>')) element.innerHTML = v; else element.textContent = v;
         }
       });
       
@@ -1943,8 +2030,212 @@
       };
     }
 
+    // ===== Navigation + History API =====
+    const byId = id => document.getElementById(id);
+    const HAS_HISTORY = !!(window.history && history.pushState);
+    if (HAS_HISTORY) { try { history.scrollRestoration = 'manual'; } catch (e) {} }
+    const SECTION_HASH = { imagesSection: 'images', videosSection: 'videos', audioSection: 'audio', textSection: 'text', ahdSection: 'hadith', booksSection: 'books', weakHadithsSection: 'weak', usefulSitesSection: 'sites' };
+    const HASH_SECTION = Object.fromEntries(Object.entries(SECTION_HASH).map(([k, v]) => [v, k]));
+    let renderedKey = null, searchPushed = false;
+
+    const baseOf = s => (s && s.v) ? { v: s.v, id: s.id, q: s.q, f: s.f } : { v: 'menu' };
+    const keyOf = s => { const b = baseOf(s); return [b.v, b.id || '', b.q || '', b.f || ''].join('|'); };
+    function urlFor(s) {
+      const b = baseOf(s);
+      let h = '';
+      if (b.v === 'section') h = '#' + SECTION_HASH[b.id];
+      else if (b.v === 'search') h = '#search=' + encodeURIComponent(b.q) + (b.f && b.f !== 'all' ? '&filter=' + b.f : '');
+      return location.pathname + location.search + h;
+    }
+    function stateFromHash() {
+      const h = location.hash.slice(1);
+      if (HASH_SECTION[h]) return { v: 'section', id: HASH_SECTION[h] };
+      if (h.startsWith('search=')) {
+        const p = new URLSearchParams(h), q = p.get('search');
+        if (q) return { v: 'search', q, f: p.get('filter') || 'all' };
+      }
+      return { v: 'menu' };
+    }
+    function saveScroll() {
+      if (!HAS_HISTORY || !history.state) return;
+      try { history.replaceState(Object.assign({}, history.state, { y: window.scrollY }), ''); } catch (e) {}
+    }
+    function navigate(s, opts = {}) {
+      if (HAS_HISTORY) {
+        const cur = history.state || {};
+        if (!opts.replace && !s.modal && !cur.modal && cur.v && keyOf(cur) === keyOf(s)) return; // already here
+        const st = Object.assign(baseOf(s), { idx: (cur.idx || 0) + (opts.replace ? 0 : 1), y: 0 });
+        if (s.modal) st.modal = s.modal;
+        try {
+          if (opts.replace) history.replaceState(st, '', urlFor(st));
+          else { saveScroll(); history.pushState(st, '', urlFor(st)); }
+        } catch (e) { /* sandboxed frames may forbid it: render without history */ }
+        s = st;
+      }
+      renderState(s);
+      if (!opts.keepScroll) window.scrollTo(0, 0);
+    }
+    function goBack() {            // in-page "Back" button = browser Back when possible
+      if (HAS_HISTORY && history.state && history.state.idx > 0) history.back();
+      else navigate({ v: 'menu' }, { replace: true });
+    }
+    function pageTitle(b) {
+      if (b.v === 'section') return 'M4S – ' + (translations[currentLanguage]['section' + b.id.replace('Section', '').replace(/^./, c => c.toUpperCase())] || '');
+      return b.v === 'search' ? 'M4S – ' + b.q : 'M4S';
+    }
+    function renderState(s) {
+      const key = keyOf(s);
+      if (key !== renderedKey) {
+        closeModalUI(true); closeRandomUI(); stopAllAudio();
+        renderedKey = key;
+        const b = baseOf(s);
+        if (b.v === 'section') renderSection(b.id);
+        else if (b.v === 'search') {
+          currentFilter = b.f || 'all';
+          document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === currentFilter));
+          byId('globalSearch').value = b.q;
+          performSearch(true);
+        } else { byId('globalSearch').value = ''; renderMenu(); }
+        document.title = pageTitle(b);
+      }
+      syncModal(s.modal);
+    }
+    function syncModal(m) {        // open/close overlays to match the history entry
+      if (!m) { closeModalUI(); closeRandomUI(); return; }
+      if (m.type === 'random') { openRandomUI(); if (randomFresh || !lastRandom) { randomFresh = false; loadRandom(); } return; }
+      const item = (m.type === 'image' ? allContent.images : allContent.videos).find(x => x.name === m.name);
+      if (item) openModalUI(m.type, item);
+    }
+    function commitSearch() {      // typing replaces one search entry; Back returns to the menu
+      if (!HAS_HISTORY) return;
+      const cur = history.state || {}, raw = byId('globalSearch').value.trim();
+      try {
+        if (!raw) {
+          if (cur.v !== 'search') return;
+          renderedKey = keyOf({ v: 'menu' });
+          if (searchPushed) { searchPushed = false; history.back(); }
+          else history.replaceState({ v: 'menu', idx: cur.idx || 0, y: 0 }, '', urlFor({ v: 'menu' }));
+          document.title = 'M4S';
+          return;
+        }
+        const st = { v: 'search', q: raw, f: currentFilter, idx: (cur.idx || 0) + (cur.v === 'search' ? 0 : 1), y: 0 };
+        if (cur.v === 'search') history.replaceState(st, '', urlFor(st));
+        else { saveScroll(); history.pushState(st, '', urlFor(st)); searchPushed = true; }
+        renderedKey = keyOf(st); document.title = pageTitle(st);
+      } catch (e) {}
+    }
+    function showMenu() { navigate({ v: 'menu' }); }
+    function showSection(id) { navigate({ v: 'section', id }); }
+    function initHistory() {
+      const s = stateFromHash(), prev = (HAS_HISTORY && history.state && history.state.idx) || 0;
+      if (HAS_HISTORY) { const st = Object.assign(baseOf(s), { idx: prev, y: 0 }); try { history.replaceState(st, '', urlFor(st)); } catch (e) {} renderState(st); }
+      else renderState(s);
+    }
+    window.addEventListener('popstate', e => {
+      const s = (e.state && e.state.v) ? e.state : stateFromHash();
+      renderState(s);
+      if (typeof s.y === 'number') requestAnimationFrame(() => window.scrollTo(0, s.y));
+    });
+    let scrollTimer = null;
+    window.addEventListener('scroll', () => {
+      byId('toTop').classList.toggle('show', window.scrollY > 500);
+      clearTimeout(scrollTimer); scrollTimer = setTimeout(saveScroll, 200);
+    }, { passive: true });
+    byId('toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // ===== Random item from the `ahd` (authentic hadith) and `text` folders =====
+    const randomDlg = byId('randomModal');
+    let lastRandom = null, randomFresh = false, randomToken = 0;
+    const FOLDERS = { ahd: ['ahd', 'adh'], text: ['text'] };   // 'adh' kept as a fallback spelling
+
+    async function getFolder(key) {
+      if (allContent[key] && allContent[key].length) return allContent[key];
+      for (const dir of FOLDERS[key]) {
+        const ck = 'm4s:' + dir;
+        let list = null;
+        try { list = JSON.parse(sessionStorage.getItem(ck)); } catch (e) {}
+        if (!list) {
+          const r = await fetch(`https://api.github.com/repos/${githubUser}/${repoName}/contents/${dir}?ref=${branch}`);
+          if (!r.ok) continue;
+          const data = await r.json();
+          if (!Array.isArray(data)) continue;
+          list = data.filter(f => f.type === 'file');
+          try { sessionStorage.setItem(ck, JSON.stringify(list)); } catch (e) {}
+        }
+        if (list.length) { allContent[key] = list; return list; }
+      }
+      return [];
+    }
+    function pickExcerpt(txt) {    // a random paragraph; long ones are trimmed to a random run of lines
+      const clean = txt.replace(/\r/g, '').trim();
+      let blocks = clean.split(/\n\s*\n/).map(b => b.trim()).filter(b => b.length > 15);
+      if (!blocks.length) blocks = [clean];
+      let b = blocks[Math.floor(Math.random() * blocks.length)];
+      if (b.length > 700) {
+        const lines = b.split('\n').filter(l => l.trim());
+        let i = Math.floor(Math.random() * lines.length), out = '';
+        while (i < lines.length && out.length < 450) out += (out ? '\n' : '') + lines[i++];
+        b = out.length > 900 ? out.slice(0, 900).replace(/\s+\S*$/, '') + '…' : out;
+      }
+      return b;
+    }
+    function renderRandom() {
+      const L = translations[currentLanguage];
+      if (!lastRandom) { byId('randomBody').textContent = L.loading + '…'; return; }
+      byId('randomKind').innerHTML = `<i class="fas fa-${lastRandom.kind === 'ahd' ? 'book-open' : 'file-alt'}"></i> ${lastRandom.kind === 'ahd' ? L.randomKindAhd : L.randomKindText}`;
+      byId('randomTitle').textContent = lastRandom.name.replace(/\.[^/.]+$/, '');
+      byId('randomBody').textContent = lastRandom.text;
+    }
+    async function loadRandom() {
+      const tok = ++randomToken, L = translations[currentLanguage];
+      byId('randomBody').textContent = L.loading + '…';
+      try {
+        const [a, t] = await Promise.all([getFolder('ahd'), getFolder('text')]);
+        const ok = f => !/\.(pdf|docx?|pptx?|xlsx?|zip|rar|png|jpe?g|gif|webp|mp3|mp4|webm|ogg|wav)$/i.test(f.name);
+        const pool = [...a.filter(ok).map(f => ({ f, kind: 'ahd' })), ...t.filter(ok).map(f => ({ f, kind: 'text' }))];
+        if (!pool.length) throw new Error('no files found');
+        let pick;
+        for (let i = 0; i < 5; i++) { pick = pool[Math.floor(Math.random() * pool.length)]; if (pool.length < 2 || !lastRandom || pick.f.name !== lastRandom.name) break; }
+        const res = await fetch(pick.f.download_url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const text = pickExcerpt(await res.text());
+        if (tok !== randomToken) return;
+        lastRandom = { name: pick.f.name, kind: pick.kind, text };
+        renderRandom();
+      } catch (err) {
+        console.error('Random item error:', err);
+        if (tok === randomToken) byId('randomBody').textContent = L.error;
+      }
+    }
+    function openRandomUI() { randomDlg.classList.add('show'); document.body.style.overflow = 'hidden'; renderRandom(); byId('randomShare').hidden = !navigator.share; }
+    function closeRandomUI() { randomDlg.classList.remove('show'); document.body.style.overflow = ''; }
+    function closeAnyModal() {
+      if (HAS_HISTORY && history.state && history.state.modal) history.back();
+      else { closeModalUI(); closeRandomUI(); }
+    }
+    byId('randomBtn').addEventListener('click', () => {
+      if (randomDlg.classList.contains('show')) return loadRandom();
+      randomFresh = true;
+      navigate({ ...baseOf(history.state || stateFromHash()), modal: { type: 'random' } }, { keepScroll: true });
+    });
+    byId('randomAgain').addEventListener('click', loadRandom);
+    byId('randomClose').addEventListener('click', closeAnyModal);
+    randomDlg.addEventListener('click', e => { if (e.target === randomDlg) closeAnyModal(); });
+    byId('randomCopy').addEventListener('click', e => { if (lastRandom) copyToClipboard(lastRandom.text, e.currentTarget); });
+    byId('randomShare').addEventListener('click', () => {
+      if (lastRandom && navigator.share) navigator.share({ title: lastRandom.name.replace(/\.[^/.]+$/, ''), text: lastRandom.text, url: location.href.split('#')[0] }).catch(() => {});
+    });
+    byId('randomOpen').addEventListener('click', () => {
+      if (!lastRandom) return;
+      navigate({ v: 'section', id: lastRandom.kind === 'ahd' ? 'ahdSection' : 'textSection' }, { replace: true });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeAnyModal();
+      else if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey && !e.altKey && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) byId('randomBtn').click();
+    });
+
     // Navigation
-    function showMenu() {
+    function renderMenu() {
       document.getElementById('menu').style.display = 'grid';
       document.querySelector('.welcome-container').style.display = 'block';
       document.querySelector('.advanced-search').style.display = 'block';
@@ -1954,8 +2245,8 @@
       showFinalMessage();
     }
     
-    function showSection(id) {
-      showMenu();
+    function renderSection(id) {
+      renderMenu();
       document.getElementById('menu').style.display = 'none';
       document.querySelector('.welcome-container').style.display = 'none';
       document.querySelector('.advanced-search').style.display = 'none';
@@ -1975,7 +2266,7 @@
     }
     
     document.querySelectorAll('.menu-item').forEach(i => i.addEventListener('click', () => showSection(i.dataset.section)));
-    document.querySelectorAll('.back-button').forEach(b => b.addEventListener('click', showMenu));
+    document.querySelectorAll('.back-button').forEach(b => b.addEventListener('click', goBack));
 
     // Modal with video control
     const modal = document.getElementById('modal');
@@ -1984,6 +2275,10 @@
     const modalDownloadBtn = document.getElementById('modalDownloadBtn');
 
     function openModal(type, item) {
+      navigate({ ...baseOf(history.state || stateFromHash()), modal: { type, name: item.name } }, { keepScroll: true });
+    }
+
+    function openModalUI(type, item) {
       preview.innerHTML = '';
       currentModalItem = item;
       
@@ -2013,7 +2308,9 @@
       setTimeout(() => modal.classList.add('show'), 10);
     }
     
-    function closeModal() {
+    function closeModal() { closeAnyModal(); }
+
+    function closeModalUI(instant) {
       if (currentVideo) {
         currentVideo.pause();
         currentVideo.currentTime = 0;
@@ -2024,7 +2321,7 @@
       modalDownloadBtn.style.display = 'none';
       
       modal.classList.remove('show');
-      setTimeout(() => modal.style.display = 'none', 300);
+      if (instant) modal.style.display = 'none'; else setTimeout(() => modal.style.display = 'none', 300);
     }
     
     modalClose.addEventListener('click', closeModal);
@@ -2749,11 +3046,12 @@
       });
     });
 
-    function performSearch() {
+    function performSearch(fromHistory) {
       const searchTerm = document.getElementById('globalSearch').value.toLowerCase();
+      if (fromHistory !== true) commitSearch();
       
       if (!searchTerm) {
-        showMenu();
+        renderMenu();
         return;
       }
       
@@ -2836,9 +3134,7 @@
     }
 
     // Initialize
-    document.addEventListener('DOMContentLoaded', function() {
-      showMenu();
-    });
+    document.addEventListener('DOMContentLoaded', initHistory);
 
     // Add no-results style
     const style = document.createElement('style');
