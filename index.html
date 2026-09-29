@@ -1133,6 +1133,33 @@
     @media (hover: none) { .media-download { opacity: 1; transform: none; } }
     @media (min-width: 1400px) { #menu, section { max-width: 1320px; } }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+    /* ===== Dorar hadith encyclopedia ===== */
+    .dorar-form { display: flex; gap: .6rem; flex-wrap: wrap; max-width: 720px; margin: 0 auto 1rem; }
+    .dorar-form input { flex: 1 1 220px; min-width: 0; min-height: 46px; padding: .7rem 1.1rem; font: inherit; font-size: 1rem; color: var(--text-primary); background: rgba(255,255,255,.08); border: 1px solid rgba(212,175,55,.25); border-radius: 12px; }
+    [data-theme="light"] .dorar-form input { background: rgba(0,0,0,.05); }
+    .dorar-form input:focus { outline: none; border-color: var(--accent-gold); }
+    .dorar-form .site-btn { min-height: 46px; justify-content: center; }
+    .dorar-status { text-align: center; color: var(--text-secondary); margin: .8rem 0 1.2rem; min-height: 1.5rem; }
+    .dorar-card { line-height: 2; overflow-wrap: anywhere; }
+    .dorar-card .hadith, .dorar-card > div:first-child { font-family: 'Amiri', serif; font-size: clamp(1.1rem, 3.6vw, 1.3rem); line-height: 2.1; }
+    .dorar-card .hadith-info { margin-top: .8rem; padding-top: .8rem; font-size: .95rem; color: var(--text-secondary); border-top: 1px solid rgba(212,175,55,.2); }
+    .dorar-card b, .dorar-card strong { color: var(--accent-gold); }
+    .dorar-card a { color: var(--accent-gold); }
+    .dorar-card * { max-width: 100%; }
+    .dorar-credit { text-align: center; margin-top: 1.5rem; font-size: .9rem; }
+    .dorar-credit a { color: var(--accent-gold); text-decoration: none; }
+
+    /* ===== search hits (files + Dorar) ===== */
+    mark { background: rgba(212,175,55,.35); color: inherit; padding: 0 .12em; border-radius: 3px; }
+    .hit-card .text-title { overflow-wrap: anywhere; }
+    .hit-snippet { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 2.1; padding: .55rem 0; font-family: 'Amiri', serif; font-size: clamp(1.05rem, 3.4vw, 1.2rem); border-top: 1px dashed rgba(212,175,55,.2); }
+    .hit-snippet:first-of-type { border-top: none; }
+    .dorar-card .hadith { text-align: justify; }
+    .dorar-card .info-subtitle { color: var(--accent-gold); }
+    .dorar-card .text-actions { margin-top: .8rem; }
+    a.text-action-btn { display: inline-flex; align-items: center; gap: .4rem; text-decoration: none; }
+    .dorar-more { justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
   </style>
 </head>
 <body data-theme="dark" data-lang="ar">
@@ -1180,6 +1207,7 @@
         <div class="filter-chip" data-filter="text" data-translate="filterText">النصوص</div>
         <div class="filter-chip" data-filter="books" data-translate="filterBooks">الكتب</div>
         <div class="filter-chip" data-filter="ahd" data-translate="filterAhd">الأحاديث الصحيحة</div>
+        <div class="filter-chip" data-filter="dorar" data-translate="filterDorar">الموسوعة الحديثية</div>
       </div>
     </div>
   </div>
@@ -1196,7 +1224,7 @@
       الراوي: - | المحدث: ابن تيمية | المصدر: مجموع الفتاوى | الصفحة أو الرقم: 1/191
     </div>
     <div class="random-wrap">
-      <button class="random-btn" id="randomBtn" type="button"><span data-translate="randomBtn">حديث أو نص عشوائي</span></button>
+      <button class="random-btn" id="randomBtn" type="button"><i class="fas fa-dice"></i> <span data-translate="randomBtn">حديث أو نص عشوائي</span></button>
     </div>
   </div>
 
@@ -1233,6 +1261,10 @@
     <div class="menu-item" data-section="usefulSitesSection">
       <i class="fas fa-link"></i>
       <span data-translate="menuUsefulSites">مواقع مفيدة</span>
+    </div>
+    <div class="menu-item" data-section="dorarSection">
+      <i class="fas fa-magnifying-glass"></i>
+      <span data-translate="menuDorar">الموسوعة الحديثية</span>
     </div>
   </div>
   
@@ -1357,6 +1389,37 @@
     <div class="sites-grid" id="usefulSitesList"></div>
   </section>
   
+  <section id="dorarSection">
+    <button class="back-button" data-back>
+      <i class="fas fa-arrow-right"></i>
+      <span data-translate="back">العودة</span>
+    </button>
+    <h2 data-translate="sectionDorar">الموسوعة الحديثية</h2>
+    <form class="dorar-form" id="dorarForm" role="search">
+      <input type="search" id="dorarInput" dir="auto" autocomplete="off" enterkeyhint="search" data-translate-placeholder="dorarPlaceholder" placeholder="اكتب كلمة أو جزءًا من حديث…">
+      <button type="submit" class="site-btn"><i class="fas fa-search"></i> <span data-translate="dorarSearch">بحث</span></button>
+    </form>
+    <div class="dorar-status" id="dorarStatus" aria-live="polite"></div>
+    <div id="dorarResults"></div>
+    <p class="dorar-credit"><a href="https://dorar.net" target="_blank" rel="noopener noreferrer" data-translate="dorarSource">المصدر: الدرر السنية – الموسوعة الحديثية</a></p>
+  </section>
+
+  <section id="contentHitsSection">
+    <h2 data-translate="hitsInFiles">نتائج داخل النصوص</h2>
+    <div class="dorar-status" id="contentStatus" aria-live="polite"></div>
+    <div id="contentHits"></div>
+  </section>
+
+  <section id="dorarHitsSection">
+    <h2 data-translate="hitsDorar">نتائج الموسوعة الحديثية</h2>
+    <div class="dorar-status" id="dorarHitsStatus" aria-live="polite"></div>
+    <div id="dorarHits"></div>
+    <div class="text-actions dorar-more" id="dorarMore" style="display:none">
+      <button class="text-action-btn" id="dorarMoreBtn" type="button"><i class="fas fa-list"></i> <span data-translate="dorarAll">عرض كل النتائج</span></button>
+      <a class="text-action-btn" id="dorarWebLink" href="https://dorar.net" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square"></i> <span data-translate="dorarOpenWeb">فتح في dorar.net</span></a>
+    </div>
+  </section>
+
   <!-- Random item dialog -->
   <div id="randomModal" role="dialog" aria-modal="true" aria-labelledby="randomTitle">
     <div class="content">
@@ -1679,6 +1742,16 @@
     Object.assign(translations.de, { randomBtn: 'Zufälliger Hadith oder Text', randomAgain: 'Nächster', randomOpen: 'Bereich öffnen', randomKindAhd: 'Authentischer Hadith', randomKindText: 'Text', share: 'Teilen' });
     Object.assign(translations.fr, { randomBtn: 'Hadith ou texte au hasard', randomAgain: 'Un autre', randomOpen: 'Ouvrir la section', randomKindAhd: 'Hadith authentique', randomKindText: 'Texte', share: 'Partager' });
 
+    Object.assign(translations.ar, { menuDorar: 'الموسوعة الحديثية', sectionDorar: 'الموسوعة الحديثية', dorarPlaceholder: 'اكتب كلمة أو جزءًا من حديث…', dorarSearch: 'بحث', dorarHint: 'ابحث في الموسوعة الحديثية (الدرر السنية)', dorarNoResults: 'لا توجد نتائج لهذا البحث', dorarError: 'تعذر الاتصال بالموسوعة الحديثية، حاول مرة أخرى.', dorarSource: 'المصدر: الدرر السنية – الموسوعة الحديثية' });
+    Object.assign(translations.en, { menuDorar: 'Hadith Encyclopedia', sectionDorar: 'Hadith Encyclopedia (Dorar)', dorarPlaceholder: 'Type a word or part of a hadith (Arabic)…', dorarSearch: 'Search', dorarHint: 'Search the Dorar hadith encyclopedia (results are in Arabic)', dorarNoResults: 'No results for this search', dorarError: 'Could not reach the hadith encyclopedia. Please try again.', dorarSource: 'Source: Dorar.net – Hadith Encyclopedia' });
+    Object.assign(translations.de, { menuDorar: 'Hadith-Enzyklopädie', sectionDorar: 'Hadith-Enzyklopädie (Dorar)', dorarPlaceholder: 'Wort oder Hadith-Teil eingeben (Arabisch)…', dorarSearch: 'Suchen', dorarHint: 'Durchsuche die Dorar-Hadith-Enzyklopädie (Ergebnisse auf Arabisch)', dorarNoResults: 'Keine Ergebnisse für diese Suche', dorarError: 'Die Hadith-Enzyklopädie ist nicht erreichbar. Bitte erneut versuchen.', dorarSource: 'Quelle: Dorar.net – Hadith-Enzyklopädie' });
+    Object.assign(translations.fr, { menuDorar: 'Encyclopédie du Hadith', sectionDorar: 'Encyclopédie du Hadith (Dorar)', dorarPlaceholder: 'Saisir un mot ou un extrait de hadith (arabe)…', dorarSearch: 'Rechercher', dorarHint: 'Rechercher dans l\u2019encyclopédie Dorar (résultats en arabe)', dorarNoResults: 'Aucun résultat pour cette recherche', dorarError: 'Impossible de joindre l\u2019encyclopédie. Veuillez réessayer.', dorarSource: 'Source : Dorar.net – Encyclopédie du Hadith' });
+
+    Object.assign(translations.ar, { filterDorar: 'الموسوعة الحديثية', hitsInFiles: 'نتائج داخل النصوص والأحاديث', hitsDorar: 'نتائج الموسوعة الحديثية', dorarAll: 'عرض كل النتائج', dorarOpenWeb: 'فتح في dorar.net', searching: 'جارٍ البحث داخل الملفات' });
+    Object.assign(translations.en, { filterDorar: 'Dorar Hadith', hitsInFiles: 'Matches inside texts & hadiths', hitsDorar: 'Hadith Encyclopedia results', dorarAll: 'Show all results', dorarOpenWeb: 'Open on dorar.net', searching: 'Searching inside files' });
+    Object.assign(translations.de, { filterDorar: 'Dorar-Hadith', hitsInFiles: 'Treffer in Texten & Hadithen', hitsDorar: 'Ergebnisse der Hadith-Enzyklopädie', dorarAll: 'Alle Ergebnisse anzeigen', dorarOpenWeb: 'Auf dorar.net öffnen', searching: 'Durchsuche Dateien' });
+    Object.assign(translations.fr, { filterDorar: 'Hadith Dorar', hitsInFiles: 'Résultats dans les textes et hadiths', hitsDorar: 'Résultats de l\u2019encyclopédie du Hadith', dorarAll: 'Tous les résultats', dorarOpenWeb: 'Ouvrir sur dorar.net', searching: 'Recherche dans les fichiers' });
+
     // Theme Toggle
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
@@ -1778,7 +1851,7 @@
         .replace(/[ة]/g, 'ه')
         .replace(/[ؤ]/g, 'و')
         .replace(/[ئ]/g, 'ي')
-        .replace(/[ًٌٍَُِّ]/g, '')
+        .replace(/[\u064B-\u0652\u0670\u0640]/g, '')   // all harakat, sukun, dagger alef, tatweel
         .replace(/\s+/g, ' ')
         .trim();
     }
@@ -2034,7 +2107,7 @@
     const byId = id => document.getElementById(id);
     const HAS_HISTORY = !!(window.history && history.pushState);
     if (HAS_HISTORY) { try { history.scrollRestoration = 'manual'; } catch (e) {} }
-    const SECTION_HASH = { imagesSection: 'images', videosSection: 'videos', audioSection: 'audio', textSection: 'text', ahdSection: 'hadith', booksSection: 'books', weakHadithsSection: 'weak', usefulSitesSection: 'sites' };
+    const SECTION_HASH = { imagesSection: 'images', videosSection: 'videos', audioSection: 'audio', textSection: 'text', ahdSection: 'hadith', booksSection: 'books', weakHadithsSection: 'weak', usefulSitesSection: 'sites', dorarSection: 'dorar' };
     const HASH_SECTION = Object.fromEntries(Object.entries(SECTION_HASH).map(([k, v]) => [v, k]));
     let renderedKey = null, searchPushed = false;
 
@@ -2043,12 +2116,16 @@
     function urlFor(s) {
       const b = baseOf(s);
       let h = '';
-      if (b.v === 'section') h = '#' + SECTION_HASH[b.id];
+      if (b.v === 'section') h = '#' + SECTION_HASH[b.id] + (b.id === 'dorarSection' && b.q ? '=' + encodeURIComponent(b.q) : '');
       else if (b.v === 'search') h = '#search=' + encodeURIComponent(b.q) + (b.f && b.f !== 'all' ? '&filter=' + b.f : '');
       return location.pathname + location.search + h;
     }
     function stateFromHash() {
       const h = location.hash.slice(1);
+      if (h === 'dorar' || h.startsWith('dorar=')) {
+        let q = ''; try { q = decodeURIComponent(h.slice(6)); } catch (e) {}
+        return q ? { v: 'section', id: 'dorarSection', q } : { v: 'section', id: 'dorarSection' };
+      }
       if (HASH_SECTION[h]) return { v: 'section', id: HASH_SECTION[h] };
       if (h.startsWith('search=')) {
         const p = new URLSearchParams(h), q = p.get('search');
@@ -2087,9 +2164,9 @@
       const key = keyOf(s);
       if (key !== renderedKey) {
         closeModalUI(true); closeRandomUI(); stopAllAudio();
-        renderedKey = key;
+        renderedKey = key; remoteShown = '';
         const b = baseOf(s);
-        if (b.v === 'section') renderSection(b.id);
+        if (b.v === 'section') { renderSection(b.id); if (b.id === 'dorarSection') dorarShow(b.q); }
         else if (b.v === 'search') {
           currentFilter = b.f || 'all';
           document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === currentFilter));
@@ -2234,8 +2311,252 @@
       else if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey && !e.altKey && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) byId('randomBtn').click();
     });
 
+    // ===== Dorar Hadith Encyclopedia API =====
+    const DORAR_API = 'https://dorar.net/dorar_api.json?skey=';
+    const DORAR_WEB = 'https://dorar.net/hadith/search?q=';
+    // Last-resort CORS proxies, used only when the direct request AND JSONP both fail. Set to [] to disable.
+    const DORAR_PROXIES = [u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u), u => 'https://corsproxy.io/?' + encodeURIComponent(u)];
+    const dorarCache = new Map();
+    let dorarToken = 0;
+
+    function dorarParseText(t) {           // plain JSON or JSONP-wrapped: cb({...});
+      const a = t.indexOf('{'), b = t.lastIndexOf('}');
+      if (a < 0 || b < a) throw new Error('bad response');
+      return JSON.parse(t.slice(a, b + 1));
+    }
+    async function dorarFetchJson(url) {
+      const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 12000);
+      try {
+        const r = await fetch(url, { signal: ctl.signal });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return dorarParseText(await r.text());
+      } finally { clearTimeout(timer); }
+    }
+    function dorarJsonp(url) {
+      return new Promise((resolve, reject) => {
+        const cb = '__dorarCb' + Date.now() + Math.floor(Math.random() * 1e4);
+        const script = document.createElement('script');
+        let done = false, timer;
+        const finish = (fn, v) => { if (done) return; done = true; clearTimeout(timer); delete window[cb]; script.remove(); fn(v); };
+        timer = setTimeout(() => finish(reject, new Error('timeout')), 10000);
+        window[cb] = data => finish(resolve, data);
+        script.onerror = () => finish(reject, new Error('network'));
+        script.onload = () => finish(reject, new Error('no jsonp callback'));   // a valid JSONP reply already resolved before load fires
+        script.src = url + '&callback=' + cb;
+        document.head.appendChild(script);
+      });
+    }
+    function firstOk(list) {               // first promise to succeed wins; rejects only if all fail
+      return new Promise((res, rej) => { let n = list.length, last; list.forEach(p => p.then(res, e => { last = e; if (--n === 0) rej(last); })); });
+    }
+    function dorarClean(html) {            // third-party HTML: keep text formatting only
+      const doc = new DOMParser().parseFromString('<div>' + html + '</div>', 'text/html');
+      const root = doc.body.firstChild;
+      root.querySelectorAll('script,style,iframe,object,embed,link,meta,form,base,img,svg,video,audio').forEach(n => n.remove());
+      root.querySelectorAll('*').forEach(el => {
+        [...el.attributes].forEach(a => {
+          const n = a.name.toLowerCase();
+          if (n.startsWith('on') || n === 'style' || n === 'src' || (n === 'href' && /^\s*(javascript|data|vbscript):/i.test(a.value))) el.removeAttribute(a.name);
+        });
+        if (el.tagName === 'A') {
+          const h = el.getAttribute('href');
+          if (h && h.startsWith('/')) el.setAttribute('href', 'https://dorar.net' + h);
+          el.target = '_blank'; el.rel = 'noopener noreferrer';
+        }
+      });
+      return root;
+    }
+    function dorarParseItems(data) {       // {"ahadith":{"result":"<div class=hadith>…</div><div class=hadith-info>…"}} -> [{body, info}]
+      const a = data && data.ahadith, pick = x => typeof x === 'string' ? x : (x && (x.th || x.result)) || '';
+      let parts = [];
+      if (Array.isArray(a)) parts = a.map(pick).filter(Boolean);            // older array format (item.th)
+      else if (a && typeof a === 'object') { const r = pick(a); if (r) parts = [r]; }
+      else if (typeof a === 'string' && a) parts = [a];
+      else if (data && typeof data.result === 'string' && data.result) parts = [data.result];
+      const items = [];
+      parts.forEach(html => {
+        const root = dorarClean(html), hs = root.querySelectorAll('.hadith');
+        if (!hs.length) { if (root.textContent.trim()) items.push({ body: root, info: null }); return; }
+        hs.forEach(h => {
+          const n = h.nextElementSibling, info = n && n.classList.contains('hadith-info') ? n : null;
+          const f = h.firstChild; if (f && f.nodeType === 3) f.nodeValue = f.nodeValue.replace(/^\s*\d+\s*[-–]\s*/, '');
+          items.push({ body: h, info });
+        });
+      });
+      return items;
+    }
+    async function dorarQuery(q) {
+      if (dorarCache.has(q)) return dorarCache.get(q);
+      const url = DORAR_API + encodeURIComponent(q);
+      let data;
+      try { data = await firstOk([dorarFetchJson(url), dorarJsonp(url)]); }
+      catch (err) {
+        for (const px of DORAR_PROXIES) { try { data = await dorarFetchJson(px(url)); break; } catch (e) {} }
+        if (!data) throw err;
+      }
+      const items = dorarParseItems(data);
+      dorarCache.set(q, items);
+      return items;
+    }
+    function dorarRender(items, box, limit) {
+      box.textContent = '';
+      items.slice(0, limit).forEach(it => {
+        const card = document.createElement('div');
+        card.className = 'text-container dorar-card'; card.dir = 'rtl';
+        card.appendChild(it.body.cloneNode(true));
+        if (it.info) card.appendChild(it.info.cloneNode(true));
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'text-action-btn';
+        btn.innerHTML = '<i class="fas fa-copy"></i> ' + translations[currentLanguage].copy;
+        btn.addEventListener('click', () => copyToClipboard(it.body.textContent.trim() + '\n' + (it.info ? it.info.textContent.replace(/\s+/g, ' ').trim() : ''), btn));
+        const acts = document.createElement('div'); acts.className = 'text-actions'; acts.appendChild(btn);
+        card.appendChild(acts);
+        box.appendChild(card);
+      });
+    }
+    function dorarStatus(el, msg, q) {     // message + link to the same search on dorar.net
+      el.textContent = msg + ' ';
+      const a = document.createElement('a');
+      a.href = DORAR_WEB + encodeURIComponent(q); a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = 'dorar.net'; a.style.color = 'var(--accent-gold)';
+      el.appendChild(a);
+    }
+    async function dorarShow(q) {          // the dedicated Dorar section
+      const L = translations[currentLanguage], st = byId('dorarStatus'), box = byId('dorarResults'), tok = ++dorarToken;
+      byId('dorarInput').value = q || '';
+      document.querySelector('.dorar-credit a').href = q ? DORAR_WEB + encodeURIComponent(q) : 'https://dorar.net';
+      box.textContent = '';
+      if (!q) { st.textContent = L.dorarHint; return; }
+      st.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + L.loading + '…';
+      try {
+        const items = await dorarQuery(q);
+        if (tok !== dorarToken) return;
+        if (!items.length) { dorarStatus(st, L.dorarNoResults, q); return; }
+        st.textContent = '';
+        dorarRender(items, box, items.length);
+      } catch (err) {
+        console.error('Dorar API error:', err);
+        if (tok === dorarToken) dorarStatus(st, L.dorarError, q);
+      }
+    }
+    byId('dorarForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const q = byId('dorarInput').value.trim();
+      if (!q) return;
+      const cur = history.state || {};
+      if (cur.v === 'section' && cur.id === 'dorarSection' && cur.q === q) dorarShow(q);   // same query: refresh
+      else navigate({ v: 'section', id: 'dorarSection', q }, { keepScroll: true });        // new query = new history entry
+    });
+
+    // ===== Search inside the text / ahd files (grep) =====
+    const NON_TEXT = /\.(pdf|docx?|pptx?|xlsx?|zip|rar|png|jpe?g|gif|webp|mp3|mp4|webm|ogg|wav)$/i;
+    const fileTextCache = new Map();
+    const fileText = f => { if (!fileTextCache.has(f.download_url)) fileTextCache.set(f.download_url, fetch(f.download_url).then(r => r.ok ? r.text() : '').catch(() => '')); return fileTextCache.get(f.download_url); };
+    const escRe = c => c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    function arWord(w) {                   // matches a word ignoring diacritics and alef/yaa/taa-marbuta variants
+      const map = { 'ا': '[اأإآ]', 'ي': '[يىئ]', 'ه': '[هة]', 'و': '[وؤ]' };
+      return [...w].map(c => map[c] || escRe(c)).join('[\\u064B-\\u0652\\u0640]*');
+    }
+    function findSnippets(text, q, max) {
+      const nq = normalizeArabic(q.toLowerCase()), words = nq.split(' ').filter(Boolean);
+      if (nq.length < 2) return [];
+      let paras = text.replace(/\r/g, '').split(/\n\s*\n/);
+      if (paras.length < 3) paras = text.replace(/\r/g, '').split(/\n/);
+      const scored = [];
+      paras.forEach((p, i) => {
+        p = p.trim(); if (p.length < 2) return;
+        const n = normalizeArabic(p.toLowerCase());
+        const sc = n.includes(nq) ? 2 : (words.every(w => n.includes(w)) ? 1 : 0);
+        if (sc) scored.push({ p, i, sc });
+      });
+      return scored.sort((a, b) => b.sc - a.sc || a.i - b.i).slice(0, max || 3).sort((a, b) => a.i - b.i).map(x => x.p);
+    }
+    function markedNode(par, q) {          // paragraph with the matches wrapped in <mark>, clipped around the first match
+      const words = normalizeArabic(q.toLowerCase()).split(' ').filter(Boolean);
+      const alt = [normalizeArabic(q.toLowerCase()), ...words].filter(Boolean).map(arWord).join('|');
+      const first = new RegExp(alt).exec(par);
+      if (par.length > 600) {
+        const st = Math.max(0, (first ? first.index : 0) - 200);
+        par = (st ? '… ' : '') + par.slice(st, st + 600) + (st + 600 < par.length ? ' …' : '');
+      }
+      const d = document.createElement('div'); d.className = 'hit-snippet'; d.dir = 'auto';
+      par.split(new RegExp('(' + alt + ')', 'gi')).forEach((chunk, i) => {
+        if (!chunk) return;
+        if (i % 2) { const m = document.createElement('mark'); m.textContent = chunk; d.appendChild(m); }
+        else d.appendChild(document.createTextNode(chunk));
+      });
+      return d;
+    }
+    function renderHit(box, it, snippets, q) {
+      const L = translations[currentLanguage], card = document.createElement('div');
+      card.className = 'text-container hit-card';
+      const head = document.createElement('div'); head.className = 'text-header';
+      const title = document.createElement('div'); title.className = 'text-title'; title.textContent = it.f.name.replace(/\.[^/.]+$/, '');
+      const kind = document.createElement('span'); kind.className = 'random-kind'; kind.textContent = it.kind === 'ahd' ? L.randomKindAhd : L.randomKindText;
+      head.append(title, kind); card.appendChild(head);
+      snippets.forEach(sn => card.appendChild(markedNode(sn, q)));
+      const acts = document.createElement('div'); acts.className = 'text-actions';
+      const open = document.createElement('button'); open.type = 'button'; open.className = 'text-action-btn';
+      open.innerHTML = '<i class="fas fa-arrow-up-right-from-square"></i> ' + L.randomOpen;
+      open.addEventListener('click', () => navigate({ v: 'section', id: it.kind === 'ahd' ? 'ahdSection' : 'textSection' }));
+      acts.appendChild(open); card.appendChild(acts);
+      box.appendChild(card);
+    }
+    async function searchContent(q, f, run) {
+      const L = translations[currentLanguage], st = byId('contentStatus'), box = byId('contentHits');
+      box.textContent = ''; st.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + L.loading + '…';
+      try {
+        const files = [];
+        if (f === 'all' || f === 'text') (await getFolder('text')).forEach(x => files.push({ f: x, kind: 'text' }));
+        if (f === 'all' || f === 'ahd') (await getFolder('ahd')).forEach(x => files.push({ f: x, kind: 'ahd' }));
+        if (run !== searchRun) return;
+        const MAX_FILES = 120, MAX_CARDS = 40, scan = files.filter(x => !NON_TEXT.test(x.f.name)).slice(0, MAX_FILES);
+        let idx = 0, done = 0, cards = 0;
+        const worker = async () => {
+          while (idx < scan.length) {
+            const it = scan[idx++];
+            const sn = findSnippets(await fileText(it.f), q, 3);
+            if (run !== searchRun) return;
+            if (sn.length && cards < MAX_CARDS) { renderHit(box, it, sn, q); cards++; }
+            st.textContent = L.searching + ' ' + (++done) + '/' + scan.length;
+          }
+        };
+        await Promise.all(Array.from({ length: 6 }, worker));
+        if (run !== searchRun) return;
+        st.textContent = cards ? '' : L.noResults;
+      } catch (err) {
+        console.error('Content search error:', err);
+        if (run === searchRun) st.textContent = L.error;
+      }
+    }
+    async function searchDorarBox(q, run) {
+      const L = translations[currentLanguage], st = byId('dorarHitsStatus'), box = byId('dorarHits'), more = byId('dorarMore');
+      box.textContent = ''; more.style.display = 'none';
+      st.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + L.loading + '…';
+      try {
+        const items = await dorarQuery(q);
+        if (run !== searchRun) return;
+        if (!items.length) { dorarStatus(st, L.dorarNoResults, q); return; }
+        st.textContent = '';
+        dorarRender(items, box, currentFilter === 'dorar' ? items.length : 5);
+        byId('dorarWebLink').href = DORAR_WEB + encodeURIComponent(q);
+        byId('dorarMoreBtn').onclick = () => navigate({ v: 'section', id: 'dorarSection', q });
+        more.style.display = 'flex';
+      } catch (err) {
+        console.error('Dorar search error:', err);
+        if (run === searchRun) dorarStatus(st, L.dorarError, q);
+      }
+    }
+    function searchRemote(q, run) {
+      const f = currentFilter, doContent = f === 'all' || f === 'text' || f === 'ahd', doDorar = f === 'all' || f === 'dorar';
+      byId('contentHitsSection').style.display = doContent ? 'block' : 'none';
+      byId('dorarHitsSection').style.display = doDorar ? 'block' : 'none';
+      if (doContent) searchContent(q, f, run);
+      if (doDorar) searchDorarBox(q, run);
+    }
+
     // Navigation
     function renderMenu() {
+      remoteShown = ''; searchRun++; clearTimeout(remoteTimer);
       document.getElementById('menu').style.display = 'grid';
       document.querySelector('.welcome-container').style.display = 'block';
       document.querySelector('.advanced-search').style.display = 'block';
@@ -2493,7 +2814,7 @@
         .then(r => r.json()).then(data => {
           allContent.images = data.filter(f => f.type === 'file' && /\.(jpe?g|png|gif|webp)$/i.test(f.name));
           displayImages(allContent.images);
-          loadedContent.images = true;
+          loadedContent.images = true; onListLoaded();
           document.getElementById('imagesLoading').style.display = 'none';
         })
         .catch(error => {
@@ -2551,7 +2872,7 @@
         .then(r => r.json()).then(data => {
           allContent.videos = data.filter(f => f.type === 'file' && /\.(mp4|webm|ogg)$/i.test(f.name));
           displayVideos(allContent.videos);
-          loadedContent.videos = true;
+          loadedContent.videos = true; onListLoaded();
           document.getElementById('videosLoading').style.display = 'none';
         })
         .catch(error => {
@@ -2611,7 +2932,7 @@
         .then(r => r.json()).then(data => {
           allContent.audio = data.filter(f => f.type === 'file');
           displayAudio(allContent.audio);
-          loadedContent.audio = true;
+          loadedContent.audio = true; onListLoaded();
           document.getElementById('audioLoading').style.display = 'none';
         })
         .catch(error => {
@@ -2658,7 +2979,7 @@
         .then(r => r.json()).then(data => {
           allContent.text = data.filter(f => f.type === 'file');
           displayTextList(allContent.text);
-          loadedContent.text = true;
+          loadedContent.text = true; onListLoaded();
           document.getElementById('textLoading').style.display = 'none';
         })
         .catch(error => {
@@ -2716,7 +3037,7 @@
         .then(r => r.json()).then(data => {
           allContent.ahd = data.filter(f => f.type === 'file');
           displayAhdList(allContent.ahd);
-          loadedContent.ahd = true;
+          loadedContent.ahd = true; onListLoaded();
           document.getElementById('ahdLoading').style.display = 'none';
         })
         .catch(error => {
@@ -2785,7 +3106,7 @@
         .then(r => r.json()).then(data => {
           allContent.books = data.filter(f => f.type === 'file');
           displayBooksList(allContent.books);
-          loadedContent.books = true;
+          loadedContent.books = true; onListLoaded();
           document.getElementById('booksLoading').style.display = 'none';
         })
         .catch(error => {
@@ -3046,90 +3367,43 @@
       });
     });
 
+    let searchRun = 0, remoteTimer = null, remoteShown = '';
+    const listsStarted = new Set(), REMOTE_SECTIONS = ['contentHitsSection', 'dorarHitsSection'];
+    function onListLoaded() {              // a folder listing arrived: refresh the results if a search is on screen
+      const st = history.state;
+      if (st && st.v === 'search') performSearch(true);
+    }
     function performSearch(fromHistory) {
-      const searchTerm = document.getElementById('globalSearch').value.toLowerCase();
+      const raw = document.getElementById('globalSearch').value.trim();
       if (fromHistory !== true) commitSearch();
-      
-      if (!searchTerm) {
-        renderMenu();
-        return;
-      }
-      
-      // Hide menu and welcome
+      if (!raw) { renderMenu(); return; }
+      const term = raw.toLowerCase(), f = currentFilter, want = k => f === 'all' || f === k;
+
       document.getElementById('menu').style.display = 'none';
       document.querySelector('.welcome-container').style.display = 'none';
       document.querySelector('.advanced-search').style.display = 'block';
       hideFinalMessage();
-      
-      // Show all sections or specific based on filter
-      document.querySelectorAll('section').forEach(s => s.style.display = 'none');
-      
-      let results = [];
-      
-      if (currentFilter === 'all' || currentFilter === 'images') {
-        if (!loadedContent.images) loadImages();
-        results = results.concat(allContent.images.filter(i => 
-          fuzzySearch(searchTerm, i.name)
-        ));
-        if (results.length > 0) {
-          document.getElementById('imagesSection').style.display = 'block';
-          displayImages(results);
-        }
-      }
-      
-      if (currentFilter === 'all' || currentFilter === 'videos') {
-        if (!loadedContent.videos) loadVideos();
-        results = results.concat(allContent.videos.filter(v => 
-          fuzzySearch(searchTerm, v.name)
-        ));
-        if (results.length > 0) {
-          document.getElementById('videosSection').style.display = 'block';
-          displayVideos(results);
-        }
-      }
-      
-      if (currentFilter === 'all' || currentFilter === 'audio') {
-        if (!loadedContent.audio) loadAudio();
-        results = results.concat(allContent.audio.filter(a => 
-          fuzzySearch(searchTerm, a.name)
-        ));
-        if (results.length > 0) {
-          document.getElementById('audioSection').style.display = 'block';
-          displayAudio(results);
-        }
-      }
-      
-      if (currentFilter === 'all' || currentFilter === 'text') {
-        if (!loadedContent.text) loadText();
-        results = results.concat(allContent.text.filter(t => 
-          fuzzySearch(searchTerm, t.name)
-        ));
-        if (results.length > 0) {
-          document.getElementById('textSection').style.display = 'block';
-          displayTextList(results);
-        }
-      }
-      
-      if (currentFilter === 'all' || currentFilter === 'ahd') {
-        if (!loadedContent.ahd) loadAhd();
-        results = results.concat(allContent.ahd.filter(a => 
-          fuzzySearch(searchTerm, a.name)
-        ));
-        if (results.length > 0) {
-          document.getElementById('ahdSection').style.display = 'block';
-          displayAhdList(results);
-        }
-      }
-      
-      if (currentFilter === 'all' || currentFilter === 'books') {
-        if (!loadedContent.books) loadBooks();
-        results = results.concat(allContent.books.filter(b => 
-          fuzzySearch(searchTerm, b.name)
-        ));
-        if (results.length > 0) {
-          document.getElementById('booksSection').style.display = 'block';
-          displayBooksList(results);
-        }
+      document.querySelectorAll('section').forEach(s => { if (!REMOTE_SECTIONS.includes(s.id)) s.style.display = 'none'; });
+
+      // 1) file names (each type on its own; nothing leaks between sections)
+      [['images', 'imagesSection', loadImages, displayImages], ['videos', 'videosSection', loadVideos, displayVideos],
+       ['audio', 'audioSection', loadAudio, displayAudio], ['text', 'textSection', loadText, displayTextList],
+       ['ahd', 'ahdSection', loadAhd, displayAhdList], ['books', 'booksSection', loadBooks, displayBooksList]
+      ].forEach(([key, sec, load, show]) => {
+        if (!want(key)) return;
+        if (!loadedContent[key] && !listsStarted.has(key)) { listsStarted.add(key); load(); }
+        const hits = allContent[key].filter(i => fuzzySearch(term, i.name));
+        if (hits.length) { document.getElementById(sec).style.display = 'block'; show(hits); }
+      });
+
+      // 2) inside the text/ahd files + the Dorar hadith encyclopedia API
+      const key = raw + '|' + f;
+      if (remoteShown !== key) {
+        remoteShown = key;
+        clearTimeout(remoteTimer);
+        const run = ++searchRun;
+        REMOTE_SECTIONS.forEach(id => document.getElementById(id).style.display = 'none');
+        remoteTimer = setTimeout(() => { if (run === searchRun) searchRemote(raw, run); }, fromHistory === true ? 0 : 450);
       }
     }
 
