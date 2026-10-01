@@ -1160,6 +1160,15 @@
     .dorar-card .text-actions { margin-top: .8rem; }
     a.text-action-btn { display: inline-flex; align-items: center; gap: .4rem; text-decoration: none; }
     .dorar-more { justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
+
+    .src-chips { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; max-width: 900px; margin: 0 auto 1rem; }
+    .src-chip { min-height: 40px; padding: .4rem 1rem; font: inherit; font-size: .9rem; color: var(--text-secondary); background: transparent; border: 1px solid rgba(212,175,55,.3); border-radius: 20px; cursor: pointer; transition: var(--transition); }
+    .src-chip:hover { border-color: var(--accent-gold); }
+    .src-chip.active { color: var(--primary-dark); background: linear-gradient(135deg, var(--accent-gold), var(--accent-blue)); border-color: transparent; }
+    .src-block { margin: 1.6rem 0; }
+    .src-title { margin: 0 0 .4rem; font-size: 1.25rem; color: var(--accent-gold); }
+    .hit-grade { margin-top: .4rem; font-size: .9rem; color: var(--text-secondary); }
+    .more-wrap { display: flex; justify-content: center; margin-top: 1rem; }
   </style>
 </head>
 <body data-theme="dark" data-lang="ar">
@@ -1399,9 +1408,11 @@
       <input type="search" id="dorarInput" dir="auto" autocomplete="off" enterkeyhint="search" data-translate-placeholder="dorarPlaceholder" placeholder="اكتب كلمة أو جزءًا من حديث…">
       <button type="submit" class="site-btn"><i class="fas fa-search"></i> <span data-translate="dorarSearch">بحث</span></button>
     </form>
+    <div class="src-chips" id="srcChips" role="group"></div>
     <div class="dorar-status" id="dorarStatus" aria-live="polite"></div>
     <div id="dorarResults"></div>
     <p class="dorar-credit"><a href="https://dorar.net" target="_blank" rel="noopener noreferrer" data-translate="dorarSource">المصدر: الدرر السنية – الموسوعة الحديثية</a></p>
+    <p class="dorar-credit"><a href="https://github.com/fawazahmed0/hadith-api" target="_blank" rel="noopener noreferrer" data-translate="hadithCredit">كتب الحديث: مشروع hadith-api</a></p>
   </section>
 
   <section id="contentHitsSection">
@@ -1751,6 +1762,11 @@
     Object.assign(translations.en, { filterDorar: 'Dorar Hadith', hitsInFiles: 'Matches inside texts & hadiths', hitsDorar: 'Hadith Encyclopedia results', dorarAll: 'Show all results', dorarOpenWeb: 'Open on dorar.net', searching: 'Searching inside files' });
     Object.assign(translations.de, { filterDorar: 'Dorar-Hadith', hitsInFiles: 'Treffer in Texten & Hadithen', hitsDorar: 'Ergebnisse der Hadith-Enzyklopädie', dorarAll: 'Alle Ergebnisse anzeigen', dorarOpenWeb: 'Auf dorar.net öffnen', searching: 'Durchsuche Dateien' });
     Object.assign(translations.fr, { filterDorar: 'Hadith Dorar', hitsInFiles: 'Résultats dans les textes et hadiths', hitsDorar: 'Résultats de l\u2019encyclopédie du Hadith', dorarAll: 'Tous les résultats', dorarOpenWeb: 'Ouvrir sur dorar.net', searching: 'Recherche dans les fichiers' });
+
+    Object.assign(translations.ar, { book_dorar: 'الدرر السنية', book_bukhari: 'صحيح البخاري', book_muslim: 'صحيح مسلم', book_abudawud: 'سنن أبي داود', book_tirmidhi: 'جامع الترمذي', book_nasai: 'سنن النسائي', book_ibnmajah: 'سنن ابن ماجه', book_malik: 'موطأ مالك', book_nawawi: 'الأربعون النووية', book_qudsi: 'الأحاديث القدسية', hadithNo: 'حديث رقم', showMore: 'عرض المزيد', loadingBook: 'جارٍ تحميل', matchesCount: 'نتيجة', hadithCredit: 'كتب الحديث: مشروع hadith-api', dorarGeneric: 'الدرر السنية لا تُرجع نتائج لهذا البحث عبر الواجهة حاليًا (قد تكون الخدمة معطّلة أو محجوبة).', dorarHint: 'ابحث في الموسوعة الحديثية (الدرر السنية) وفي كتب الحديث، واختر المصادر من الأزرار' });
+    Object.assign(translations.en, { book_dorar: 'Dorar.net', book_bukhari: 'Sahih al-Bukhari', book_muslim: 'Sahih Muslim', book_abudawud: 'Sunan Abi Dawud', book_tirmidhi: 'Jami\u2019 at-Tirmidhi', book_nasai: 'Sunan an-Nasa\u2019i', book_ibnmajah: 'Sunan Ibn Majah', book_malik: 'Muwatta Malik', book_nawawi: 'Forty Hadith (Nawawi)', book_qudsi: 'Hadith Qudsi', hadithNo: 'Hadith no.', showMore: 'Show more', loadingBook: 'Loading', matchesCount: 'results', hadithCredit: 'Hadith books: hadith-api project', dorarGeneric: 'Dorar is not returning results for this search through its API right now (the service may be down or blocking requests).', dorarHint: 'Search the Dorar encyclopedia and the hadith books; pick the sources with the buttons' });
+    Object.assign(translations.de, { book_dorar: 'Dorar.net', book_bukhari: 'Sahih al-Bukhari', book_muslim: 'Sahih Muslim', book_abudawud: 'Sunan Abi Dawud', book_tirmidhi: 'Jami\u2019 at-Tirmidhi', book_nasai: 'Sunan an-Nasa\u2019i', book_ibnmajah: 'Sunan Ibn Majah', book_malik: 'Muwatta Malik', book_nawawi: 'Forty Hadith (Nawawi)', book_qudsi: 'Hadith Qudsi', hadithNo: 'Hadith Nr.', showMore: 'Mehr anzeigen', loadingBook: 'Lade', matchesCount: 'Treffer', hadithCredit: 'Hadith-Bücher: Projekt hadith-api', dorarGeneric: 'Dorar liefert über seine API derzeit keine Ergebnisse für diese Suche (Dienst evtl. gestört oder blockiert).', dorarHint: 'Durchsuche Dorar und die Hadith-Bücher; Quellen mit den Schaltflächen wählen' });
+    Object.assign(translations.fr, { book_dorar: 'Dorar.net', book_bukhari: 'Sahih al-Bukhari', book_muslim: 'Sahih Muslim', book_abudawud: 'Sunan Abi Dawud', book_tirmidhi: 'Jami\u2019 at-Tirmidhi', book_nasai: 'Sunan an-Nasa\u2019i', book_ibnmajah: 'Sunan Ibn Majah', book_malik: 'Muwatta Malik', book_nawawi: 'Forty Hadith (Nawawi)', book_qudsi: 'Hadith Qudsi', hadithNo: 'Hadith n°', showMore: 'Voir plus', loadingBook: 'Chargement', matchesCount: 'résultats', hadithCredit: 'Livres de hadith : projet hadith-api', dorarGeneric: 'Dorar ne renvoie actuellement aucun résultat pour cette recherche via son API (service indisponible ou bloqué).', dorarHint: 'Recherchez dans Dorar et les livres de hadith ; choisissez les sources avec les boutons' });
 
     // Theme Toggle
     const themeToggle = document.getElementById('themeToggle');
@@ -2388,31 +2404,21 @@
     async function dorarQuery(q) {
       if (dorarCache.has(q)) return dorarCache.get(q);
       const url = DORAR_API + encodeURIComponent(q);
-      let data;
-      try { data = await firstOk([dorarFetchJson(url), dorarJsonp(url)]); }
+      let data, sawGeneric = false;
+      const chk = d => {          // Dorar answers every query with the same generic list (link q=*:*) when it ignores the search word
+        if (/search\?q=\*:\*/.test(JSON.stringify(d || {}))) { sawGeneric = true; throw new Error('generic'); }
+        return d;
+      };
+      const generic = () => { const e = new Error('generic'); e.generic = true; return e; };
+      try { data = await firstOk([dorarFetchJson(url).then(chk), dorarJsonp(url).then(chk)]); }
       catch (err) {
-        for (const px of DORAR_PROXIES) { try { data = await dorarFetchJson(px(url)); break; } catch (e) {} }
-        if (!data) throw err;
+        if (sawGeneric) throw generic();
+        for (const px of DORAR_PROXIES) { try { data = chk(await dorarFetchJson(px(url))); break; } catch (e) {} }
+        if (!data) throw sawGeneric ? generic() : err;
       }
       const items = dorarParseItems(data);
       dorarCache.set(q, items);
       return items;
-    }
-    function dorarRender(items, box, limit) {
-      box.textContent = '';
-      items.slice(0, limit).forEach(it => {
-        const card = document.createElement('div');
-        card.className = 'text-container dorar-card'; card.dir = 'rtl';
-        card.appendChild(it.body.cloneNode(true));
-        if (it.info) card.appendChild(it.info.cloneNode(true));
-        const btn = document.createElement('button');
-        btn.type = 'button'; btn.className = 'text-action-btn';
-        btn.innerHTML = '<i class="fas fa-copy"></i> ' + translations[currentLanguage].copy;
-        btn.addEventListener('click', () => copyToClipboard(it.body.textContent.trim() + '\n' + (it.info ? it.info.textContent.replace(/\s+/g, ' ').trim() : ''), btn));
-        const acts = document.createElement('div'); acts.className = 'text-actions'; acts.appendChild(btn);
-        card.appendChild(acts);
-        box.appendChild(card);
-      });
     }
     function dorarStatus(el, msg, q) {     // message + link to the same search on dorar.net
       el.textContent = msg + ' ';
@@ -2420,24 +2426,158 @@
       a.href = DORAR_WEB + encodeURIComponent(q); a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = 'dorar.net'; a.style.color = 'var(--accent-gold)';
       el.appendChild(a);
     }
-    async function dorarShow(q) {          // the dedicated Dorar section
+    function copyBtn(getText) {
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'text-action-btn';
+      btn.innerHTML = '<i class="fas fa-copy"></i> ' + translations[currentLanguage].copy;
+      btn.addEventListener('click', () => copyToClipboard(getText(), btn));
+      const acts = document.createElement('div'); acts.className = 'text-actions'; acts.appendChild(btn);
+      return acts;
+    }
+    function dorarCardEl(it) {
+      const card = document.createElement('div');
+      card.className = 'text-container dorar-card'; card.dir = 'rtl';
+      card.appendChild(it.body.cloneNode(true));
+      if (it.info) card.appendChild(it.info.cloneNode(true));
+      card.appendChild(copyBtn(() => it.body.textContent.trim() + '\n' + (it.info ? it.info.textContent.replace(/\s+/g, ' ').trim() : '')));
+      return card;
+    }
+
+    // ----- Hadith books: Arabic editions from fawazahmed0/hadith-api (static JSON on jsDelivr, CORS-enabled, searched in the browser) -----
+    const HADITH_BOOKS = ['bukhari', 'muslim', 'abudawud', 'tirmidhi', 'nasai', 'ibnmajah', 'malik', 'nawawi', 'qudsi'];
+    const HADITH_CDN = ['https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/', 'https://raw.githubusercontent.com/fawazahmed0/hadith-api/1/editions/'];
+    const HADITH_DEFAULT = ['dorar', 'bukhari', 'muslim', 'nawawi', 'qudsi'];
+    const bookCache = new Map();
+    let hadithSel = new Set(HADITH_DEFAULT);
+    try {
+      const v = JSON.parse(localStorage.getItem('m4s:hadithSources'));
+      const ok = Array.isArray(v) ? v.filter(k => k === 'dorar' || HADITH_BOOKS.includes(k)) : [];
+      if (ok.length) hadithSel = new Set(ok);
+    } catch (e) {}
+    const srcOrder = () => ['dorar', ...HADITH_BOOKS].filter(k => hadithSel.has(k));
+
+    function loadBook(key) {
+      if (bookCache.has(key)) return bookCache.get(key);
+      const names = [`ara-${key}1.min.json`, `ara-${key}.min.json`, `ara-${key}1.json`, `ara-${key}.json`];   // "1" = diacritics removed
+      const p = (async () => {
+        let last;
+        for (const base of HADITH_CDN) for (const nm of names) {
+          const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 90000);
+          try {
+            const r = await fetch(base + nm, { signal: ctl.signal });
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            const j = await r.json();
+            if (!j || !Array.isArray(j.hadiths)) throw new Error('bad data');
+            return j.hadiths.filter(h => h && h.text).map(h => ({ n: h.hadithnumber, text: String(h.text), norm: normalizeArabic(String(h.text).toLowerCase()), grades: h.grades || [], ref: h.reference || {} }));
+          } catch (e) { last = e; } finally { clearTimeout(timer); }
+        }
+        throw last || new Error('unavailable');
+      })();
+      bookCache.set(key, p);
+      p.catch(() => bookCache.delete(key));
+      return p;
+    }
+    function searchBook(list, q) {
+      const nq = normalizeArabic(q.toLowerCase()), words = nq.split(' ').filter(Boolean);
+      if (nq.length < 2) return [];
+      const out = [];
+      for (const h of list) {
+        const sc = h.norm.includes(nq) ? 2 : (words.length > 1 && words.every(w => h.norm.includes(w)) ? 1 : 0);
+        if (sc) out.push({ h, sc });
+      }
+      return out.sort((a, b) => b.sc - a.sc || a.h.n - b.h.n).map(x => x.h);
+    }
+    function bookCardEl(key, h, q) {
+      const L = translations[currentLanguage], card = document.createElement('div');
+      card.className = 'text-container hit-card'; card.dir = 'rtl';
+      const head = document.createElement('div'); head.className = 'text-header';
+      const title = document.createElement('div'); title.className = 'text-title'; title.textContent = L['book_' + key];
+      const badge = document.createElement('span'); badge.className = 'random-kind'; badge.textContent = L.hadithNo + ' ' + h.n;
+      head.append(title, badge); card.appendChild(head);
+      card.appendChild(markedNode(h.text, q));
+      const gr = (h.grades || []).filter(g => g && g.grade);
+      if (gr.length) { const g = document.createElement('div'); g.className = 'hit-grade'; g.dir = 'auto'; g.textContent = gr.map(x => (x.name ? x.name + ': ' : '') + x.grade).join(' • '); card.appendChild(g); }
+      card.appendChild(copyBtn(() => h.text + '\n— ' + L['book_' + key] + ' (' + L.hadithNo + ' ' + h.n + ')'));
+      return card;
+    }
+
+    // ----- one runner for the Dorar section and the main search box -----
+    function pagedList(list, items, limit, mk) {
+      let shown = 0;
+      const more = document.createElement('div'); more.className = 'more-wrap';
+      const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'text-action-btn';
+      more.appendChild(btn);
+      const step = () => {
+        items.slice(shown, shown + limit).forEach(it => list.appendChild(mk(it)));
+        shown = Math.min(items.length, shown + limit);
+        btn.innerHTML = '<i class="fas fa-angles-down"></i> ' + translations[currentLanguage].showMore + ' (' + (items.length - shown) + ')';
+        more.style.display = shown < items.length ? 'flex' : 'none';
+      };
+      btn.addEventListener('click', step);
+      list.after(more); step();
+    }
+    function hadithRun(q, box, limit, isCurrent) {
+      box.textContent = '';
+      const L = translations[currentLanguage], spin = '<i class="fas fa-spinner fa-spin"></i> ';
+      srcOrder().forEach(key => {
+        const blk = document.createElement('div'); blk.className = 'src-block';
+        const h = document.createElement('h3'); h.className = 'src-title'; h.textContent = L['book_' + key];
+        const st = document.createElement('div'); st.className = 'dorar-status';
+        const list = document.createElement('div');
+        blk.append(h, st, list); box.appendChild(blk);
+        (async () => {
+          try {
+            let items;
+            if (key === 'dorar') { st.innerHTML = spin + L.loading + '…'; items = await dorarQuery(q); }
+            else {
+              st.innerHTML = spin + L.loadingBook + ' ' + L['book_' + key] + '…';
+              const book = await loadBook(key);
+              if (!isCurrent()) return;
+              st.innerHTML = spin + L.searching + '…';
+              await new Promise(r => setTimeout(r, 0));
+              items = searchBook(book, q);
+            }
+            if (!isCurrent()) return;
+            if (!items.length) { if (key === 'dorar') dorarStatus(st, L.dorarNoResults, q); else st.textContent = L.noResults; return; }
+            st.textContent = '';
+            h.textContent = L['book_' + key] + ' — ' + items.length + ' ' + L.matchesCount;
+            pagedList(list, items, limit, key === 'dorar' ? dorarCardEl : (hh => bookCardEl(key, hh, q)));
+          } catch (err) {
+            console.error('Hadith source error (' + key + '):', err);
+            if (!isCurrent()) return;
+            if (key === 'dorar') dorarStatus(st, err.generic ? L.dorarGeneric : L.dorarError, q);
+            else st.textContent = L.error;
+          }
+        })();
+      });
+    }
+    function dorarShow(q) {                // the dedicated section: Dorar + selected hadith books
       const L = translations[currentLanguage], st = byId('dorarStatus'), box = byId('dorarResults'), tok = ++dorarToken;
       byId('dorarInput').value = q || '';
       document.querySelector('.dorar-credit a').href = q ? DORAR_WEB + encodeURIComponent(q) : 'https://dorar.net';
       box.textContent = '';
       if (!q) { st.textContent = L.dorarHint; return; }
-      st.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + L.loading + '…';
-      try {
-        const items = await dorarQuery(q);
-        if (tok !== dorarToken) return;
-        if (!items.length) { dorarStatus(st, L.dorarNoResults, q); return; }
-        st.textContent = '';
-        dorarRender(items, box, items.length);
-      } catch (err) {
-        console.error('Dorar API error:', err);
-        if (tok === dorarToken) dorarStatus(st, L.dorarError, q);
-      }
+      st.textContent = '';
+      hadithRun(q, box, 20, () => tok === dorarToken);
     }
+    function buildSrcChips() {
+      const box = byId('srcChips'); box.textContent = '';
+      ['dorar', ...HADITH_BOOKS].forEach(k => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'src-chip' + (hadithSel.has(k) ? ' active' : '');
+        b.setAttribute('data-translate', 'book_' + k); b.textContent = translations[currentLanguage]['book_' + k];
+        b.addEventListener('click', () => {
+          if (hadithSel.has(k)) hadithSel.delete(k); else hadithSel.add(k);
+          if (!hadithSel.size) hadithSel.add(k);                       // keep at least one source
+          b.classList.toggle('active', hadithSel.has(k));
+          try { localStorage.setItem('m4s:hadithSources', JSON.stringify([...hadithSel])); } catch (e) {}
+          const st = history.state || {};
+          if (st.v === 'section' && st.id === 'dorarSection' && st.q) dorarShow(st.q);
+        });
+        box.appendChild(b);
+      });
+    }
+    buildSrcChips();
     byId('dorarForm').addEventListener('submit', e => {
       e.preventDefault();
       const q = byId('dorarInput').value.trim();
@@ -2528,30 +2668,19 @@
         if (run === searchRun) st.textContent = L.error;
       }
     }
-    async function searchDorarBox(q, run) {
-      const L = translations[currentLanguage], st = byId('dorarHitsStatus'), box = byId('dorarHits'), more = byId('dorarMore');
-      box.textContent = ''; more.style.display = 'none';
-      st.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + L.loading + '…';
-      try {
-        const items = await dorarQuery(q);
-        if (run !== searchRun) return;
-        if (!items.length) { dorarStatus(st, L.dorarNoResults, q); return; }
-        st.textContent = '';
-        dorarRender(items, box, currentFilter === 'dorar' ? items.length : 5);
-        byId('dorarWebLink').href = DORAR_WEB + encodeURIComponent(q);
-        byId('dorarMoreBtn').onclick = () => navigate({ v: 'section', id: 'dorarSection', q });
-        more.style.display = 'flex';
-      } catch (err) {
-        console.error('Dorar search error:', err);
-        if (run === searchRun) dorarStatus(st, L.dorarError, q);
-      }
+    function searchHadithBox(q, run) {
+      byId('dorarHitsStatus').textContent = '';
+      hadithRun(q, byId('dorarHits'), currentFilter === 'dorar' ? 20 : 5, () => run === searchRun);
+      byId('dorarWebLink').href = DORAR_WEB + encodeURIComponent(q);
+      byId('dorarMoreBtn').onclick = () => navigate({ v: 'section', id: 'dorarSection', q });
+      byId('dorarMore').style.display = 'flex';
     }
     function searchRemote(q, run) {
       const f = currentFilter, doContent = f === 'all' || f === 'text' || f === 'ahd', doDorar = f === 'all' || f === 'dorar';
       byId('contentHitsSection').style.display = doContent ? 'block' : 'none';
       byId('dorarHitsSection').style.display = doDorar ? 'block' : 'none';
       if (doContent) searchContent(q, f, run);
-      if (doDorar) searchDorarBox(q, run);
+      if (doDorar) searchHadithBox(q, run);
     }
 
     // Navigation
@@ -3403,6 +3532,7 @@
         clearTimeout(remoteTimer);
         const run = ++searchRun;
         REMOTE_SECTIONS.forEach(id => document.getElementById(id).style.display = 'none');
+        byId('dorarMore').style.display = 'none';
         remoteTimer = setTimeout(() => { if (run === searchRun) searchRemote(raw, run); }, fromHistory === true ? 0 : 450);
       }
     }
